@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	
+    <!-- 실행환경에서 빈이름 참조(EgovAbstractDAO) -->
+	<bean id="egov.lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
+
+	<!-- Mybatis setup for Mybatis Database Layer -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">		
+		<!-- DB접속 설정 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- myBatis 기본 설정 -->
+		<property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
+		<!-- query가 있는 위치 -->
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:/egovframework/mapper/let/**/*_${Globals.DbType}.xml</value>
+				<value>classpath:/egovframework/mapper/let/**/*_mysql.xml</value> <!-- 자영 추가 -->
+				<value>classpath:/egovframework/mapper/let/uat/uia/userMapper.xml</value> <!-- 사용자 추가 -->
+				
+			</list>
+		</property>
+		<!-- gpt가 loginVO 인식못한다고 추가하라고 함 -->
+		 <!-- VO 클래스 경로 설정 -->
+    	<property name="typeAliasesPackage" value="egovframework.com.cmm" />
+		
+	</bean>
+
+	<!-- Mybatis Session Template -->
+	<bean id="egov.sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="egov.sqlSession"/>
+	</bean>
+	
+	<alias name="sqlSession" alias="egov.sqlSession" />
+	
+	
+	
+	<!-- 블로그 참조해서 넣은거 (안 될 확률 높음) 출처 :https://ivory-room.tistory.com/60)(전자정부프레임워크기반 게시판 만들기 (3) MariaDB연동, 게시판 리스트 출력)-->
+    
+    <!-- <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+    </bean>
+     -->
+	<!-- MapperConfigurer setup for MyBatis Database Layer with @Mapper("deptMapper" in DeptMapper Interface -->
+ 	<!--  
+ 	<bean class="egovframework.rte.psl.dataaccess.mapper.MapperConfigurer">
+ 	
+		<property name="basePackage" value="egovframework" />
+	</bean>
+-->
+<!-- egovframework\spring\com\context-mapper -->
+
+</beans>
