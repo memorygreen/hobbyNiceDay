@@ -21,6 +21,7 @@ egovframework\let\utl\fcc\service\EgovFormBasedUUID.class
 egovframework\let\uat\uia\web\EgovLoginController.class
 egovframework\com\cmm\interceptor\AuthenticInterceptor.class
 egovframework\com\cmm\annotation\IncludedInfo.class
+egovframework\com\cmm\UserVO.class
 egovframework\let\cop\bbs\service\impl\EgovBBSAttributeManageServiceImpl.class
 egovframework\com\cmm\service\EgovFileMngUtil.class
 egovframework\com\cmm\service\impl\EgovComAbstractDAO.class
@@ -28,11 +29,14 @@ egovframework\let\cop\bbs\service\BoardMaster.class
 egovframework\com\cmm\EgovMessageSource.class
 egovframework\let\sym\cal\service\impl\RestdeManageDAO.class
 egovframework\com\cmm\web\EgovComUtlController.class
+egovframework\com\user\service\UserService.class
 egovframework\let\cop\bbs\service\impl\BBSAttributeManageDAO.class
 egovframework\let\cop\bbs\service\impl\BBSLoneMasterDAO.class
 egovframework\let\cop\bbs\service\impl\BBSAddedOptionsDAO.class
+egovframework\com\user\service\impl\UserDAO.class
 egovframework\com\cmm\service\impl\EgovCmmUseServiceImpl.class
 egovframework\let\utl\fcc\service\EgovStringUtil.class
+egovframework\com\user\service\impl\UserServiceImpl.class
 egovframework\let\sym\cal\service\EgovCalRestdeManageService.class
 egovframework\let\cop\com\service\impl\EgovUserInfManageServiceImpl.class
 egovframework\com\cmm\util\EgovUserDetailsHelper.class
@@ -83,6 +87,7 @@ egovframework\let\cop\bbs\service\EgovBBSManageService.class
 egovframework\let\cop\com\service\impl\EgovTemplateManageServiceImpl.class
 egovframework\com\cmm\AltibaseClobStringTypeHandler.class
 egovframework\com\cmm\web\EgovImageProcessController.class
+egovframework\com\user\web\UserController.class
 egovframework\com\cmm\service\EgovFileMngService.class
 egovframework\com\cmm\EgovComOthersExcepHndlr.class
 egovframework\let\cop\com\service\EgovTemplateManageService.class

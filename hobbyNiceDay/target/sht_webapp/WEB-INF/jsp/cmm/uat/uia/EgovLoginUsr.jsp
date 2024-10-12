@@ -154,6 +154,13 @@ function fnInit() {
                         </div>
                          -->
                     </div>
+                    
+                    <!-- 로그인 버튼 하단에 회원가입 버튼 추가 -->
+					<div class="user_login_btstyle">
+					    <ul class="bt_ulstyle1">
+					        <li><a href="<c:url value='/cmm/uat/uia/insertForm.do'/>"><img src="<c:url value='/'/>images/login/btn_regist.gif" alt="회원가입" /></a></li>
+					    </ul>
+					</div>
             </div>                      
             <!-- //content 끝 -->    
     </div>  

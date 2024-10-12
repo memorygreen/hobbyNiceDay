@@ -158,4 +158,13 @@
 		</isEqual>
 	</update>
 	-->
+	
+	
+	<!-- 자영 추가 회원가입 기능 -->
+	<insert id="insertMember" parameterType="LoginVO">
+	    INSERT INTO LETTNEMPLYRINFO (EMPLYR_ID, PASSWORD, USER_NM, EMAIL_ADRES)
+	   	     VALUES (#{id}, #{password}, #{name}, #{email})
+	</insert>
+	
+			
 </mapper>
