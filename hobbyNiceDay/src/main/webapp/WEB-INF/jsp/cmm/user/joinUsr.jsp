@@ -128,33 +128,23 @@
 }
 /*231026추가 끝*/
 
-/*input 태그 스타일*/
-.jy_input {
-	height: 50px;
-	width: 100%;
-	border: 1px solid #e1e1e1;
-	font-size: 14px;
-	color: #b7b7b7;
-	padding-left: 20px;
-	margin-bottom: 20px;
-	margin: 0;
-	font-family: inherit;
-	line-height: inherit;
+
+/*성별 라디오 버튼*/
+.checkout__input input {
+    height: 50px;
+    width: 100%;
+    border: 1px solid #e1e1e1;
+    font-size: 14px;
+    color: #b7b7b7;
+    padding-left: 20px;
+    margin-bottom: 20px;
 }
 
-/*필수입력 p태그 */
-.jy_input_p {
-	color: #111111;
-	margin-bottom: 12px;
-	font-size: 15px;
-	font-family: "Nunito Sans", sans-serif;
-	font-weight: 400;
-	line-height: 25px;
-	margin: 0 0 15px 0;
-}
-/*필수입력 span태그 (*) */
-.jy_input_p span {
-	color: #e53637;
+/*input 태그 포커스 */
+.checkout__input input:focus {
+    border-color: #000; /* 테두리를 검정색으로 변경 */
+    outline: none; /* 기본 파란색 외곽선 제거 */
+
 }
 </style>
 
@@ -163,8 +153,6 @@
 <body>
 
 	<noscript>자바스크립트를 지원하지 않는 브라우저에서는 일부 기능을 사용하실 수 없습니다.</noscript>
-
-
 
 	<!-- Page Preloder -->
 	<div id="preloder">
@@ -183,40 +171,13 @@
 	</div>
 	<!-- Header Section End -->
 
-
-
 	<!-- Hero Section Begin -->
-	<!-- 
-	<section class="hero">
-
-	<div class="hero__slider owl-carousel">
-
-		<div class="hero__items set-bg"
-			data-setbg="<c:url value='/images/img/hero/hero-1.jpg' />">
-			<div class="container">
-				<div class="row">
-					<div class="col-xl-5 col-lg-7 col-md-8">
-						<div class="hero__text">
-							<h6>SIGN IN</h6>
-							<h2>회원가입</h2>
-							<p>회원정보를 입력해주세요</p>
-							<!-- form태그? --
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-	</div>
-	</section>
-	 -->
 	<!-- Hero Section End -->
 
-	<input type="text" class="jy_input">
-
-	<section class="contact spad">
+	<!-- Checkout Section Begin -->
+	<section class="checkout spad">
 	<div class="container">
+	
 		<div class="row">
 			<div class="col-lg-6 col-md-6">
 				<div class="contact__text">
@@ -229,15 +190,12 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	</section>
-
-	<!-- Checkout Section Begin -->
-	<section class="checkout spad">
-	<div class="container">
+		<div class="jy_margin_1" style="height:50px"></div>
+		
 		<div class="checkout__form">
 
-			<form action="#">
+			<form id="joinForm" name="joinForm" method="post" >
+				<input type="hidden" id="userSe" name="userSe" value="user"><!-- 사용자 구분(일반사용자) -->
 				<!-- 이용약관 시작 -->
 				<h4>사이트 이용약관</h4>
 				<div class="terms_wrap">
@@ -387,21 +345,15 @@
 						</li>
 					</ul>
 				</div>
-				<!-- 이용약관 동의 체크바스 -->
-				<!--  <div class="terms_agree">
-					<input type="checkbox" id="agree1" name="agree1" value="Y">
-					<label for="agree1">사이트 이용약관에 동의합니다.</label>
-				</div>-->
-				
+				<!-- 이용약관 동의 체크박스 -->
 				<div class="checkout__input__checkbox">
 					<label for="agree1"> 사이트 이용약관에 동의합니다. 
-						<input type="checkbox" id="agree1" name="agree1" value="Y"> 
+						<input type="checkbox" id="agree1" name="agree1" value="Y">
 						<span class="checkmark"></span>
 					</label>
 				</div>
-
-
-
+				<div class="jy_margin_1" style="height:50px"></div>
+				<!-- 이용약관2(개인정보 수집동의) 시작 -->
 				<h4>개인정보 수집/이용 동의</h4>
 				<div class="terms_wrap">
 					<h5 class="mt10 ml25">1. 개인정보의 수집 및 이용 목적</h5>
@@ -433,206 +385,98 @@
 							저희가 제공하는 서비스를 이용할 수 없습니다.</li>
 					</ul>
 				</div>
-				
+
 				<!-- 개인정보 취급방침 동의 체크박스 -->
-				<div class="terms_agree">
-					<input type="checkbox" id="agree2" name="agree2" value="Y">
-					<label for="agree2">개인정보 취급방침에 동의합니다.</label>
-				</div>
-				
 				<div class="checkout__input__checkbox">
-					<label for="agree2"> 사이트 이용약관에 동의합니다. 
-						<input type="checkbox" id="agree2" name="agree2" value="Y"> 
+					<label for="agree2">개인정보 취급방침에 동의합니다. <input
+						type="checkbox" id="agree2" name="agree2" value="Y" required>
 						<span class="checkmark"></span>
 					</label>
 				</div>
+				<!-- 이용약관2 끝 -->
 				
-				<!-- 이용약관 끝 -->
-
-
+				<div class="jy_margin_1" style="height:50px"></div>
+				
+				<!-- 회원가입 폼 시작 -->
 				<h6 class="checkout__title">회원정보 입력</h6>
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>
-								ID<span>*</span>
-							</p>
-							<input type="text" id="userId" name="userId" /> <input
-								type="submit" value="중복확인" class="primary-btn" />
-
+							<p>ID<span>*</span></p>
+							<input type="text" id="userId" name="userId" autocomplete="new-password" required /> 
+							<a href="#" id="userIdCk" class="primary-btn" />ID중복확인</a> 
+							<span id="userIdMsg"></span>
+							<!-- 중복 체크 결과를 표시할 영역 -->
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>
-								이름<span>*</span>
-							</p>
-							<input type="text" id="userName" name="userName" />
+							<p>이름<span>*</span></p>
+							<input type="text" id="userName" name="userName" autocomplete="new-password" required />
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>
-								Last Name<span>*</span>
-							</p>
-							<input type="text">
+							<p>비밀번호<span>*</span></p>
+							<input type="password" id="passwd" name="passwd" autocomplete="new-password" required />
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>비밀번호 확인<span>*</span></p>
+							<input type="password" id="passwdCk" name="passwdCk" required />
 						</div>
 					</div>
 				</div>
 
-				<div class="checkout__input">
-					<p>
-						Country<span>*</span>
-					</p>
-					<input type="text">
+
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="input_radio">
+							<p>성별<span style="color: #e53637;">*</span></p>
+							<input type="radio" id="male" name="sex" value="남성" / required>남성 
+							<input type="radio" id="female" name="sex" value="여성" /> 여성
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>생년월일<span>*</span></p>
+							<input type="date" id="brthdy" name="brthdy" required>
+						</div>
+					</div>
 				</div>
 
-				<div class="checkout__input">
-					<p>
-						Address<span>*</span>
-					</p>
-					<input type="text" placeholder="Street Address"
-						class="checkout__input__add"> <input type="text"
-						placeholder="Apartment, suite, unite ect (optinal)">
-				</div>
 
-				<div class="checkout__input">
-					<p>
-						Town/City<span>*</span>
-					</p>
-					<input type="text">
-				</div>
-				<div class="checkout__input">
-					<p>
-						Country/State<span>*</span>
-					</p>
-					<input type="text">
-				</div>
-				<div class="checkout__input">
-					<p>
-						Postcode / ZIP<span>*</span>
-					</p>
-					<input type="text">
-				</div>
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>
-								Phone<span>*</span>
-							</p>
-							<input type="text">
+							<p>휴대전화<span>*</span></p>
+							<input type="text" id="mbtlnum" name="mbtlnum" required>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>
-								Email<span>*</span>
-							</p>
-							<input type="text">
+							<p>이메일<span>*</span></p>
+							<input type="text" id="email" name="email" required>
 						</div>
 					</div>
 				</div>
-				<div class="checkout__input__checkbox">
-					<label for="acc"> Create an account? <input type="checkbox"
-						id="acc"> <span class="checkmark"></span>
-					</label>
-					<p>뭐라뭐라</p>
-				</div>
-				<div class="checkout__input">
-					<p>
-						Account Password<span>*</span>
-					</p>
-					<input type="text">
-				</div>
-				<div class="checkout__input__checkbox">
-					<label for="diff-acc"> Note about your order, e.g, special
-						noe for delivery <input type="checkbox" id="diff-acc"> <span
-						class="checkmark"></span>
-					</label>
-				</div>
-				<div class="checkout__input">
-					<p>
-						Order notes<span>*</span>
-					</p>
-					<input type="text"
-						placeholder="Notes about your order, e.g. special notes for delivery.">
-				</div>
+
 		</div>
 		<!-- checkout Form 끝 -->
 
-		<!-- 회원가입 표로 돼있는거 -->
-
-
-
-		<!-- 회원가입 폼 -->
-		<form id="registerForm" name="registerForm" method="post"
-			action="<c:url value='/joinUser.do'/>">
-			<table border="1" cellpadding="10" cellspacing="0"
-				style="width: 100%; border-collapse: collapse; border-color: #f1f3f5;">
-				<tr>
-					<th>아이디<span class="impt">*</span></th>
-					<td>
-
-						<div class="col-lg-6">
-							<div class="checkout__input">
-								<input type="text" id="userId" name="userId" />
-								<button type="button"  class="primary-btn" >중복확인</button>
-							</div>
-						</div>
-
-					</td>
-					<th>이름<span class="impt">*</span></th>
-					<td>
-						<div class="col-lg-6">
-							<div class="checkout__input">
-								<input type="text" id="userName" name="userName" />
-							</div>
-						</div>
-					</td>
-
-
-
-				</tr>
-				<tr>
-					<th>비밀번호<span class="impt">*</span></th>
-					<td><input type="password" id="password" name="password"
-						style="width: 100%;" /></td>
-					<th>비밀번호 확인<span class="impt">*</span></th>
-					<td><input type="password" id="passwordConfirm"
-						name="passwordConfirm" style="width: 100%;" /></td>
-				</tr>
-				<tr>
-					<th>성별<span class="impt">*</span></th>
-					<td>
-						<input type="radio" id="male" name="gender" value="남성" /> 남성 
-						<input type="radio" id="female" name="gender" value="여성" /> 여성
-					</td>
-					
-					<th>생년월일<span class="impt">*</span></th>
-					<td>
-						<input type="date" id="brthdy" name="brthdy"/>
-					</td>
-				</tr>
-				<tr>
-					<th>연락처<span class="impt">*</span></th>
-					<td><input type="text" id="userPhone" name="userPhone" style="width: 100%;" /></td>
-					<th>이메일</th>
-					<td><input type="text" id="userEmail" name="userEmail" style="width: 100%;" placeholder="example@gmail.com"/></td>
-				</tr>
-				
-				<tr>
-					<td colspan="4" style="text-align: center;"><input
-						type="submit" value="회원가입" class="primary-btn" />
-						<button type="reset" class="primary-btn">취소</button> <!-- <a href="#" class="primary-btn">회원가입 <span class="arrow_right"></span></a> -->
-				</tr>
-			</table>
 		</form>
+
+		<!-- <input type="submit" value="회원가입" class="primary-btn" /> -->
+		<button type="reset" class="primary-btn">취소</button>
+		
+		<a href="#" class="primary-btn joinBtn">회원가입</a>
+		<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
+	
+
 		<!-- 회원가입 폼 끝-->
 
 
-	</div>
-	</form>
-	</div>
 	</div>
 	</section>
 	<!-- Checkout Section End -->
@@ -640,65 +484,7 @@
 
 
 	<!-- Contact Section Begin -->
-	<section class="contact spad">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6 col-md-6">
-				<div class="contact__text">
-					<!-- <div class=""section-title> -->
-					<div class="jy_page_title">
-						<span>SIGN IN</span>
-						<h2>회원가입</h2>
-						<p>회원정보를 입력해주세요</p>
-					</div>
 
-					<ul>
-						<li>
-							<!-- 이용약관 시작 -->
-							<h4>사이트 이용약관</h4>
-				</div>
-				<!-- 이용약관 동의 체크바스 -->
-				<div class="terms_agree">
-					<input type="checkbox" id="agree1" name="agree1" value="Y">
-					<label for="agree1">사이트 이용약관에 동의합니다.</label>
-				</div>
-				</li>
-
-				</ul>
-
-			</div>
-		</div>
-		<div class="col-lg-6 col-md-6">
-			<div class="contact__form">
-				<form action="#">
-					<div class="row">
-						<div class="col-lg-6">
-							<input type="text" placeholder="Name">
-						</div>
-						<div class="col-lg-6">
-							<input type="text" placeholder="Email">
-						</div>
-
-						<div class="col-lg-12">
-							<label for="userEmail">Email: </label><input type="text"
-								id="userEmail" name="userEmail" placeholder="Email">
-
-						</div>
-
-
-						<div class="col-lg-12">
-							<textarea placeholder="Message"></textarea>
-							<button type="submit" class="site-btn">Send Message</button>
-						</div>
-
-
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	</div>
-	</section>
 	<!-- Contact Section End -->
 
 
@@ -740,6 +526,248 @@
 		</div>
 	</div>
 	<!-- Search End -->
+
+	<script>
+	//페이지 로드가 완료되면
+	if (window.addEventListener)
+			window.addEventListener("load", userData, false);
+	else if (window.attachEvent)
+			window.attachEvent("onload", userData);
+	else
+			window.onload = userData;
+	var userIdCk = false;
+	function userData() {
+		
+		// 사용자ID 중복체크 - 가져옴
+		
+		/*
+		$('#userIdCk').click(function(e) {
+			e.preventDefault();
+			var userId = $('#userId').val();
+		    console.log("userId: ", userId);  // 입력한 ID 확인
+		    if ($.trim(userId) != '') {
+				$.post('joinIdCheck.do', {'userId':$('#userId').val()}).done(function(data) {
+					console.log("AJAX 응답: ", data);  // 응답 데이터 확인
+					if (data.error == 'N') {
+						idCheck = true;
+						alert('사용가능한 아이디 입니다.');
+						$('#userId').prop('readonly', true);
+					} else {
+						idCheck = false;
+						alert(data.errorMsg);
+					    console.log("data.errorMsg: ", data.errorMsg);  // 입력한 ID 확인
+
+						$('#userId').prop('readonly', false);
+						$('#userId').focus();
+					}
+				}).fail(function() {
+		            alert("AJAX 요청에 실패했습니다.");
+		        });
+			} else {
+				idCheck = false;
+		        alert('ID가 중복인지 확인하세요.');
+			}
+		});
+		*/
+		
+		$('#userIdCk').click(
+				function(e) {
+					e.preventDefault(); // 링크 기본 동작 막기
+					
+					var userId = $('#userId').val(); // 입력된 ID 값 가져오기
+
+					if (userId === "") {
+						alert("ID를 입력하세요."); // 자영 : 이미 필수체크인데?
+						return;
+					}
+
+					// AJAX를 이용해 서버로 ID 중복 확인 요청 보내기
+					
+					$.ajax({
+			            url: '<c:url value="/joinIdCheck.do"/>', // 서버에서 처리할 URL
+			            type: 'POST',
+			            data: { userId: userId }, // 입력된 ID 전달
+			            success: function(response) {
+			            	console.log("성공 시 response",response)
+			            	console.log("성공 시 response",response.exist)
+			                if (response.exist == true) {
+			                    $('#userIdMsg').text("이미 사용 중인 ID입니다.").css("color", "red");
+			                } else {
+			                	userIdCk = true;
+			                    $('#userIdMsg').text("사용 가능한 ID입니다.").css("color", "green");
+			                }
+			            },
+			            error: function() {
+			                alert("ID 중복 확인 중 오류가 발생했습니다.");
+			            }
+			        });
+					
+					
+				});
+		
+		
+
+		
+		// 회원가입 버튼 클릭 시 
+		$('.joinBtn').click(function(e) {
+			
+			e.preventDefault();
+			
+			if (!$(':checkbox[name="agree1"]').is(':checked')) {
+				alert('회원이용약관에 동의하지 않으셨습니다.');
+				$('#agree1').focus();
+				return false;
+			}
+			if (!$(':checkbox[name="agree2"]').is(':checked')) {
+				alert('개인정보보호방침에 동의하지 않으셨습니다.');
+				$('#agree2').focus();
+				return false;
+			}
+			
+			if (!userIdCk) {
+				alert('아이디 중복확인을 해주세요.');
+				$('#userId').focus();
+				return false;
+			}
+			
+			if ($.trim($('#userName').val()) == ''){
+				alert('이름을 입력해주세요');
+				$('#userName').focus();
+				return false;
+			}
+			
+			//var groupId = $("input[name='groupId']:checked").val();
+			if ($.trim($('#passwd').val()) == ''){
+				alert('비밀번호를 입력해주세요');
+				$('#passwd').focus();
+				return false;
+			}else if($('#passwd').val() != $('#passwdCk').val()){
+				alert('비밀번호를 다시 확인해주세요!');
+				$('#passwdCk').focus();
+				return false;
+			}
+			
+			if(!$('input:radio[name=sex]').is(":checked")){
+				alert("성별을 선택해주세요.");
+				$('#sex').focus();
+				return false;
+			}
+			
+			if ($.trim($('#brthdy').val()) == ''){
+				alert('생년월일을 입력해주세요');
+				$('#brthdy').focus();
+				return false;
+			}
+			
+			if ($.trim($('#mbtlnum').val()) == ''){
+				alert('휴대전화 번호를 입력해주세요');
+				$('#mbtlnum').focus();
+				return false;
+			}
+			
+			if ($.trim($('#email').val()) == '' ){
+				alert('이메일을 입력해주세요.');
+				$('#email').focus();
+			}
+			/*else if ($.trim($('#email').val()) != '' && !ValidEmail($.trim($('#email').val()))) {
+				alert('이메일 : 잘못된 이메일 형식입니다.');
+				$('#email').focus();
+				return;
+			}*/
+			
+			
+			// 유효성 검사 - 미입력
+			if (requiredEmpty()) {
+				return;
+			}
+			
+			
+			if (confirm("회원가입을 하시겠습니까?")) {
+				var form = $('#joinForm')[0];
+				var formData = new FormData(form);
+				
+				$.ajax({
+					url: 'joinUser.do',
+					processData: false,
+					contentType: false,
+					data: formData,
+					type: 'POST',
+					success: function(result){
+						console.log("회원가입 응답 result:", result);
+		                
+		                // JSON 파싱
+		                var response = JSON.parse(result);
+						console.log("회원가입 response:", response);
+
+		                if (response.error == 'N') {
+		                    alert("회원가입되었습니다.");
+		                    location.href = '/loginForm.do';
+		                } else if (response.error == 'Y') {
+		                    alert('회원가입 실패: ' + response.errorMsg);
+		                    location.href = '/joinForm.do';
+		                }
+					},
+					error: function() {
+		                alert("회원가입 중 오류가 발생했습니다.");
+		            }
+				});
+			}
+			
+			
+			
+		})// 회원가입 버튼 클릭 끝
+	};// 전체 불러오기 끝
+		
+		
+		
+		
+	// 유효성 검사 함수
+	function requiredEmpty() {
+		var empty = false;
+		$("*[required]").each(
+				function() {
+					if (empty)
+						return;
+					var input = $(this), value = input.val();
+					if (empty = !value) {
+						var label = $(
+								"label[for='" + input.attr("id") + "']")
+								.html();
+						if (label)
+							alert(label.replace("<br>", "")
+									+ "을(를) 입력하십시오.");
+						else
+							alert("필수값이 입력되지 않았습니다.");
+						input.focus();
+					}
+
+				});
+		return empty;
+	}
+
+	// 사용자ID 중복체크
+	/*
+	$('.idCheck').click(function(e) {
+		e.preventDefault();
+		if ($.trim($('#userId').val()) != '') {
+			$.post('<c:out value="${path.context}" />joinIdCheck.do', {'userId':$('#userId').val()}).done(function(data) {
+				if (data.error == 'N') {
+					idCheck = true;
+					alert('사용가능한 아이디 입니다.');
+					$('#userId').prop('readonly', true);
+				} else {
+					idCheck = false;
+					alert(data.errorMsg);
+					$('#userId').prop('readonly', false);
+					$('#userId').focus();
+				}
+			});
+		} else {
+			idCheck = false;
+		}
+	});*/
+		
+	</script>
 
 	<!-- Js Plugins -->
 	<!--<jsp:include page="/WEB-INF/jsp/main/inc/commonJsPlugins.jsp" />-->

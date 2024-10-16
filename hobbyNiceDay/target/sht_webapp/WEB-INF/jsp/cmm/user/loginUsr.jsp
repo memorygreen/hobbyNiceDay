@@ -17,7 +17,7 @@
 <meta name="keywords" content="Male_Fashion, unica, creative, html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>경량환경 단순홈페이지 템플릿 (자영 : 회원가입)/ Male-Fashion | Template</title>
+<title>경량환경 단순홈페이지 템플릿 (자영 : 로그인)/ Male-Fashion | Template</title>
 
 <!-- 전자정부 프레임워크 기본 -->
 <!-- <link href="<c:url value='/'/>css/common.css" rel="stylesheet"
@@ -131,7 +131,7 @@
 					<div class="col-xl-5 col-lg-7 col-md-8">
 						<div class="hero__text">
 							<h6>SIGN IN</h6>
-							<h2>회원가입</h2>
+							<h2>로그인</h2>
 							<p>회원정보를 입력해주세요</p>
 							<!-- form태그? --
 
@@ -153,7 +153,7 @@
 					<div class="contact__text">
 						<div class="section-title">
 							<span>SIGN IN</span>
-							<h2>회원가입</h2>
+							<h2>로그인(임시)</h2>
 							<p>회원정보를 입력해주세요</p>
 						</div>
 					</div>
@@ -501,7 +501,7 @@
 				<div class="contact__text">
 					<div class="section-title">
 						<span>SIGN IN</span>
-						<h2>회원가입</h2>
+						<h2>로그인</h2>
 						<p>회원정보를 입력해주세요</p>
 					</div>
 					
@@ -697,7 +697,7 @@
 
 
 
-					<!-- 회원가입 폼 -->
+					<!-- 로그인 폼 -->
 					<form id="registerForm" name="registerForm" method="post"
 						action="<c:url value='/cmm/uat/uia/insertUser.do'/>">
 						<table border="1" cellpadding="10" cellspacing="0"
@@ -737,13 +737,13 @@
 							</tr>
 							<tr>
 								<td colspan="4" style="text-align: center;">
-								<input type="submit" value="회원가입" class="primary-btn" />
+								<input type="submit" value="로그인" class="primary-btn" />
 								<button type="reset" class="primary-btn">취소</button> 
-								<!-- <a href="#" class="primary-btn">회원가입 <span class="arrow_right"></span></a> -->
+								<!-- <a href="#" class="primary-btn">로그인 <span class="arrow_right"></span></a> -->
 							</tr>
 						</table>
 					</form>
-					<!-- 회원가입 폼 끝-->
+					<!-- 로그인 폼 끝-->
 				</div>
 			</div>
 			<div class="col-lg-6 col-md-6">

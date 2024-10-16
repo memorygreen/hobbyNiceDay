@@ -23,4 +23,11 @@
 		    	, NOW()
 	    	)
 	</insert>
+	
+<!-- 회원가입 id 중복 체크 -->
+	<select id="joinIdCheck" parameterType="String" resultType="int">
+	    SELECT COUNT(*)
+	    FROM user
+	    WHERE user_id = #{userId}
+	</select>
 </mapper>

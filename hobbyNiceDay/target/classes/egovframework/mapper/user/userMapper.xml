@@ -6,21 +6,50 @@
 <!-- 회원 관련 mapper  -->
 	<!-- 회원가입 -->
 	<insert id="joinUser" parameterType="egovframework.com.cmm.UserVO">
-    INSERT INTO user (
-				    	user_id
-				    	, password
-				    	, user_name
-				    	, email
-				    	, phone
-				    	, created_at
-    				  )
+    INSERT INTO TB_USER (
+        USER_ID,
+        PASSWD,
+        USER_NAME,
+        EMAIL,
+        BRTHDY,
+        MBTLNUM,
+        SEX,
+        SNS_PROVIDER,
+        USER_SE,
+        REG_IP,
+        REG_ID,
+        REG_DT,
+        UPDT_ID,
+        UPDT_IP,
+        UPDT_DT,
+        LAST_LOGIN_IP,
+        LAST_LOGIN_DT
+    )
     VALUES (
-		    	#{userId}
-		    	, #{password}
-		    	, #{userName}
-		    	, #{email}
-		    	, #{phone}
-		    	, NOW()
-	    	)
+        #{userId},
+        #{passwd},
+        #{userName},
+        #{email},
+        #{brthdy},
+        #{mbtlnum},
+        #{sex},
+        #{snsProvider},
+        #{userSe},
+        #{regIp},
+        #{userId},
+        NOW(),
+        #{updtId},
+        #{updtIp},
+        #{updtDt},
+        #{lastLoginIp},
+        #{lastLoginDt}
+    )
 	</insert>
+	
+<!-- 회원가입 id 중복 체크 -->
+	<select id="joinIdCheck" parameterType="String" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_USER
+	    WHERE USER_ID = #{userId}
+	</select>
 </mapper>

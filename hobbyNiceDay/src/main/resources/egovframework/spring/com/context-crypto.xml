@@ -13,5 +13,10 @@
 		<property name="passwordEncoder" ref="egovPasswordEncoder" />
 		<property name="blockSize" value="1024" />
 	</bean>
+	
+	<!-- 자영 암호화 추가(gpt) -->
+	<bean id="egovEnvCryptoService" class="org.egovframe.rte.fdl.cryptography.impl.EgovEnvCryptoServiceImpl">
+    <property name="passwordEncoder" ref="egovPasswordEncoder" />
+	</bean>
  
 </beans>
