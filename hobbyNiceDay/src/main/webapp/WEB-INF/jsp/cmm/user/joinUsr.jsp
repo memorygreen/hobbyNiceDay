@@ -605,9 +605,6 @@
 					
 				});
 		
-		
-
-		
 		// 회원가입 버튼 클릭 시 
 		$('.joinBtn').click(function(e) {
 			

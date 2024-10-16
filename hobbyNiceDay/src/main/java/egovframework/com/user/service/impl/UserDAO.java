@@ -8,6 +8,7 @@ import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.UserVO;
 
 
@@ -25,6 +26,7 @@ public class UserDAO extends EgovAbstractMapper {
      * @param vo UserVO
      * @exception Exception
      */
+	// 회원가입
     public int joinUser(UserVO vo) throws Exception {
         int resultJoin = insert("UserDAO.joinUser", vo);
         return resultJoin;
@@ -36,7 +38,10 @@ public class UserDAO extends EgovAbstractMapper {
 		//return 0;
 		//return selectOne("UserDAO.joinIdCheck", userId);
         return selectOne("UserDAO.joinIdCheck", userId);
-
-		
+	}
+	
+	// 로그인 
+	public UserVO loginUser(UserVO vo) throws Exception {
+		return (UserVO) selectOne("UserDAO.loginUser", vo);
 	}
 }

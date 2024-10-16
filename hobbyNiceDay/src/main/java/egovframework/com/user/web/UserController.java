@@ -12,14 +12,18 @@ import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import com.google.gson.JsonObject;
 
+import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.UserVO;
 import egovframework.com.user.service.UserService;
 
@@ -45,14 +49,14 @@ public class UserController {
 	
 	 // 회원가입 페이지로 이동
     @RequestMapping(value = "/joinForm.do", method = RequestMethod.GET)
-    public String joinForm() {
+    public String joinForm() throws Exception {
         return "/cmm/user/joinUsr";
     }
     
     // 회원가입 기능
     @RequestMapping(value = "/joinUser.do", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> joinUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) {
+    public ResponseEntity<String> joinUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) throws Exception {
     	System.out.println("회원가입 기능 들어왔는지 확인");
     	JsonObject jsonObj = new JsonObject();
     	//HashMap<String, Object> retMap = new HashMap<>();
@@ -91,7 +95,7 @@ public class UserController {
     
 
  // 클라이언트 IP를 가져오는 메서드 추가
-    private String getClientIp(HttpServletRequest request) {
+    private String getClientIp(HttpServletRequest request) throws Exception{
 	     String ip = request.getHeader("X-Forwarded-For");
 	     if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
 	         ip = request.getHeader("Proxy-Client-IP");
@@ -114,7 +118,7 @@ public class UserController {
     // 회원가입 id 중복 체크 기능
     @RequestMapping(value = "/joinIdCheck.do", method = RequestMethod.POST,  produces = "application/json; charset=UTF-8")
     @ResponseBody // 추가: JSON으로 반환
-    public String  checkUserId(@RequestParam("userId") String userId) {
+    public String joinIdCheck(@RequestParam("userId") String userId) throws Exception{
     	
     //public Map<String, Object> checkUserId(@RequestParam("userId") String userId) {
 	//public HashMap<String, Object> joinIdCheck(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, Object> param) throws Exception {
@@ -187,15 +191,80 @@ public class UserController {
     
     // 로그인 페이지로 이동
     @RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
-    public String loginForm() {
+    public String loginForm() throws Exception{
     	return "/cmm/user/loginUsr";
     }
+    
+    
+    @RequestMapping(value = "/loginUser.do")
+    @ResponseBody
+	public ResponseEntity<String> loginUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) throws Exception {
+        //public ResponseEntity<String> joinUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) {
+    	
+    	JsonObject jsonObj = new JsonObject();
+        try {
+			// 1. 일반 로그인 처리
+			UserVO resultVO = userService.loginUser(userVO); // id,pw 같은 경우 resultVO 반환
+			System.out.println(resultVO);
+			
+			boolean loginPolicyYn = true;
+		
+		
+			if (resultVO != null && resultVO.getUserId() != null && !resultVO.getUserId().equals("") && loginPolicyYn) {
+				System.out.println("로그인 성공");
+				request.getSession().setAttribute("UserVO", resultVO); // 세션에 담기
+//				return "forward:/cmm/main/mainPage.do";
+				jsonObj.addProperty("error", "N");
+				System.out.println("로그인 성공 jsonObj"+ jsonObj);
+			} else {
+				jsonObj.addProperty("error", "Y");
+	            jsonObj.addProperty("errorMsg", "아이디 또는 비밀번호가 잘못되었습니다.");
+	//			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+				//return "/cmm/user/loginUsr";
+	            System.out.println("로그인 실패 jsonObj"+ jsonObj);
+			}
+        } catch (Exception e) {
+        	System.out.println("catch");
+            jsonObj.addProperty("error", "Y");
+            jsonObj.addProperty("errorMsg", "로그인 중 오류가 발생했습니다. 관리자에게 문의하세요.");
+            e.printStackTrace();
+        }
+        
+        System.out.println("return 직전 jsonObj"+jsonObj);
+        return ResponseEntity.ok(jsonObj.toString());
+
+	}
+    
+    
+    
+    
     
     // 회원정보수정 페이지로 이동
     @RequestMapping(value = "/updateUsrForm.do", method = RequestMethod.GET)
     public String updateUsrForm() {
     	return "/cmm/user/updateUsr";
     }
+    
+    
+    
+    
+    /**
+	 * 로그아웃한다.
+	 * @return String
+	 * @exception Exception
+	 */
+	/*@RequestMapping(value = "/uat/uia/actionLogout.do")
+	public String actionLogout(HttpServletRequest request, ModelMap model) throws Exception {
+
+		RequestContextHolder.getRequestAttributes().removeAttribute("LoginVO", RequestAttributes.SCOPE_SESSION);
+
+		return "forward:/cmm/main/mainPage.do";
+	}*/
+	
+    
+    
+    
+    
 }
     
     

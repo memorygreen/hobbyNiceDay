@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="UserDAO">
+<mapper namespace="UserDAO"><!-- egovframework.com.user.service.impl.UserDAO -->
 <!-- "egovframework.mapper.let.uat.uia.userMapper" -->
 
 <!-- 회원 관련 mapper  -->
@@ -46,10 +46,44 @@
     )
 	</insert>
 	
-<!-- 회원가입 id 중복 체크 -->
+	<!-- 회원가입 id 중복 체크 -->
 	<select id="joinIdCheck" parameterType="String" resultType="int">
 	    SELECT COUNT(*)
 	    FROM TB_USER
 	    WHERE USER_ID = #{userId}
+	</select>
+	
+	
+	<!-- 로그인 처리를 위한 resultMap -->
+	<resultMap id="resultLogin" type="egovframework.com.cmm.UserVO">
+		<result property="userId" column="userId"/>
+		<result property="userName" column="userName"/>
+		<result property="passwd" column="passwd"/>
+		<result property="email" column="email"/>
+		<result property="brthdy" column="brthdy"/>
+		<result property="sex" column="sex"/>		
+		<result property="userSe" column="userSe"/>
+	</resultMap>
+	
+	
+	<!-- 로그인 -->
+	<!-- 일반 로그인 -->
+	<select id="loginUser" parameterType="egovframework.com.cmm.UserVO" resultMap="resultLogin">
+	
+            SELECT 
+            	   USER_ID AS userId
+                 , USER_NAME AS userName
+                 , PASSWD AS passwd
+                 , EMAIL AS email
+                 , BRTHDY AS brthdy
+                 , MBTLNUM AS mbtlnum
+                 , SEX AS sex
+                 , USER_SE as userSe
+              FROM TB_USER
+             WHERE USER_ID = #{userId}
+               AND PASSWD = #{passwd}
+               <if test="userSe != null">
+		          AND USER_SE = #{userSe}
+		      </if>
 	</select>
 </mapper>
