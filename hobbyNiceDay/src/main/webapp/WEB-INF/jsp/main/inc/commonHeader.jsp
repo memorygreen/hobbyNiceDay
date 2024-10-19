@@ -17,7 +17,7 @@
                              
                             
                             <a href="<c:url value='/loginForm.do'/>">LOGIN</a>
-                            <a href="#">ADMIN</a>
+                            <a href="/adminMain.do">ADMIN</a>
                         </div>
                         <!-- 
                         <div class="header__top__hover">
@@ -48,14 +48,14 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li><a href="<c:url value='/cmm/main/mainPage.do'/>">Home</a></li>
-                        <li class="active"><a href="./shop.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
+                        <!-- <li class="active"><a href="./shop.html">Shop</a></li> -->
+                        <li><a href="#">MyPage</a>
                             <ul class="dropdown">
-                                <li><a href="./about.html">About Us</a></li>
-                                <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
+                                <li><a href="./about.html">회원정보수정</a></li>
+                                <li><a href="./shop-details.html">예약관리</a></li>
+                                <li><a href="./shopping-cart.html">리뷰관리</a></li>
+                                <li><a href="./checkout.html">클래스수강이력</a></li>
+                                <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
                             </ul>
                         </li>
                         <li><a href="./blog.html">Blog</a></li>

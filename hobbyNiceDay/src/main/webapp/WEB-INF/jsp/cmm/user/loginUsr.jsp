@@ -17,7 +17,7 @@
 <meta name="keywords" content="Male_Fashion, unica, creative, html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>경량환경 단순홈페이지 템플릿 (자영 : 회원가입)/ Male-Fashion | Template</title>
+<title>HobbyNiceDay</title>
 
 <!-- 전자정부 프레임워크 기본 -->
 <!-- <link href="<c:url value='/'/>css/common.css" rel="stylesheet"
