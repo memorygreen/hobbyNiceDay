@@ -1,6 +1,7 @@
 package egovframework.com.user.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
@@ -15,5 +16,8 @@ public interface UserService {
 	
 	// 로그인 서비스
 	public UserVO loginUser(UserVO vo) throws Exception;
+	
+	// 관리자 회원테이블 전체 리스트 조회 
+	public List<EgovMap> getAdminUserList()  throws Exception;
 
 }

@@ -1,5 +1,7 @@
 package egovframework.com.user.web;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.egovframe.rte.fdl.cryptography.EgovEnvCryptoService;
 import org.egovframe.rte.fdl.cryptography.EgovPasswordEncoder;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import egovframework.com.cmm.LoginVO;
@@ -187,6 +191,105 @@ public class UserController {
          return jsonObj.toString();
 
      }
+    
+    // 전체 회원 목록 조회 기능
+    @RequestMapping(value = "/getAdminUserList.do", method = RequestMethod.POST,  produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public ResponseEntity<String> adminUserAllList(Model model) throws Exception{
+    	System.out.println("관리자 전체 회원목록 조회 됐는지 확인");
+    	
+    	JsonObject jsonObj = new JsonObject();
+    	HashMap<String, Object> retMap = new  HashMap<>();
+    	HashMap<String, Object> listMap = new  HashMap<>();
+    	 try {
+		    	
+		    	List<EgovMap> listData = new ArrayList<EgovMap>();
+		    	listData = userService.getAdminUserList();  // 모든 사용자 정보 가져오기
+		    	System.out.println("listData 확인 : "+ listData);
+		    	
+		    	listMap.put("dataMap", listData); // hashMap에 담기
+		    	System.out.println("listMap 확인 : "+ listMap);
+		        
+		    	retMap.put("error", "N");
+				retMap.put("dataMap", listMap);
+				System.out.println("retMap 확인 : "+ retMap);
+		        
+				Gson gson = new Gson();
+			    String jsonStr = gson.toJson(retMap);  // retMap을 JSON 문자열로 변환
+			    System.out.println("jsonStr 확인 : " + jsonStr);
+			     return ResponseEntity.ok(jsonStr);  // 변환된 JSON 문자열 반환
+    	 } catch (Exception e) {
+    		 	retMap.put("error", "Y");
+    		 	retMap.put("errorMsg", "회원 목록 조회 중 발생했습니다.");
+    		 	
+    	        e.printStackTrace();  // 예외 출력
+    	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 에러 발생");
+    	 }
+    	 
+     }
+    
+    /*proflist 참고하기*/
+ // 리스트 데이터
+// 	@RequestMapping({"/getProfListData.do","/{siteId}/getProfListData.do"})
+// 	@ResponseBody
+// 	public void getProfListData(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, Object> param) throws Exception {
+// 		HashMap<String, Object> retMap = new HashMap<>();
+// 		HashMap<String, Object> listMap = new HashMap<>();
+// 		try {
+// 			// 로그인정보 가져오기
+// 			LoginVO loginVO = (LoginVO) SiiruUtil.getAttribute("siiruLogin");
+// 			param.put("deptId", loginVO.getDeptId());
+// 			param.put("loginId", loginVO.getUserId());
+//
+// 			//기관 책임자 여부 체크 
+// 			//int chargeAuth = pgCommonService.getInstChargeAuth(param);
+// 			//if(chargeAuth > 0) {
+// 			//	param.put("chargeYn", "Y");
+// 			//}else {
+// 			//	param.put("chargeYn", "N");
+// 			//}
+// 			
+// 			// 페이지 번호
+// 			int movePage = NumberUtil.toInt(param.get("movePage"),"1");
+// 			param.put("movePage", movePage);
+// 			// 한페이지 레코드 개수
+// 			double recordCnt = NumberUtil.toDouble(SiiruProperties.getSiiRU("recordCnt"),10);
+// 			if (StringUtil.isNotEmpty(param.get("recordCnt"))) recordCnt = NumberUtil.toDouble(param.get("recordCnt"));
+// 			param.put("recordCnt", (int)recordCnt);
+// 			// limit 시작 개수 (Mariadb, mySql)
+// 			param.put("limitStart", ((movePage - 1) * (int)recordCnt));
+// 			// 전체 개수
+// 			double totalCnt = pgProfService.getProfListTotal(param);
+// 			// 전체 페이지수
+// 			double pageCnt = Math.ceil(totalCnt / recordCnt);
+// 			// 리스트
+// 			ArrayList<EgovMap> listData = pgProfService.getProfListData(param);
+// 			// 복호화
+// 			for (EgovMap list : listData) {
+// 				list.put("telno", cryptoService.getPrivacyDecrypt((String)list.get("telno")));
+// 			}
+// 			// 리턴값 정리
+// 			listMap.put("page", movePage);
+// 			listMap.put("pageCnt", pageCnt);
+// 			listMap.put("totalCnt", totalCnt);
+// 			listMap.put("recordCnt", recordCnt);
+// 			listMap.put("list", listData);
+// 			retMap.put("error", "N");
+// 			retMap.put("dataMap", listMap);
+// 		} catch (DataAccessException e) {
+// 			retMap.put("error", "Y");
+// 			retMap.put("errorTitle", "Error");
+// 			retMap.put("errorMsg", "시스템 오류가 발생했습니다.");
+// 			SiiruUtil.logFile(req, e);
+// 		}
+// 		SiiruUtil.writeJson(retMap, res);
+// 	}
+    
+    
+    
+    
+    
+    
     
     
     // 로그인 페이지로 이동

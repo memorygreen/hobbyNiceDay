@@ -60,5 +60,17 @@ public class UserVO implements Serializable {
     private String lastLoginIp;
     // 마지막 로그인 일시
     private String lastLoginDt;
+    
+    // 로그인 횟수
+    private int loginCnt;
+    
+    // 로그인 실패 횟수
+    private int loginErrCnt;
+    
+    // 로그인 제한 여부
+    private String loginRestricted;
+    
+    
+    
 
 }

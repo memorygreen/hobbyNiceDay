@@ -405,8 +405,7 @@
 							<p>ID<span>*</span></p>
 							<input type="text" id="userId" name="userId" autocomplete="new-password" required /> 
 							<a href="#" id="userIdCk" class="primary-btn" />ID중복확인</a> 
-							<span id="userIdMsg"></span>
-							<!-- 중복 체크 결과를 표시할 영역 -->
+							<span id="userIdMsg"></span><!-- 중복 체크 결과를 표시할 영역 -->
 						</div>
 					</div>
 					<div class="col-lg-6">

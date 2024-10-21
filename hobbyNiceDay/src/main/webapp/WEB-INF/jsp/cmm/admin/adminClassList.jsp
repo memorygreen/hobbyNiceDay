@@ -13,11 +13,6 @@
 	
 	<!-- 템플릿-->
 	<title>HobbyNiceDay management</title>
-    
-
-    <!-- dddddddddddddddddddddddddddddddddddddddddddd -->
-    
-    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -47,9 +42,14 @@
 </head>
 
 <body>
+
     <!-- Pre-loader start -->
-    <div class="pre_loader_start"></div>
+    <div class="pre_loader_start">
+    	<jsp:include page="/WEB-INF/jsp/main/inc/adminPreLoader.jsp" />
+    </div>
     <!-- Pre-loader end -->
+     
+     
      
     <div id="pcoded" class="pcoded">
         <div class="pcoded-overlay-box"></div>

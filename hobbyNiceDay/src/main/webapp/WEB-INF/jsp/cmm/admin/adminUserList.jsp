@@ -13,11 +13,6 @@
 	
 	<!-- 템플릿-->
 	<title>HobbyNiceDay management</title>
-    
-
-    <!-- dddddddddddddddddddddddddddddddddddddddddddd -->
-    
-    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -48,7 +43,9 @@
 
 <body>
     <!-- Pre-loader start -->
-    <div class="pre_loader_start"></div>
+    <div class="pre_loader_start">
+    	<jsp:include page="/WEB-INF/jsp/main/inc/adminPreLoader.jsp" />
+    </div>
     <!-- Pre-loader end -->
      
     <div id="pcoded" class="pcoded">
@@ -139,7 +136,7 @@
 															</svg>   등록
 										                </button>
 										            </div>
-                                                    <table class="table table-hover">
+                                                    <table class="userList table table-hover">
                                                         <thead>
                                                             <tr>
                                                                 <th>순번</th>
@@ -147,58 +144,62 @@
                                                                 <th>이름</th>
                                                                 <th>성별</th>
                                                                 <th>생년월일</th>
-                                                                <th>연령대</th>
+                                                                <th>나이(만)</th>
                                                                 <th>이메일</th>
                                                                 <th>연락처</th>
                                                                 <th>사용자구분</th>
                                                                 <th>로그인 횟수</th>
                                                                 <th>마지막 로그인일시</th>
+                                                                <th>로그인 실패 횟수</th>
                                                                 <th>로그인 제한 여부</th>
                                                                 <th>마지막 수정일시</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
+                                                        
                                                         <tbody>
-                                                            <tr>
-                                                                <th scope="row">1</th>
-                                                                <td id="">Mark</td>
-                                                                <td>Otto</td>
-                                                                <td>@mdo</td>
-                                                                <td>Mark</td>
-                                                                <td>Otto</td>
-                                                                <td>@mdo</td>
-                                                                <td>Mark</td>
-                                                                <td>Otto</td>
-                                                                <td>@mdo</td>
-                                                                <td>Otto</td>
-                                                                <td>
-                                                                    <div class="dropdown-inverse dropdown open">
-                                                                        <button class="btn btn-inverse dropdown-toggle waves-effect waves-light " type="button" id="dropdown-7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">로그인 제한 해제</button>
-                                                                        <div class="dropdown-menu" aria-labelledby="dropdown-7" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                                                            <a class="dropdown-item waves-light waves-effect" href="#">로그인 가능</a>
-                                                                            <a class="dropdown-item waves-light waves-effect" href="#">로그인 제한</a>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                
-                                                                <td>@mdo</td>
-                                                                <td>
-                                                                    <button id="btnUpdate" class="btn waves-effect waves-light btn-success btn-outline-success">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-																		  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-																		  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-																	</svg> 수정</button>
-                                                                    <button class="btn waves-effect waves-light btn-danger btn-outline-danger">
-                                                                    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-																		  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																		  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-																		</svg> 삭제</button>
-
-                                                                </td>
-                                                            </tr>
-                                                           
+                                                        	<c:forEach var="user" items="${userList}">
+	                                                            <tr>
+	                                                                <td id="userId">${user.userId}</td>
+													                <td id="userName">${user.userName}</td>
+													                <td id="sex">${user.sex}</td>
+													                <td id="brthdy">${user.brthdy}</td>
+	                                                                <td id="ageSe">${user.ageSe}</td>
+	                                                                <td id="email">${user.email}</td>
+													                <td id="mbtlno">${user.mbtlno}</td>
+													                <td id="userSe">${user.userSe}</td>
+													                <td id="loginCnt">${user.loginCnt}</td>
+													                <td id="lastLoginDt">${user.lastLoginDt}</td>
+	                                                                <td id="loginRestricted">${user.loginRestricted}
+	                                                                    <div class="dropdown-inverse dropdown open">
+	                                                                        <button class="btn btn-inverse dropdown-toggle waves-effect waves-light " type="button" id="dropdown-7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">로그인 제한 해제</button>
+	                                                                        <div class="dropdown-menu" aria-labelledby="dropdown-7" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+	                                                                            <a class="dropdown-item waves-light waves-effect" href="#">로그인 가능</a>
+	                                                                            <a class="dropdown-item waves-light waves-effect" href="#">로그인 제한</a>
+	                                                                        </div>
+	                                                                    </div>
+	                                                                </td>
+	                                                                
+	                                                                <td id="uptDt">${user.uptDt}</td>
+	                                                                <td>
+	                                                                    <button id="btnUpdate" class="btn waves-effect waves-light btn-success btn-outline-success">
+	                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+																			  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+																			  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+																		</svg> 수정</button>
+	                                                                    <button class="btn waves-effect waves-light btn-danger btn-outline-danger">
+	                                                                    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+																			  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+																			  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+																			</svg> 삭제</button>
+	
+	                                                                </td>
+	                                                            </tr>
+                                                        	</c:forEach>   
                                                         </tbody>
                                                     </table>
+                                                    
+                                                    <c:out value="${userList}" />
                                                 </div>
                                             </div>
                                         </div>
@@ -235,7 +236,7 @@
     <script type="text/javascript" src="js/admin/js/popper.js/popper.min.js"></script>
     <script type="text/javascript" src="js/admin/js/bootstrap/js/bootstrap.min.js "></script>
     <!-- waves js -->
-    <script src="assets/pages/waves/js/waves.min.js"></script>
+    <script src="/pages/admin/pages/waves/js/waves.min.js"></script>
     <!-- jquery slimscroll js -->
     <script type="text/javascript" src="js/admin/js/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Custom js -->
@@ -245,11 +246,22 @@
     <script type="text/javascript" src="js/admin/js/script.js"></script>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        // 등록 버튼 클릭 시 회원 등록 페이지로 이동
+  //페이지 로드가 완료되면
+    if (window.addEventListener) window.addEventListener("load", userList, false);
+	else if (window.attachEvent) window.attachEvent("onload", userList);
+	else window.onload = userList;
+	function userList() {
+		
+		dataList()
+		
+		console.log("로드 확인용 ")
+    
+    
+    	// 등록 버튼 클릭 시 회원 등록 페이지로 이동
         $("#btnRegister").click(function() {
             window.location.href = '<c:url value="/adminUserInsertForm.do" />';
         });
+    	
    		// 수정 버튼 클릭 시 사용자 ID를 가져와서 페이지로 이동
         $("#btnUpdate").click(function() {
             var userId = $(this).closest("tr").find(".userId").text();
@@ -262,8 +274,97 @@
             	window.location.href = '<c:url value="/adminUserInsertForm.do" />';
             }
         });        
-       
-    });
+     
+	} 
+    
+  //리스트 데이터
+  
+  function dataList() {
+	console.log("data List들어오는지 확인")
+	$.post('/getAdminUserList.do', function(data) {  // 괄호 수정
+		console.log("post 요청 들어오는지 확인")
+	    if ($.trim(data.error) == 'N') {
+	    	console.log("data : " , data);  // cosole -> console 오타 수정
+	        var dataMap = data.dataMap.dataMap.dataMap;
+	    	console.log("dataMap : " , dataMap);  // cosole -> console 오타 수정
+	        
+	    	// dataMap에서 dataMap 배열을 가져옴
+			var listData = data.dataMap.dataMap;  // 이 부분이 핵심
+			console.log("listData: ", listData);
+			
+	    	var html = '';
+	        var positionNm = '';
+	        
+	        $.each(listData, function(key, values) {
+	            html+= '<tr>';
+	            //html+= '    <td>' + ((data.totalCnt - (data.page - 1 ) * data.recordCnt) - key) + '</td>';
+	            html+= '    <td></td>';
+	            html += '    <td><a href="#" style="text-decoration: underline;">' + $.trim(values.userId) + '</a></td>';
+	            html+= '    <td>' + $.trim(values.userName) + '</td>';
+	            html+= '    <td>' + $.trim(values.sex) + '</td>';
+	            html+= '    <td>' + formatDate($.trim(values.brthdy)) + '</td>';
+	            //html+= '    <td>' + $.trim(values.ageSe) + '</td>'; 
+	            html+= '    <td>'+ calculateAge(formatDate($.trim(values.brthdy))) +'</td>';// 나이
+	            html+= '    <td>' + $.trim(values.email) + '</td>';
+	            html+= '    <td>' + $.trim(values.mbtlnum) + '</td>';
+	            html+= '    <td>' + $.trim(values.userSe) + '</td>';
+	            html+= '    <td>' + $.trim(values.loginCnt) + '</td>';
+	            html+= '    <td>' + $.trim(values.lastLoginDt) + '</td>';
+	            html+= '    <td>' + $.trim(values.loginErrCnt) + '</td>';
+	            html+= '    <td>' + $.trim(values.loginRestricted) + '</td>';
+	            html+= '    <td>' + $.trim(values.lastLoginDt) + '</td>';
+	            html+= '    <td>' + $.trim(values.updtDt) + '</td>';
+	        });
+	        
+	        //if (data.list.length == 0){ 
+	        //    html+= '<tr><td colspan="9" class="nodata">데이터가 존재하지 않습니다.</td></tr>';
+	        //}
+	        
+	        $('.userList tbody').append(html);
+	        $('.totalCnt').text(numberWithCommas(data.totalCnt));
+	        
+	        // 페이징을 만든다
+	        //paging('.paging', data.page, data.pageCnt, data.totalCnt);
+	    }
+	    
+	    // $('.userList tbody').children('tr.loading').remove('');
+	});
+  }
+    			/*
+    			$('.totalCnt').html(numberWithCommas($.trim(data.totalCnt)));
+    			$('.page').html(numberWithCommas($.trim(data.page)));
+    			$('.pageCnt').html(numberWithCommas($.trim(data.pageCnt)));
+    			*/
+    			// 페이징을 만든다
+    			//paging('.paging', data.page, data.pageCnt, data.totalCnt);
+    		// $('.userList tbody').children('tr.loading').remove('');
+   
+ // 생년월일을 날짜 형식으로 변환하는 함수
+   function formatDate(dateStr) {
+ 	   var date = new Date(dateStr);
+	    var year = date.getFullYear();
+	    var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+	    var day = ('0' + date.getDate()).slice(-2); // 일도 2자리로 맞춤
+	    return year + '-' + month + '-' + day;
+} 
+// 생년월일을 통해 나이를 구하는 함수
+function calculateAge(birthdate) {
+    // 생년월일을 Date 객체로 변환
+    var birthDate = new Date(birthdate);
+    var today = new Date(); // 현재 날짜
+
+    var age = today.getFullYear() - birthDate.getFullYear(); // 연도 차이 계산
+    var monthDiff = today.getMonth() - birthDate.getMonth(); // 월 차이 계산
+    var dayDiff = today.getDate() - birthDate.getDate(); // 일 차이 계산
+
+    // 생일이 지나지 않았다면 나이를 1살 줄임
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        age--;
+    }
+
+    return age;
+}
+
 	</script>
     
 </body>

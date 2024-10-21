@@ -1,5 +1,8 @@
 package egovframework.com.user.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
@@ -43,5 +46,11 @@ public class UserDAO extends EgovAbstractMapper {
 	// 로그인 
 	public UserVO loginUser(UserVO vo) throws Exception {
 		return (UserVO) selectOne("UserDAO.loginUser", vo);
+	}
+
+	// 관리자 회원 테이블 전체 조회
+	public List<EgovMap> getAdminUserList() throws Exception {
+		List<EgovMap> resultJoin = selectList("UserDAO.getAdminUserList");
+		return resultJoin;
 	}
 }

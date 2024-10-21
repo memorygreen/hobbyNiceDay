@@ -54,6 +54,13 @@
 	</select>
 	
 	
+	<!-- 관리자 회원 전체 테이블 조회 -->
+	<select id="getAdminUserList" resultType="EgovMap">
+	    SELECT *
+	    FROM TB_USER
+	</select>
+	
+	
 	<!-- 로그인 처리를 위한 resultMap -->
 	<resultMap id="resultLogin" type="egovframework.com.cmm.UserVO">
 		<result property="userId" column="userId"/>

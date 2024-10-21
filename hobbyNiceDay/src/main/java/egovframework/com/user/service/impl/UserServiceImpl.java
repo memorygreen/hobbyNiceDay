@@ -1,5 +1,6 @@
 package egovframework.com.user.service.impl;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -35,6 +36,13 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     public  boolean   joinIdCheck(String userId) throws Exception{
     	int count = (Integer) UserDAO.joinIdCheck(userId);
         return count > 0;
+    }
+    
+    
+    // 관리자 회원 전체 테이블 조회
+    @Override
+    public List<EgovMap> getAdminUserList() throws Exception {
+        return UserDAO.getAdminUserList();  // 모든 사용자 리스트 가져오기
     }
     
     

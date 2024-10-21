@@ -48,7 +48,9 @@
 
 <body>
     <!-- Pre-loader start -->
-    <div class="pre_loader_start"></div>
+    <div class="pre_loader_start">
+    	<jsp:include page="/WEB-INF/jsp/main/inc/adminPreLoader.jsp" />	
+   	</div>
     <!-- Pre-loader end -->
      
     <div id="pcoded" class="pcoded">
