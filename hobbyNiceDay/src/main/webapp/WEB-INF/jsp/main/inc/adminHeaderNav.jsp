@@ -88,8 +88,8 @@
                     </a>
                     <ul class="show-notification profile-notification">
                         <li class="waves-effect waves-light">
-                            <a href="#!">
-                                <i class="ti-settings"></i> 설정
+                            <a href="/cmm/main/mainPage.do">
+                                <i class="ti-settings"></i>사용자 페이지 이동
                             </a>
                         </li>
                         <li class="waves-effect waves-light">

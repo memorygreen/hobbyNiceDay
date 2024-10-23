@@ -31,7 +31,7 @@ public class ImgVO implements Serializable {
     private String imgUrl;          // 이미지 저장 경로 또는 URL
     private String imgType;         // 이미지 분류 (클래스, 리뷰 등)
     private String imgRep;          // 대표 이미지 여부 (Y/N)
-    
+    private int classId; // fk 클래스 고유 id   
     // 등록 관련 필드
     private String regIp;           // 등록 IP
     private String regId;           // 등록 ID

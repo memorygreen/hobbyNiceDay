@@ -12,13 +12,18 @@ import egovframework.com.cmm.ImgVO;
 public interface ClassService {
 	
 	// 관리자 클래스 등록 기능
-	int insertClass(ClassVO classVO) throws Exception;
+	public int insertClass(ClassVO classVO) throws Exception;
 	
 	// 관리자 클래스 등록 시 이미지 등록
-	int insertImage(ImgVO imgVO) throws Exception;
+	public int insertImage(ImgVO imgVO) throws Exception;
 	
 	// 관리자 클래스 등록 시 휴무일 등록
 	public int insertHoliday(HolidayVO holidayVO) throws Exception;
-
+	
+	// 관리자 클래스 등록 시 수강 시간대 등록
+	public int insertClassDetail(ClassVO classVO) throws Exception;
+		
+	
+	// 관리자 클래스 전체 조회 
 	List<EgovMap> getAdminClassList() throws Exception;
 }

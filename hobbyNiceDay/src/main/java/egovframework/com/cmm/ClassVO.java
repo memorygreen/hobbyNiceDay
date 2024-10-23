@@ -41,6 +41,13 @@ public class ClassVO implements Serializable {
     private int classAgeMin;        // 최소 수강 가능 연령
     private int classMaxCnt;        // 최대 참가자 수
     private int classPrice;      // 클래스 가격 // 할인된 가격도 추가해야하나?
+    private String classPost;  // 클래스 게시 여부
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startDt; // 클래스 수강 시작일
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endDt; // 클래스 수강 종료일
+    
     
     // 이미지 관련 필드
     private int imgId;           // 클래스 이미지 ID
@@ -58,7 +65,7 @@ public class ClassVO implements Serializable {
     private String holidayDesc;        // 휴무일 설명
     
     
-    // 등록 관련 필드
+    // tb_class 테이블 등록 관련 필드
     private String regIp;           // 등록 IP
     private String regId;           // 등록 ID
     private String regDt;           // 등록 일시
@@ -67,6 +74,22 @@ public class ClassVO implements Serializable {
     private String updtDt;          // 수정 일시 (Nullable)
 
     
+ // TB_CLASS_DETAIL 관련 필드들
+    private int classDetailId; // 클래스 디테일 ID
+    private int maxParticipants;// 최대 예약 가능 인원수(시간대별)
+    private int availableCurrentCnt; // 현재 예약된 인원수
+    private int availableSeats; // 남은 좌석 수
+    private String availableStatus; // 예약 가능 상태
+    private String timeStart; // 시작 시간
+    private String timeEnd; // 종료 시간
+    
+    // TB_CLASS_DETAIL 테이블 등록 관련 필드
+    private String classDetailRegIp; // TB_CLASS_DETAIL 등록 IP
+    private String classDetailRegId; // TB_CLASS_DETAIL 등록 ID
+    private Date classDetailRegDt; // TB_CLASS_DETAIL 등록 일시
+    private String classDetailUpdtId; // TB_CLASS_DETAIL 수정 ID
+    private String classDetailUpdtIp; // TB_CLASS_DETAIL 수정 IP
+    private Date classDetailUpdtDt; // TB_CLASS_DETAIL 수정 일시
     
 
 }

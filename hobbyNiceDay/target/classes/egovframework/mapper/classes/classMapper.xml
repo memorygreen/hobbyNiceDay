@@ -12,7 +12,7 @@
  -->
  
 	<!-- 클래스 등록 -->
-	<insert id="insertClass" parameterType="egovframework.com.cmm.ClassVO">
+	<insert id="insertClass" parameterType="egovframework.com.cmm.ClassVO" useGeneratedKeys="true" keyProperty="classId">
     INSERT INTO TB_CLASS (
 					          CLASS_NM
 					        , CLASS_DSCRPTN
@@ -22,13 +22,12 @@
 					        , CLASS_AGE_MIN
 					        , CLASS_PRICE
 					        , CLASS_MAX_CNT
-					        , HOLIDAY_ID
 					        , REG_IP
 					        , REG_ID
 					        , REG_DT
 					        , UPDT_DT
 					        , UPDT_IP
-					        , IMG_ID
+					        , CLASS_POST
 					     )
 	    VALUES (
 			          #{classNm}
@@ -39,13 +38,12 @@
 			        , #{classAgeMin}
 			        , #{classPrice}
 			        , #{classMaxCnt}
-			        , #{holidayId}
 			        , #{regIp}
 			        , #{regId}
 			        , NOW()
 			        , #{updtDt}
 			        , #{updtIp}
-			        , #{imgId}
+			        , #{classPost}
 			    )
 	</insert>
 
@@ -67,7 +65,7 @@
 	    INSERT INTO TB_HOLIDAY (
 					 	    	  HOLIDAY_DT
 						      	, HOLIDAY_DESC
-						    	<!-- , CLASS_ID, -->
+						    	, CLASS_ID
 					        	, IS_PUBLIC_HOLIDAY
 					        	, REG_IP
 					        	, REG_ID
@@ -76,11 +74,40 @@
 					    VALUES (
 							       #{holidayDt}
 							      ,#{holidayDesc}
-							    <!--  ,#{classId} -->
+							      ,#{classId}
 							      ,#{isPublicHoliday}
 							      ,#{regIp}
 							      ,#{regId}
        						      , NOW()
+				     			 )
+	</insert>
+	
+	
+	<!-- 클래스 생성 시 시간 추가  -->
+	<insert id="insertClassDetail" parameterType="ClassVO" useGeneratedKeys="true" keyProperty="classDetailId"> <!-- 생성된 PK를 반환 -->
+	    INSERT INTO TB_CLASS_DETAIL (
+					 	    	  CLASS_ID
+						      	, MAX_PARTICIPANTS <!-- TB_CLASS 에 이미 있음  -->
+						    	, AVAILABLE_CURRENT_CNT 
+					        	, AVAILABLE_SEATS <!-- 남은좌석수 -->
+					        	, AVAILABLE_STATUS
+					        	, TIME_START
+					        	, TIME_END
+					        	, REG_IP
+					        	, REG_ID
+					        	, REG_DT
+						     	 )
+					    VALUES (
+							       #{classId}
+							      ,#{maxParticipants}
+							      , 0 <!-- 현재 예약된 인원수 -->
+							      ,#{availableSeats} <!-- 남은좌석수 -->
+							      ,#{availableStatus}<!-- 예약가능 상태  -->
+							      ,#{timeStart}
+							      ,#{timeEnd}
+							      ,#{classDetailRegIp}
+							      ,#{classDetailRegId} <!-- 세션에 담긴 ID 값 -->
+							      , NOW()
 				     			 )
 	</insert>
 	

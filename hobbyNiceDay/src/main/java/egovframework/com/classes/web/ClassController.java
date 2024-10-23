@@ -59,8 +59,25 @@ public class ClassController {
     		System.out.println("clientIp"+ clientIp);
     		classVO.setRegIp(clientIp);
     		
+
+            // 3. 클래스 정보 저장
+            /* 클래스 등록 서비스 호출*/
+    		int affectedRows = classService.insertClass(classVO);
+    		System.out.println("클래스 들어갔는지 classId 생성됐나 확인 : " + affectedRows); // 1을 반환하고 있음 
+    		int classId = classVO.getClassId(); // 생성된 classId 가져오기
+            System.out.println("생성된 classVO에서 classId 가져오기 : " + classId); // 확인 필요
+            
+            if(classId > 0) {
+            	jsonObj.addProperty("error", "N");
+            	//return "redirect:/loginForm.do";
+            	System.out.println("클래스 등록 성공 시 리턴 직전, jsonObj:"+ jsonObj);
+            }else { // 확인 분기 이게 맞는지 확인 필요함
+            	jsonObj.addProperty("error", "Y");
+            	jsonObj.addProperty("errorMsg", "클래스 등록에 실패했습니다. 관리자에게 문의하세요.");
+            }
     		
-    		
+            System.out.println(classVO);
+            
     		// 이미지 저장 처리
     		// 1. 파일이 있을 때만 처리
     		 if (imgFile != null && !imgFile.isEmpty()) {
@@ -115,43 +132,63 @@ public class ClassController {
             
     		// + 휴무일이 있으면 등록처리 ,없으면 넘어감(null 허용)
             // 2. 휴무일 등록 처리
-            
-            // 날짜 형식 설정
-            String holidayDtStr = request.getParameter("holidayDt");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            
-            // 문자열을 Date로 변환
-            Date holidayDt = dateFormat.parse(holidayDtStr);
-            
-            HolidayVO holidayVO = new HolidayVO();
-            holidayVO.setHolidayDt(holidayDt);
-            holidayVO.setHolidayDesc(request.getParameter("holidayDesc"));
-            holidayVO.setRegIp(clientIp);
+    		 
+    		// HttpServletRequest에서 파라미터 추출 (holidayDt[] 및 holidayDesc[])
+	        String[] holidayDtArray = request.getParameterValues("holidayDt[]");
+	        String[] holidayDescArray = request.getParameterValues("holidayDesc[]");
 
-            // 휴무일 테이블에 등록
-            int holidayId = classService.insertHoliday(holidayVO);
-//            if(holidayId == null) {
-//            	System.out.println("휴무일 등록 성공");
-//            }else {
-//            	System.out.println("휴무일 등록 실패");
-//            }
-            System.out.println("holidayId : "+holidayId);
-            classVO.setHolidayId(holidayId);  // 휴무일 ID 설정
-        	System.out.println("휴무일id 넣은 후 classVO : "+ classVO);
+    		System.out.println("classId : " + classId);
+    		// 휴무일 저장 처리 (여러 개의 휴무일을 반복문으로 처리)
+    	        if (holidayDtArray != null && holidayDescArray != null) {
+    	            for (int i = 0; i < holidayDtArray.length; i++) {
+    	                // 휴무일 날짜 변환
+    	                String holidayDtStr = holidayDtArray[i];
+    	                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    	                Date holidayDt = dateFormat.parse(holidayDtStr);
 
-            // 3. 클래스 정보 저장
-            /* 클래스 등록 서비스 호출*/
-            int resultInsertClass = classService.insertClass(classVO);
-            System.out.println("mapper 완료됐나 확인");
-            
-            if(resultInsertClass > 0) {
-            	jsonObj.addProperty("error", "N");
-            	//return "redirect:/loginForm.do";
-            	System.out.println("클래스 등록 성공 시 리턴 직전, jsonObj:"+ jsonObj);
-            }else {
-            	jsonObj.addProperty("error", "Y");
-            	jsonObj.addProperty("errorMsg", "클래스 등록에 실패했습니다. 관리자에게 문의하세요.");
-            }
+    	                // 휴무일 VO 생성 및 설정
+    	                HolidayVO holidayVO = new HolidayVO();
+    	                holidayVO.setHolidayDt(holidayDt);
+    	                holidayVO.setHolidayDesc(holidayDescArray[i]);
+    	                holidayVO.setRegIp(clientIp);
+    	                holidayVO.setClassId(classId);  // CLASS_ID 설정
+
+    	                // 휴무일 테이블에 저장
+    	                int holidayId = classService.insertHoliday(holidayVO);
+    	                System.out.println("휴무일 등록 완료. holidayId: " + holidayId + ", classId : " + classId );
+    	                // 필요 시, 클래스에 연결할 휴무일 ID 추가 처리 (필요한 로직에 따라 조정 가능)
+    	            }
+    	        }
+    	  
+    	        // TB_CLASS_DETAIL 저장
+    	        String[] timeStartArray = request.getParameterValues("timeStart[]");
+    	        String[] timeEndArray = request.getParameterValues("timeEnd[]");
+
+        		System.out.println("classId : " + classId);
+        		// 클래스 세부정보 저장 처리 (여러 개의 클래스 시작, 종료 시간을 반복문으로 처리)
+        		if (timeStartArray != null && timeEndArray != null) {
+        		    for (int i = 0; i < timeStartArray.length; i++) {
+        		        // 시작, 종료 시간 추출
+        		        String timeStart = timeStartArray[i];
+        		        String timeEnd = timeEndArray[i];
+        		        
+        		        // 클래스 세부정보 VO 생성 및 설정
+        		        ClassVO classDetailVO = new ClassVO();
+        		        classDetailVO.setClassId(classId);  // CLASS_ID 설정
+        		        classDetailVO.setTimeStart(timeStart);
+        		        classDetailVO.setTimeEnd(timeEnd);
+        		        classDetailVO.setClassDetailRegIp(clientIp);   // 등록 IP 설정
+        		        	
+        		        int classMaxCnt = Integer.parseInt(request.getParameter("classMaxCnt"));
+        		        classDetailVO.setMaxParticipants(classMaxCnt);  // 기본 참가자 수 설정
+        		        classDetailVO.setAvailableSeats(0);  // 기본 남은 좌석 수 설정
+        		        classDetailVO.setAvailableStatus("Y");  // 예약 가능 상태 설정
+        		        
+        		        // 클래스 세부정보 테이블에 저장
+        		        int classDetailId = classService.insertClassDetail(classDetailVO);
+        		        System.out.println("클래스 세부정보 등록 완료. classDetailId: " + classDetailId + ", classId: " + classId);
+        		    }
+        		}
             
         } catch (Exception e) {
         	jsonObj.addProperty("error", "Y");
@@ -165,7 +202,7 @@ public class ClassController {
     }
     
     
-    // 전체 회원 목록 조회 기능
+    // 관리자 전체 클래스 목록 조회 기능
     @RequestMapping(value = "/getAdminClassList.do", method = RequestMethod.POST,  produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<String> getAdminClassList(Model model) throws Exception{
@@ -200,6 +237,8 @@ public class ClassController {
     	 }
      }
    
+    
+    
     // 이미지 파일 저장 메소드
     private String saveImg(MultipartFile imgFile) throws IOException {
         String fileName = imgFile.getOriginalFilename();

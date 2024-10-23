@@ -41,6 +41,8 @@
                 </a>
             </li>
         </ul>
+        
+        <!-- 
         <div class="pcoded-navigation-label">UI Element</div>
         <ul class="pcoded-item pcoded-left-item">
             <li class="pcoded-hasmenu">
@@ -116,16 +118,19 @@
                 </ul>
             </li>
         </ul>
-        <div class="pcoded-navigation-label">Forms</div>
-        <ul class="pcoded-item pcoded-left-item">
-            <li class="">
-                <a href="form-elements-component.html" class="waves-effect waves-dark">
-                    <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
-                    <span class="pcoded-mtext">Form</span>
-                    <span class="pcoded-mcaret"></span>
-                </a>
-            </li>
-        </ul>
+         -->
+        <!-- 
+		        <div class="pcoded-navigation-label">Forms</div>
+		        <ul class="pcoded-item pcoded-left-item">
+		            <li class="">
+		                <a href="form-elements-component.html" class="waves-effect waves-dark">
+		                    <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+		                    <span class="pcoded-mtext">Form</span>
+		                    <span class="pcoded-mcaret"></span>
+		                </a>
+		            </li>
+		        </ul>
+         -->
         <div class="pcoded-navigation-label">관리</div>
         <ul class="pcoded-item pcoded-left-item">
             <li class=""> <!--íì±í í ë active-->
@@ -140,7 +145,7 @@
                 </a>
             </li>
 
-            <li class="active">
+            <li class="">
                 <a href="/adminReservationList.do"  class="waves-effect waves-dark">
                     <span class="pcoded-micon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check" viewBox="0 0 16 16">
@@ -153,7 +158,7 @@
                 </a>
             </li>
 
-            <li class="active">
+            <li class=""> <!-- active 넣으면 활성화됨 -->
                 <a href="/adminClassList.do" class="waves-effect waves-dark">
                     <span class="pcoded-micon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-easel2" viewBox="0 0 16 16">
@@ -183,6 +188,8 @@
                 </a>
             </li>
         </ul>
+        
+        <!-- 
         <div class="pcoded-navigation-label">Pages</div>
         <ul class="pcoded-item pcoded-left-item">
             <li class="pcoded-hasmenu ">
@@ -216,5 +223,6 @@
                 </ul>
             </li>
         </ul>
+         -->
     </div>
 </nav>

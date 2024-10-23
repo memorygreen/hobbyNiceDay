@@ -48,6 +48,14 @@ public class ClassServiceImpl extends EgovAbstractServiceImpl implements egovfra
         return ClassDAO.insertHoliday(holidayVO);
     }
     
+    // 클래스 세부정보 등록 
+    @Override
+    public int insertClassDetail(ClassVO classVO) throws Exception {
+    	// 휴무일 저장 후 classDetailId 반환
+        return ClassDAO.insertClassDetail(classVO);
+    }
+    
+    
  // 관리자 회원 전체 테이블 조회
     @Override
     public java.util.List<EgovMap> getAdminClassList() throws Exception {

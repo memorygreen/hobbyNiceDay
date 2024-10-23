@@ -28,7 +28,7 @@ import lombok.Data;
 public class HolidayVO implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    
+    private int classId; // fk 클래스 고유 id 
     private int holidayId;       // 휴무일 고유 ID
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")

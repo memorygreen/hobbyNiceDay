@@ -88,9 +88,9 @@
                                             <li class="breadcrumb-item">
                                                 <a href="index.html"> <i class="fa fa-home"></i> </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Bootstrap Tables</a>
+                                            <li class="breadcrumb-item"><a href="#!">관리</a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Basic Tables</a>
+                                            <li class="breadcrumb-item"><a href="#!">클래스 관리</a>
                                             </li>
                                         </ul>
                                     </div>

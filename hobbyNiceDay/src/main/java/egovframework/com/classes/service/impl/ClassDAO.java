@@ -41,12 +41,18 @@ public class ClassDAO extends EgovAbstractMapper {
     }
     
     
+    // 클래스 상세정보  등록
+    public int insertClassDetail(ClassVO classVO) throws Exception {
+        insert("ClassDAO.insertClassDetail", classVO);
+        return classVO.getClassDetailId();  // 삽입된 클래스 세부정보의 ID 반환
+    }
+    
+    
     // 휴무일 등록
     public int insertHoliday(HolidayVO holidayVO) throws Exception {
         sqlSession.insert("ClassDAO.insertHoliday", holidayVO);
         return holidayVO.getHolidayId();  // 삽입된 휴무일의 ID 반환
     }
-
 
 	// 관리자 회원 테이블 전체 조회
 	public List<EgovMap> getAdminClassList() throws Exception {
