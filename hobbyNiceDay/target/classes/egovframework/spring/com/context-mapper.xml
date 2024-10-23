@@ -18,7 +18,7 @@
 				<value>classpath:/egovframework/mapper/let/**/*_mysql.xml</value> <!-- 자영 추가 -->
 				<!--<value>classpath:/egovframework/mapper/let/uat/uia/userMapper.xml</value>  사용자 추가 -->
 				<value>classpath:/egovframework/mapper/user/userMapper.xml</value>
-				
+				<value>classpath:/egovframework/mapper/classes/classMapper.xml</value>
 			</list>
 		</property>
 		<!-- gpt가 loginVO 인식못한다고 추가하라고 함 -->

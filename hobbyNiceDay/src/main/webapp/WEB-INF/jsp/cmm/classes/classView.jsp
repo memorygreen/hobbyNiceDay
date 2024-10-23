@@ -492,7 +492,6 @@
 			window.attachEvent("onload", userData);
 	else
 			window.onload = userData;
-	var userIdCk = false;
 	function userData() {
 	
 		/*
@@ -558,21 +557,37 @@
 		        }
 		    ]
 		});*/
-
+		
 	}
 	</script>
+	
 	
 	<!-- 자영 달력 추가 -->
 	<!-- 참고용 : 공식문서 https://fullcalendar.io/docs/initialize-globals -->
 	<script>
+	
 	  document.addEventListener('DOMContentLoaded', function() {
-	    var calendarEl = document.getElementById('calendar');
-	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	      initialView: 'dayGridMonth',
-	      events: '/getEvents.do'  // 스프링 컨트롤러에서 이벤트를 불러오는 URL 매핑
-	    });
-	    calendar.render();
-	  });
+          var calendarEl = document.getElementById('calendar');
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+              initialView: 'dayGridMonth',
+              events: '/getEvents.do',  // 스프링 컨트롤러에서 이벤트를 불러오는 URL 매핑
+              locale: 'ko', // 한국어 설정
+              headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth'
+              },
+           	// 날짜 클릭 이벤트 추가
+              dateClick: function(info) {
+                  alert('선택된 날짜: ' + info.dateStr); // 여기서 날짜 클릭 시 수행할 동작을 추가할 수 있습니다.
+              },
+              eventClick: function(info) {
+                  alert('이벤트: ' + info.event.title);
+                  // 여기서 예약 가능한 시간 등을 추가로 표시할 수 있음
+              }
+          });
+          calendar.render();
+      });
 	</script>
 	
 

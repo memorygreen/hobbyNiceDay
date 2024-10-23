@@ -84,8 +84,10 @@
 	}
 	
 	.btn-radio input[type="radio"]:checked + label {
-	    background-color: #007bff;
-	    color: white;
+	    //background-color: #007bff;
+	    color: black; /*폰트 색상 */
+	    border: 1px solid black; /* 선택 시 검정 테두리 추가 */
+	    
 	}
 	
 	
@@ -161,236 +163,169 @@
                                 <div class="page-wrapper">
                                     <!-- Page-body start -->
                                     <div class="page-body">
-                                    
-                                    
-                                    	<!-- 툴팁 시작 -->
                                     	<div class="row">
-                                            <div class="col-sm-6">
-                                                <!-- Tooltip on button card start -->
-                                                <div class="card button-page o-visible">
-                                                    <div class="card-header">
-                                                        <h5>Tooltip</h5>
-                                                    </div>
-                                                    <div class="card-block">
-                                                        <ul>
-                                                            <li>
-                                                                <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" data-placement="top" title="tooltip on top">Top
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="left" title="tooltip on left">Left
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="right" title="tooltip on right">right
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="tooltip" data-placement="bottom" title="tooltip on bottom">bottom
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="btn btn-info waves-effect waves-light" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>">Html Tooltip
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                        
-                                                        
-                                                        <!-- notifiacation 추가 -->
-                                                        <div class="row">
-	                                                        <div class="col-sm-12">
-		                                                        <ul class="notifications">
-			                                                       	<li>
-			                                                            <button class="btn btn-primary waves-effect" data-type="inverse" data-from="top" data-align="center" data-icon="fa fa-comments">Top Center</button>
-			                                                        </li>
-		                                                        </ul>
-	                                                        </div>
-                                                   
-	                                                    </div>
-	                                                    <!-- notifiacation 추가 끝 -->
+                                    		<!-- 표에 작성해보기  -->
+                                    		<div class="col-sm-12">
+	                                    	<div class="card">
+	                                            <div class="card-header">
+	                                                <h5>회원 등록</h5>
+	                                                <span>회원 등록 페이지입니다. <code>TB_USER</code></span>
+	                                       		    <div class="card-header-right">
+	                                                    <ul class="list-unstyled card-option">
+	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
+	                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
+	                                                        <li><i class="fa fa-minus minimize-card"></i></li>
+	                                                        <li><i class="fa fa-refresh reload-card"></i></li>
+	                                                        <li><i class="fa fa-trash close-card"></i></li>
+	                                                    </ul>
+	                                                </div>
+	                                            </div>
+	                                            
+	                                            <form id="joinForm" name="joinForm" method="post">
+	                                            
+	                                            <div class="card-block table-border-style">
+	                                                <div class="table-responsive">
 	                                                    
-                                                    </div>
-                                                </div>
-                                                <!-- Tooltip on button card end -->
-                                            </div>
-                                            
-                                            
-                                            <div class="col-sm-6">
-                                                <!-- Tooltip on popover card start -->
-                                                <div class="card o-visible">
-                                                    <div class="card-header">
-                                                        <h5>Popover</h5>
-                                                    </div>
-                                                    <div class="card-block tooltip-pop button-list">
-                                                        <button type="button" class="btn btn-default waves-effect" data-toggle="popover" data-placement="top" title="" data-content="top by popover" data-original-title="tooltip on top">Top
-                                                        </button>
-                                                        <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="popover" data-placement="left" title="tooltip on left" data-content="left by popover">Left
-                                                        </button>
-                                                        <button type="button" class="btn btn-success waves-effect waves-light" data-toggle="popover" data-placement="right" title="tooltip on right" data-content="right by popover">right
-                                                        </button>
-                                                        <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="popover" data-placement="bottom" title="tooltip on bottom" data-content="bottom by popover">bottom
-                                                        </button>
-                                                        <button type="button" class="btn btn-info waves-effect waves-light" data-toggle="popover" data-html="true" data-placement="top" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"
-                                                            data-content="tooltip by HTML">Html Tooltip
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <!-- Tooltip on popover card end -->
-                                            </div>
-                                            
-                                            <div class="col-sm-12 ">
-                                                <!-- Tooltips on textbox card start -->
-                                                <div class="card o-visible">
-                                                    <div class="card-header">
-                                                        <h5>회원 등록</h5>
-                                                    </div>
-                                                    
-                                                    <form id="joinForm" name="joinForm" method="post">
-                                                    
-                                                    <div class="card-block tooltip-icon button-list">
-                                                    
-	                                                    <div class="input-group-wrapper"> <!-- 자영 추가 -->
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-		                                                            <label class="input-group-text" for="userId">
-		                                                            	<i class="icofont icofont-user-alt-3">  아이디</i>
-		                                                            </label>
-	                                                            </span>
-	                                                            <input type="text" id="userId" name="userId" class="form-control" placeholder="id를 입력해주세요" title="id를 입력해주세요"  data-toggle="tooltip" required>
+	                                                    <table class="table table-hover">
+	                                                        <thead>
+	                                                            <tr>
+	                                                                <th>
+		                                                                <span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="userId">
+				                                                            	<i class="icofont icofont-user-alt-3">  아이디</i>
+				                                                            </label>
+			                                                            </span>
+			                                                            <input type="text" id="userId" name="userId" class="form-control" placeholder="id를 입력해주세요" title="id를 입력해주세요"  data-toggle="tooltip" autocomplete="new-password" required>
+			                                                            <span id="userIdMsg">ID 중복확인이 되지 않았습니다.</span>
+	                                                                </th>
+	                                                                <th width="10%">
+	                                                                    <button id="userIdCk"  class="btn btn-inverse waves-effect waves-light">ID 중복확인</button>
+	                                                                    </br>
+	                                                                </th>
+	                                                                <th colspan="2" width="50%">
+	                                                                	<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="userName">
+			                                                            	<i class="icofont icofont-ui-email">  이름</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                           	<input type="text" id="userName" name="userName" class="form-control" placeholder="이름을 입력해주세요" title="이름을 입력해주세요"  data-toggle="tooltip"  autocomplete="new-password" required>
+			                                                           	</br>
+	                                                                </th>
+	                                                            </tr>
 	                                                            
-																<!-- <a href="#" id="userIdCk" class="primary-btn" />ID중복확인</a> --> 
-																<button id="userIdCk"  class="btn btn-inverse waves-effect waves-light">ID 중복확인</button>
-																<br/>
-	                                                            <span id="userIdMsg"></span><!-- 중복 체크 결과를 표시할 영역 -->
-	                                                        </div>
+	                                                            <tr>
+	                                                                <th colspan="2" width="50%"> <!-- 비밀번호 -->
+	                                                                    <span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="passwd">
+			                                                            	<i class="icofont icofont-ui-email">  비밀번호</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                            <input type="password" id="passwd" name="passwd" class="form-control" placeholder="비밀번호를 입력해주세요" title="비밀번호를 입력해주세요"  data-toggle="tooltip" autocomplete="new-password" required>
+	                                                        			<span>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<span>
+	                                                        			
+	                                                                </th>
+	                                                                <th colspan="2" width="50%">
+		     															<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="passwdCk">
+			                                                            	<i class="icofont icofont-ui-email">  비밀번호 확인</i>
+			                                                           	</label>
+			                                                           	</span>
+	                                                            		<input type="password" id="passwdCk" name="passwdCk" class="form-control" placeholder="비밀번호를 확인해주세요" title="비밀번호를 확인해주세요" data-toggle="tooltip" required>
+	                                                            		</br>                                                         
+	                                                                </th>
+	                                                            </tr>
 	                                                        
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="userName">
-	                                                            	<i class="icofont icofont-ui-email">  이름</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="text" id="userName" name="userName" class="form-control" placeholder="이름을 입력해주세요" title="이름을 입력해주세요"  data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="userSe">
-	                                                            	<i class="icofont icofont-ui-email">  회원구분</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="text" id="userSe" name="userSe" class="form-control" placeholder="회원구분을 선택해주세요" title="회원구분을 선택해주세요"  data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="passwd">
-	                                                            	<i class="icofont icofont-ui-email">  비밀번호</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="text" id="passwd" name="passwd" class="form-control" placeholder="비밀번호를 입력해주세요" title="비밀번호를 입력해주세요"  data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="passwdCk">
-	                                                            	<i class="icofont icofont-ui-email">  비밀번호</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="text" id="passwdCk" name="passwdCk" class="form-control" placeholder="비밀번호를 확인해주세요" title="비밀번호를 확인해주세요" data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                       
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="brthdy">
-	                                                            	<i class="icofont icofont-ui-email">  생년월일</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="date" id="brthdy" name="brthdy" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                         <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="mbtlnum">
-	                                                            	<i class="icofont icofont-ui-email">  휴대전화</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="text" id="mbtlnum" name="mbtlnum" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="email">
-	                                                            	<i class="icofont icofont-ui-email">  이메일</i>
-	                                                           	</label>
-	                                                           	</span>
-	                                                            <input type="text" id="email" name="email" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
-	                                                        </div>
-	                                                        
-	                                                        <div class="input-group">
-	                                                            <span class="input-group-prepend" id="name">
-	                                                            <label class="input-group-text" for="sex">
-	                                                            	<i class="icofont icofont-ui-email">  성별</i>
-	                                                           	</label>
-	                                                           	</span>
+	                                                            <tr>
+	                                                                
+																	
+	                                                                <th colspan="2" width="50%">
+																		<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="userSe">
+			                                                            	<i class="icofont icofont-ui-email">  회원구분</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                            
+			                                                            <select id="userSe" name="userSe"  class="form-control" placeholder="회원구분을 선택해주세요" title="회원구분을 선택해주세요"  data-toggle="tooltip" required>
+			                                                            	<option value="user">사용자</option>
+			                                                            	<option value="admin">관리자</option>
+			                                                            </select>
+			                                                            
+			                                                                                                             
+	                                                                </th>
+	                                                                
+	                                                                <th colspan="2" width="50%">
+	                                                                	<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="brthdy">
+			                                                            	<i class="icofont icofont-ui-email">  생년월일</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                            <input type="date" id="brthdy" name="brthdy" class="form-control" placeholder="생년월일을 입력해주세요" title="생년월일을 입력해주세요" data-toggle="tooltip" required>
+	                                                                </th>
+	                                                                
+	                                                            </tr>
+	                                                           
+																<tr>
+	                                                                <th colspan="2" width="50%">
+																		<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="mbtlnum">
+			                                                            	<i class="icofont icofont-ui-email">  휴대전화</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                            <input type="text" id="mbtlnum" name="mbtlnum" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
+			                                                        </th>
+	                                                                <th colspan="2">
+	                                                                	<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="email">
+			                                                            	<i class="icofont icofont-ui-email">  이메일</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                            <input type="text" id="email" name="email" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
+			                                                        </th>
+	                                                            </tr>
 	                                                            
-	                                                            <!-- 
-	                                                            <input type="radio" id="sex"  name="sex"  value="여성" class="form-control" placeholder="성별을 입력해주세요" title="성별을 입력해주세요"  data-toggle="tooltip" required>
-	                                                        	 -->
-	                                                        	<!--
-	                                                        	<input type="radio" id="sex"  name="sex"  value="남성" class="form-control" placeholder="성별을 입력해주세요" title="성별을 입력해주세요"  data-toggle="tooltip" required>
-	                                                        	 -->
+	                                                            <tr>
+	                                                                <th colspan="2" width="50%">
+																		<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="sex">
+			                                                            	<i class="icofont icofont-ui-email">  성별</i>
+			                                                           	</label>
+			                                                           	</span>
+			                                                            <div class="gender-buttons">
+																	    <!-- 성별 선택 -->
+																	    <div class="input-group btn-radio">
+																	        <input type="radio" id="male" name="sex" value="M" required>
+																	        <label for="male">남성</label>
+																	    </div>
+																		    <div class="input-group btn-radio">
+																		        <input type="radio" id="female" name="sex" value="F" required>
+																		        <label for="female">여성</label>
+																		    </div>
+																	 	</div>
+		                                                        	</th>
+	                                                                <th></th>
+	                                                                <th></th>
+	                                                            </tr>
 	                                                        	
-	                                                        	<div class="gender-buttons">
-																    <!-- 성별 선택 -->
-																    <div class="input-group btn-radio">
-																        <input type="radio" id="male" name="sex" value="남성" required>
-																        <label for="male">남성</label>
-																    </div>
-																    <div class="input-group btn-radio">
-																        <input type="radio" id="female" name="sex" value="여성" required>
-																        <label for="female">여성</label>
-																    </div>
-																 </div>
-																 
-																
-																<!-- 
-	                                                        	<button type="button" class="btn btn-default waves-effect" data-toggle="popover" data-placement="top" title="" data-content="top by popover" 
-	                                                        		data-original-title="tooltip on top">Top
-                                                        		</button>
-	                                                        	 -->
-	                                                        </div>
-	                                                        <!-- 전송버튼 -->
-	                                                        <!-- <button type="button" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right" title="submit">Submit
-	                                                        </button>
-	                                                        -->  
-	                                               		 	<!-- Tooltips on textbox card end -->
-	                                            		</div>
-	                                            	</div> <!-- 자영 추가 -->
-	                                            	
-	                                            	
-                                        		</div>
+	                                                        	<tr>
+	                                                        	<td colspan="3">
+	                                                        		<button type="button" id="joinBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">등록</button>
+                                                        
+			                                                        <!-- 취소 -->
+			                                                        <button class="btn btn-danger waves-effect waves-light">취소</button>
+	                                                        	</td>
+	                                                        	</tr>    	
+	                                                            	                                                           
+	                                                        </thead>
+	                                                        
+	                                                    </table>
+	                                                </div>
+	                                            </div>
 	                                        </div>
+                                    	</div>
+                                    	</form>
+                                       	
+                                       	<!-- 툴팁 끝 -->
 	                                        
-	                                        
-	                                        <div class="col-sm-12">
-                                                <!-- Tooltips on textbox card start -->
-                                                <div class="card o-visible">
-                                                    
-                                                    <div class="card-block tooltip-icon button-list">
-                                                        <!-- 전송버튼 -->
-                                                        <button type="button" id="joinBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">등록</button>
-                                                           
-                                            		</div>
-                                        		</div>
-                                            	<!-- Tooltips on textbox card end -->
-	                                        </div>
-	                                        
-	                                        
-	                                        </form>
-	                                        <!-- 툴팁 끝 -->
-                                    	
                                         <!-- Basic table card start -->
                                         <!-- Basic table card end -->
                                         
@@ -399,7 +334,10 @@
                                         
                                         
                                         <!-- Hover table card start -->
+                                        
                                         <!-- Hover table card end -->
+                                        
+                                       
                                         
                                        
                                         <!-- Contextual classes table starts -->
@@ -423,16 +361,49 @@
         </div>
     </div>
 
+
+	<!--  회원가입 폼 붙이기 -->
+	
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Warning Section Starts -->
     
     <!-- Warning Section Ends -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <!-- Required Jquery -->
     <script type="text/javascript" src="js/admin/js/jquery/jquery.min.js "></script>
     <script type="text/javascript" src="js/admin/js/jquery-ui/jquery-ui.min.js "></script>
     <script type="text/javascript" src="js/admin/js/popper.js/popper.min.js"></script>
     <script type="text/javascript" src="js/admin/js/bootstrap/js/bootstrap.min.js "></script>
     <!-- waves js -->
-    <script src="assets/pages/waves/js/waves.min.js"></script>
+    <script src="pages/admin/pages/waves/js/waves.min.js"></script>
     <!-- jquery slimscroll js -->
     <script type="text/javascript" src="js/admin/js/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Custom js -->
@@ -454,7 +425,7 @@
 	var userIdCk = false;
 	function userData() {
 		
-		// id 중복 확인
+		// 사용자ID 중복체크
 		$('#userIdCk').click(
 				function(e) {
 					e.preventDefault(); // 링크 기본 동작 막기
@@ -486,12 +457,11 @@
 			                alert("ID 중복 확인 중 오류가 발생했습니다.");
 			            }
 			        });
-					
-					
 				});
 		
 		// 회원가입 버튼 클릭 시 
-		$('.joinBtn').click(function(e) {
+		$('#joinBtn').click(function(e) {
+			console.log("회원가입 클릭 버튼 들어왔는지 확인 ")
 			e.preventDefault();
 			
 			if (!userIdCk) {
@@ -516,6 +486,14 @@
 				return false;
 			}
 			
+			// 비밀번호 형식 체크 (영문, 숫자, 특수문자 포함 8~15자)
+			let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+			if (!reg.test($('#passwd').val())) {
+			    alert('비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.');
+			    $('#passwd').focus();
+			    return false;
+			}
+			
 			if(!$('input:radio[name=sex]').is(":checked")){
 				alert("성별을 선택해주세요.");
 				$('#sex').focus();
@@ -534,15 +512,32 @@
 				return false;
 			}
 			
+			// 휴대폰 번호 및 지역번호 형식 체크 (01X-XXXX-XXXX 또는 지역번호-XXXX-XXXX 형식)
+			// let phoneReg = /^(01[0|1|6|7|8|9])-\d{3,4}-\d{4}$/;	// 휴대폰 번호 형식 체크 (010, 011, 016, 017, 018, 019-1234-5678 형식)
+
+			let phoneReg = /^(01[0|1|6|7|8|9]-\d{3,4}-\d{4}|0\d{1,2}-\d{3,4}-\d{4})$/;
+			if (!phoneReg.test($('#mbtlnum').val())) {
+			    alert('휴대폰 번호 또는 일반 전화번호를 올바른 형식으로 입력해주세요. (ex. 010-0000-0000)');
+			    $('#mbtlnum').focus();
+			    return false;
+			}
+			
+			
 			if ($.trim($('#email').val()) == '' ){
 				alert('이메일을 입력해주세요.');
 				$('#email').focus();
 			}
-			/*else if ($.trim($('#email').val()) != '' && !ValidEmail($.trim($('#email').val()))) {
-				alert('이메일 : 잘못된 이메일 형식입니다.');
-				$('#email').focus();
-				return;
-			}*/
+			// 이메일 형식 체크 (ex. exaple@naver.com)
+				/* 
+				^[A-Z0-9._%+-]+: 이메일의 첫 부분은 영문자, 숫자, 특수문자(._%+-)를 포함할 수 있습니다.
+				@[A-Z0-9.-]+: @ 뒤에는 도메인 부분이 오며, 영문자, 숫자, 점(.), 하이픈(-)이 허용됩니다.
+				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
+			*/
+			if (!reg.test($('#email').val())) {
+			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
+			    $('#email').focus();
+			    return false;
+			}
 			
 			
 			// 유효성 검사 - 미입력
@@ -586,9 +581,6 @@
 			
 		})// 회원가입 버튼 클릭 끝
 	};// 전체 불러오기 끝
-		
-		
-		
 		
 	// 유효성 검사 함수
 	function requiredEmpty() {

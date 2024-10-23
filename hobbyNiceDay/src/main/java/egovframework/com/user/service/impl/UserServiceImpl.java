@@ -1,10 +1,15 @@
 package egovframework.com.user.service.impl;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.egovframe.rte.fdl.cryptography.EgovCryptoService;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +23,12 @@ import egovframework.let.utl.sim.service.EgovFileScrty;
 public class UserServiceImpl extends EgovAbstractServiceImpl implements egovframework.com.user.service.UserService {
     @Resource(name = "UserDAO")
     private UserDAO UserDAO;
+    
+    
+    /** 암호화서비스 - 복호화 하려고 가져옴 */
+	@Resource(name = "egovARIACryptoService")
+	EgovCryptoService cryptoService;
+
     
     // 회원가입
     @Override
@@ -46,26 +57,78 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     }
     
     
-    
+    // 로그인 
     @Override
-	public UserVO loginUser(UserVO vo) throws Exception {
+    public UserVO loginUser(UserVO vo) throws Exception {
 
-		// 1. 입력한 비밀번호를 암호화한다.
-		String enpassword = EgovFileScrty.encryptPassword(vo.getPasswd(), vo.getUserId());
-		vo.setPasswd(enpassword);
+        // 1. 입력한 비밀번호를 암호화한다.
+        String enpassword = EgovFileScrty.encryptPassword(vo.getPasswd(), vo.getUserId());
+        vo.setPasswd(enpassword);
 
-		// 2. 아이디와 암호화된 비밀번호가 DB와 일치하는지 확인한다.
-		UserVO userVo = UserDAO.loginUser(vo);
+        // 2. 아이디와 암호화된 비밀번호가 DB와 일치하는지 확인한다.
+        UserVO userVo = UserDAO.loginUser(vo);
+        System.out.println("로그인 성보 가져오기 "+ userVo);
 
-		// 3. 결과를 리턴한다.
-		if (userVo != null && !userVo.getUserId().equals("") && !userVo.getPasswd().equals("")) {
-			return userVo;
-		} else {
-			userVo = new UserVO();
-		}
+        // 3. 로그인 제한 여부 확인
+        if (userVo != null && "Y".equals(userVo.getLoginRestricted())) {
+            System.out.println("로그인 제한 Y로 걸려있는 경우 "); 
+        	// 로그인 제한된 경우 예외 발생 및 메시지 반환
+            throw new Exception("로그인이 제한되었습니다. 관리자에게 문의하세요.");
+        }
 
-		return userVo;
-	}
+        // 4. 로그인 실패 제한 (5회 이상 실패 시 제한)
+        if (userVo != null && userVo.getLoginErrCnt() >= 5) {
+            // LOGIN_RESTRICTED 컬럼을 Y로 업데이트
+            UserDAO.updateLoginRestricted(userVo.getUserId(), "Y");
+            
+            System.out.println("UserServiceImpl 로그인 제한인 경우");
+            throw new Exception("로그인이 제한되었습니다. 관리자에게 문의하세요.");
+        }
+
+        // 5. 로그인 성공 여부 확인
+        if (userVo != null && !userVo.getUserId().equals("") && !userVo.getPasswd().equals("")) {
+            // 로그인 성공 시 로그인 실패 횟수를 0으로 초기화 (로그인 제한 걸리기 전)
+            int result = UserDAO.resetLoginErrCnt(userVo.getUserId());
+            System.out.println("로그인 성공 시 로그인 실패 횟수 0으로 초기화 : "+ result);
+            return userVo;
+        } else {
+            // 로그인 실패 시 실패 횟수를 증가시키고 null 반환
+            if (userVo != null) {
+            	Map<String, Object> paramMap = new HashMap<>();
+                paramMap.put("userId", userVo.getUserId());
+                int result = UserDAO.updateLoginErrCnt(paramMap);
+                System.out.println("로그인 실패 시 로그인 실패횟수 추가 " + result);
+            }
+            return null;  // 로그인 실패
+        }
+    }
+    
+    
+    
+    
+    // 로그인 시간, 로그인성공 횟수 업데이트 
+    @Override
+    public int updateLastLoginDt(String userId, String clientIp) throws Exception {
+    	 Map<String, Object> paramMap = new HashMap<>();
+         paramMap.put("userId", userId);
+         
+         Timestamp lastLoginDt = new Timestamp(new Date().getTime()); // 현재 시간
+         
+         paramMap.put("lastLoginDt", lastLoginDt);
+         paramMap.put("lastLoginIp", clientIp);  // 로그인 시 IP
+    	 int result = UserDAO.updateLastLoginDt(paramMap);
+    	 return result;
+    }
+    
+ // 로그인 실패 회수 업데이트 
+    @Override
+    public int updateLoginErrCnt(String userId) throws Exception {
+    	 Map<String, Object> paramMap = new HashMap<>();
+         paramMap.put("userId", userId);
+    	 int result = UserDAO.updateLoginErrCnt(paramMap);
+    	 return result;
+    }
+    
 
 	/**
 	 * 아이디를 찾는다.

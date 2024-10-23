@@ -86,6 +86,7 @@
                  , MBTLNUM AS mbtlnum
                  , SEX AS sex
                  , USER_SE as userSe
+                 , LOGIN_ERR_CNT as loginErrCnt
               FROM TB_USER
              WHERE USER_ID = #{userId}
                AND PASSWD = #{passwd}
@@ -93,4 +94,38 @@
 		          AND USER_SE = #{userSe}
 		      </if>
 	</select>
+	
+	
+	<!-- 로그인 성공 시 로그인 시간 업데이트  -->
+	<!-- userMapper.xml -->
+	<update id="updateLastLoginDt" parameterType="map">
+	    UPDATE TB_USER
+	    SET LAST_LOGIN_DT = #{lastLoginDt},
+	     	LAST_LOGIN_IP = #{lastLoginIp},  <!-- IP 업데이트 추가 -->
+	    	LOGIN_CNT = LOGIN_CNT +1 
+	    WHERE USER_ID = #{userId}
+	</update>
+	
+	<!-- 로그인 성공 시 로그인실패횟수 0으로 초기화 -->
+	<update id="resetLoginErrCnt" parameterType="map">
+	    UPDATE TB_USER
+	    SET LOGIN_ERR_CNT = 0
+	    WHERE USER_ID = #{userId}
+	</update>
+	
+	<!-- 로그인 실패 시 로그인실패횟수 업데이트  -->
+	<!-- userMapper.xml -->
+	<update id="updateLoginErrCnt" parameterType="map">
+	    UPDATE TB_USER
+	    SET LOGIN_ERR_CNT = LOGIN_ERR_CNT +1 
+	    WHERE USER_ID = #{userId}
+	</update>
+	
+	<!-- 로그인 제한 설정 -->
+	<update id="updateLoginRestricted" parameterType="map">
+	    UPDATE TB_USER
+	    SET LOGIN_RESTRICTED = #{loginRestricted}
+	    WHERE USER_ID = #{userId}
+	</update>
+	
 </mapper>

@@ -19,5 +19,11 @@ public interface UserService {
 	
 	// 관리자 회원테이블 전체 리스트 조회 
 	public List<EgovMap> getAdminUserList()  throws Exception;
+	
+	// 로그인 시간 업데이트 
+	public int updateLastLoginDt(String userId, String clientIp)  throws Exception;;
+	
+	// 로그인 실패 시 로그인실패횟수 업데이트 
+	public int updateLoginErrCnt(String userId)  throws Exception;;
 
 }

@@ -418,6 +418,7 @@
 						<div class="checkout__input">
 							<p>비밀번호<span>*</span></p>
 							<input type="password" id="passwd" name="passwd" autocomplete="new-password" required />
+							<p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<p>
 						</div>
 					</div>
 					<div class="col-lg-6">
@@ -433,8 +434,8 @@
 					<div class="col-lg-6">
 						<div class="input_radio">
 							<p>성별<span style="color: #e53637;">*</span></p>
-							<input type="radio" id="male" name="sex" value="남성" / required>남성 
-							<input type="radio" id="female" name="sex" value="여성" /> 여성
+							<input type="radio" id="male" name="sex" value="M" / required>남성 
+							<input type="radio" id="female" name="sex" value="F" /> 여성
 						</div>
 					</div>
 					<div class="col-lg-6">
@@ -451,6 +452,7 @@
 						<div class="checkout__input">
 							<p>휴대전화<span>*</span></p>
 							<input type="text" id="mbtlnum" name="mbtlnum" required>
+							<p>휴대전화 번호를 '-'까지 입력해주세요. </p>
 						</div>
 					</div>
 					<div class="col-lg-6">
@@ -537,38 +539,7 @@
 	var userIdCk = false;
 	function userData() {
 		
-		// 사용자ID 중복체크 - 가져옴
-		
-		/*
-		$('#userIdCk').click(function(e) {
-			e.preventDefault();
-			var userId = $('#userId').val();
-		    console.log("userId: ", userId);  // 입력한 ID 확인
-		    if ($.trim(userId) != '') {
-				$.post('joinIdCheck.do', {'userId':$('#userId').val()}).done(function(data) {
-					console.log("AJAX 응답: ", data);  // 응답 데이터 확인
-					if (data.error == 'N') {
-						idCheck = true;
-						alert('사용가능한 아이디 입니다.');
-						$('#userId').prop('readonly', true);
-					} else {
-						idCheck = false;
-						alert(data.errorMsg);
-					    console.log("data.errorMsg: ", data.errorMsg);  // 입력한 ID 확인
-
-						$('#userId').prop('readonly', false);
-						$('#userId').focus();
-					}
-				}).fail(function() {
-		            alert("AJAX 요청에 실패했습니다.");
-		        });
-			} else {
-				idCheck = false;
-		        alert('ID가 중복인지 확인하세요.');
-			}
-		});
-		*/
-		
+		// 사용자ID 중복체크
 		$('#userIdCk').click(
 				function(e) {
 					e.preventDefault(); // 링크 기본 동작 막기
@@ -600,13 +571,10 @@
 			                alert("ID 중복 확인 중 오류가 발생했습니다.");
 			            }
 			        });
-					
-					
 				});
 		
 		// 회원가입 버튼 클릭 시 
 		$('.joinBtn').click(function(e) {
-			
 			e.preventDefault();
 			
 			if (!$(':checkbox[name="agree1"]').is(':checked')) {
@@ -632,7 +600,6 @@
 				return false;
 			}
 			
-			//var groupId = $("input[name='groupId']:checked").val();
 			if ($.trim($('#passwd').val()) == ''){
 				alert('비밀번호를 입력해주세요');
 				$('#passwd').focus();
@@ -641,6 +608,14 @@
 				alert('비밀번호를 다시 확인해주세요!');
 				$('#passwdCk').focus();
 				return false;
+			}
+			
+			// 비밀번호 형식 체크 (영문, 숫자, 특수문자 포함 8~15자)
+			let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+			if (!reg.test($('#passwd').val())) {
+			    alert('비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.');
+			    $('#passwd').focus();
+			    return false;
 			}
 			
 			if(!$('input:radio[name=sex]').is(":checked")){
@@ -661,15 +636,32 @@
 				return false;
 			}
 			
+			// 휴대폰 번호 및 지역번호 형식 체크 (01X-XXXX-XXXX 또는 지역번호-XXXX-XXXX 형식)
+			// let phoneReg = /^(01[0|1|6|7|8|9])-\d{3,4}-\d{4}$/;	// 휴대폰 번호 형식 체크 (010, 011, 016, 017, 018, 019-1234-5678 형식)
+
+			let phoneReg = /^(01[0|1|6|7|8|9]-\d{3,4}-\d{4}|0\d{1,2}-\d{3,4}-\d{4})$/;
+			if (!phoneReg.test($('#mbtlnum').val())) {
+			    alert('휴대폰 번호 또는 일반 전화번호를 올바른 형식으로 입력해주세요. (ex. 010-0000-0000)');
+			    $('#mbtlnum').focus();
+			    return false;
+			}
+			
+			
 			if ($.trim($('#email').val()) == '' ){
 				alert('이메일을 입력해주세요.');
 				$('#email').focus();
 			}
-			/*else if ($.trim($('#email').val()) != '' && !ValidEmail($.trim($('#email').val()))) {
-				alert('이메일 : 잘못된 이메일 형식입니다.');
-				$('#email').focus();
-				return;
-			}*/
+			// 이메일 형식 체크 (ex. exaple@naver.com)
+				/* 
+				^[A-Z0-9._%+-]+: 이메일의 첫 부분은 영문자, 숫자, 특수문자(._%+-)를 포함할 수 있습니다.
+				@[A-Z0-9.-]+: @ 뒤에는 도메인 부분이 오며, 영문자, 숫자, 점(.), 하이픈(-)이 허용됩니다.
+				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
+			*/
+			if (!reg.test($('#email').val())) {
+			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
+			    $('#email').focus();
+			    return false;
+			}
 			
 			
 			// 유효성 검사 - 미입력
@@ -714,9 +706,6 @@
 		})// 회원가입 버튼 클릭 끝
 	};// 전체 불러오기 끝
 		
-		
-		
-		
 	// 유효성 검사 함수
 	function requiredEmpty() {
 		var empty = false;
@@ -741,27 +730,6 @@
 		return empty;
 	}
 
-	// 사용자ID 중복체크
-	/*
-	$('.idCheck').click(function(e) {
-		e.preventDefault();
-		if ($.trim($('#userId').val()) != '') {
-			$.post('<c:out value="${path.context}" />joinIdCheck.do', {'userId':$('#userId').val()}).done(function(data) {
-				if (data.error == 'N') {
-					idCheck = true;
-					alert('사용가능한 아이디 입니다.');
-					$('#userId').prop('readonly', true);
-				} else {
-					idCheck = false;
-					alert(data.errorMsg);
-					$('#userId').prop('readonly', false);
-					$('#userId').focus();
-				}
-			});
-		} else {
-			idCheck = false;
-		}
-	});*/
 		
 	</script>
 

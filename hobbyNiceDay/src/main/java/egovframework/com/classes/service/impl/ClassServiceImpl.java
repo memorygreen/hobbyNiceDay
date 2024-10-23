@@ -8,6 +8,9 @@ import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
 
 import antlr.collections.List;
+import egovframework.com.cmm.ClassVO;
+import egovframework.com.cmm.HolidayVO;
+import egovframework.com.cmm.ImgVO;
 import egovframework.com.cmm.UserVO;
 import egovframework.let.utl.fcc.service.EgovNumberUtil;
 import egovframework.let.utl.fcc.service.EgovStringUtil;
@@ -22,5 +25,34 @@ public class ClassServiceImpl extends EgovAbstractServiceImpl implements egovfra
 //    public List<ClassAvailableVO> getAvailableDates(String start, String end) {
 //        return classMapper.selectAvailableDates(start, end);
 //    }
+    
+    // 클래스 등록
+    @Override
+    public int insertClass(ClassVO classVO) throws Exception {
+    	int result = ClassDAO.insertClass(classVO);
+    	return result;
+    };
+    
+    // 이미지 등록
+    @Override
+    public int insertImage(ImgVO imgVO) throws Exception {
+        // 이미지 저장 후 imgId 반환
+        return ClassDAO.insertImage(imgVO);
+    }
+    
+    
+    // 휴무일 등록 
+    @Override
+    public int insertHoliday(HolidayVO holidayVO) throws Exception {
+    	// 휴무일 저장 후 holidayId 반환
+        return ClassDAO.insertHoliday(holidayVO);
+    }
+    
+ // 관리자 회원 전체 테이블 조회
+    @Override
+    public java.util.List<EgovMap> getAdminClassList() throws Exception {
+        return ClassDAO.getAdminClassList();  // 모든 사용자 리스트 가져오기
+    }
+    
     
 }

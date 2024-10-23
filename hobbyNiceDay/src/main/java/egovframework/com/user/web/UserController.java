@@ -1,5 +1,6 @@
 package egovframework.com.user.web;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.ibm.icu.text.SimpleDateFormat;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.UserVO;
@@ -227,78 +229,14 @@ public class UserController {
     	 }
     	 
      }
-    
-    /*proflist 참고하기*/
- // 리스트 데이터
-// 	@RequestMapping({"/getProfListData.do","/{siteId}/getProfListData.do"})
-// 	@ResponseBody
-// 	public void getProfListData(HttpServletRequest req, HttpServletResponse res, @RequestParam HashMap<String, Object> param) throws Exception {
-// 		HashMap<String, Object> retMap = new HashMap<>();
-// 		HashMap<String, Object> listMap = new HashMap<>();
-// 		try {
-// 			// 로그인정보 가져오기
-// 			LoginVO loginVO = (LoginVO) SiiruUtil.getAttribute("siiruLogin");
-// 			param.put("deptId", loginVO.getDeptId());
-// 			param.put("loginId", loginVO.getUserId());
-//
-// 			//기관 책임자 여부 체크 
-// 			//int chargeAuth = pgCommonService.getInstChargeAuth(param);
-// 			//if(chargeAuth > 0) {
-// 			//	param.put("chargeYn", "Y");
-// 			//}else {
-// 			//	param.put("chargeYn", "N");
-// 			//}
-// 			
-// 			// 페이지 번호
-// 			int movePage = NumberUtil.toInt(param.get("movePage"),"1");
-// 			param.put("movePage", movePage);
-// 			// 한페이지 레코드 개수
-// 			double recordCnt = NumberUtil.toDouble(SiiruProperties.getSiiRU("recordCnt"),10);
-// 			if (StringUtil.isNotEmpty(param.get("recordCnt"))) recordCnt = NumberUtil.toDouble(param.get("recordCnt"));
-// 			param.put("recordCnt", (int)recordCnt);
-// 			// limit 시작 개수 (Mariadb, mySql)
-// 			param.put("limitStart", ((movePage - 1) * (int)recordCnt));
-// 			// 전체 개수
-// 			double totalCnt = pgProfService.getProfListTotal(param);
-// 			// 전체 페이지수
-// 			double pageCnt = Math.ceil(totalCnt / recordCnt);
-// 			// 리스트
-// 			ArrayList<EgovMap> listData = pgProfService.getProfListData(param);
-// 			// 복호화
-// 			for (EgovMap list : listData) {
-// 				list.put("telno", cryptoService.getPrivacyDecrypt((String)list.get("telno")));
-// 			}
-// 			// 리턴값 정리
-// 			listMap.put("page", movePage);
-// 			listMap.put("pageCnt", pageCnt);
-// 			listMap.put("totalCnt", totalCnt);
-// 			listMap.put("recordCnt", recordCnt);
-// 			listMap.put("list", listData);
-// 			retMap.put("error", "N");
-// 			retMap.put("dataMap", listMap);
-// 		} catch (DataAccessException e) {
-// 			retMap.put("error", "Y");
-// 			retMap.put("errorTitle", "Error");
-// 			retMap.put("errorMsg", "시스템 오류가 발생했습니다.");
-// 			SiiruUtil.logFile(req, e);
-// 		}
-// 		SiiruUtil.writeJson(retMap, res);
-// 	}
-    
-    
-    
-    
-    
-    
-    
-    
+   
     // 로그인 페이지로 이동
     @RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
     public String loginForm() throws Exception{
     	return "/cmm/user/loginUsr";
     }
     
-    
+    // 로그인 기능
     @RequestMapping(value = "/loginUser.do")
     @ResponseBody
 	public ResponseEntity<String> loginUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) throws Exception {
@@ -310,27 +248,72 @@ public class UserController {
 			UserVO resultVO = userService.loginUser(userVO); // id,pw 같은 경우 resultVO 반환
 			System.out.println(resultVO);
 			
-			boolean loginPolicyYn = true;
+			// 로그인 정책을 만족한다고 가정
+	        boolean loginPolicyYn = true;
 		
 		
 			if (resultVO != null && resultVO.getUserId() != null && !resultVO.getUserId().equals("") && loginPolicyYn) {
 				System.out.println("로그인 성공");
-				request.getSession().setAttribute("UserVO", resultVO); // 세션에 담기
-//				return "forward:/cmm/main/mainPage.do";
-				jsonObj.addProperty("error", "N");
-				System.out.println("로그인 성공 jsonObj"+ jsonObj);
+
+				// 2. 로그인 성공 시 세션에 사용자 정보 저장 -> 안됨
+	            request.getSession().setAttribute("UserVO", resultVO);
+	            // IP 주소 가져오기
+	            String clientIp = getClientIp(request);
+				
+	            int resultUpdtLoginDt = userService.updateLastLoginDt(resultVO.getUserId(), clientIp);
+	            System.out.println("마지막 로그인 일시 업데이트 성공확인 (resultUpdtLoginDt): " + resultUpdtLoginDt);
+	            
+				if(resultUpdtLoginDt > 0) { // 로그인 일시, 로그인 횟수, 로그인 ip 업데이트 성공 
+					jsonObj.addProperty("error", "N");
+					System.out.println("로그인 성공 jsonObj"+ jsonObj);					
+				}else { // 실패
+					jsonObj.addProperty("error", "Y");
+		            jsonObj.addProperty("errorMsg", "마지막 로그인 시간 업데이트 실패");
+		            System.out.println("마지막 로그인 시간 업데이트 실패 jsonObj"+ jsonObj);
+				}
 			} else {
+				System.out.println("로그인 실패");
+	            // userId가 null일 경우 사용자 ID를 수동으로 설정
 				jsonObj.addProperty("error", "Y");
-	            jsonObj.addProperty("errorMsg", "아이디 또는 비밀번호가 잘못되었습니다.");
-	//			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-				//return "/cmm/user/loginUsr";
-	            System.out.println("로그인 실패 jsonObj"+ jsonObj);
+				jsonObj.addProperty("errorMsg", "아이디 또는 비밀번호가 잘못되었습니다.");
+				System.out.println("로그인 실패 jsonObj"+ jsonObj);
+
+				
+				String failedUserId = userVO.getUserId(); // 로그인 시도한 userId
+
+				
+	            if (failedUserId != null && !failedUserId.isEmpty()) { // userid 가져오기
+	            	// 로그인 실패 시 로그인 실패 횟수 업데이트 (해당 id에 대해서)
+	                int resultUpdtLoginErrCnt = userService.updateLoginErrCnt(failedUserId);
+	                System.out.println("로그인 실패 업데이트 성공 확인 (resultUpdtLoginErrCnt): " + resultUpdtLoginErrCnt);
+
+	                if(resultUpdtLoginErrCnt > 0) { // 로그인실패횟수 업데이트 성공
+	                    jsonObj.addProperty("error", "N");
+	                    System.out.println("로그인 실패 - 로그인 실패 횟수 업데이트 성공");
+	                } else { // 로그인실패횟수 업데이트 실패
+	                    jsonObj.addProperty("error", "Y");
+	                    jsonObj.addProperty("errorMsg", "로그인 실패 횟수 업데이트 실패");
+	                    System.out.println("로그인 실패 - 로그인 실패 횟수 업데이트 실패");
+	                }
+	            }
+
+				
+	            
 			}
         } catch (Exception e) {
-        	System.out.println("catch");
-            jsonObj.addProperty("error", "Y");
-            jsonObj.addProperty("errorMsg", "로그인 중 오류가 발생했습니다. 관리자에게 문의하세요.");
+        	System.out.println("catch or 로그인 제한 걸린 경우)");
+        	
+        	// 로그인 제한 오류 처리
+            if (e.getMessage().contains("로그인이 제한")) {
+                jsonObj.addProperty("error", "Y");
+                jsonObj.addProperty("errorMsg", e.getMessage());
+            } else {
+                // 기타 오류 처리
+                jsonObj.addProperty("error", "Y");
+                jsonObj.addProperty("errorMsg", "로그인 중 오류가 발생했습니다. 관리자에게 문의하세요.");
+            }
             e.printStackTrace();
+            
         }
         
         System.out.println("return 직전 jsonObj"+jsonObj);
@@ -339,6 +322,22 @@ public class UserController {
 	}
     
     
+    
+    @RequestMapping(value = "/mypage.do", method = RequestMethod.GET)
+    public String myPage(HttpServletRequest request, Model model) {
+        // 세션에서 로그인된 사용자 정보 가져오기
+        UserVO loggedInUser = (UserVO) request.getSession().getAttribute("UserVO");
+
+        // 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
+        if (loggedInUser == null) {
+            return "redirect:/loginForm.do";
+        }
+
+        // 사용자 정보를 모델에 추가하여 JSP에 전달
+        model.addAttribute("user", loggedInUser);
+
+        return "/cmm/user/myPage";
+    }
     
     
     
