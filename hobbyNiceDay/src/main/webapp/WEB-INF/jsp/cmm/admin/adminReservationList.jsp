@@ -141,57 +141,27 @@
 															</svg>   등록
 										                </button>
 										            </div>
-                                                    <table class="table table-hover">
+                                                    <table class="table table-hover reservationList">
                                                         <thead>
                                                             <tr>
                                                                 <th>순번</th>
-                                                                <th>사용자ID/예약번호</th>
-                                                                <th>이름</th>
-                                                                <th>성별</th>
-                                                                <th>생년월일</th>
-                                                                <th>연령대</th>
-                                                                <th>이메일</th>
+                                                                <th>예약번호</th>
+                                                                <th>사용자ID</th>
+                                                                <th>예약자명</th>
+                                                                <th>예약인원수</th>
                                                                 <th>연락처</th>
+                                                                <th>이메일</th>
+                                                                <th>클래스명(id)</th>
+                                                                <th>예약일자</th>
+                                                                <th>시작시간</th>
+                                                                <th>종료시간</th>
                                                                 <th>예약상태</th>
-                                                                <th></th>
-                                                                
+                                                                <th>회원/비회원</th>
+                                                                <th>예약등록일시</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <th scope="row">1</th>
-                                                                <td id="userId">testId</td>
-                                                                <td>김회원</td>
-                                                                <td>여자</td>
-                                                                <td>1999-01-01</td>
-                                                                <td>20대</td>
-																<td>test@naver.com</td>
-                                                                <td>010-1111-1111</td>
-                                                                
-                                                                <td>
-                                                                    <div class="dropdown-inverse dropdown open">
-                                                                        <button class="btn btn-inverse dropdown-toggle waves-effect waves-light " type="button" id="dropdown-7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">예약상태</button>
-                                                                        <div class="dropdown-menu" aria-labelledby="dropdown-7" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                                                            <a class="dropdown-item waves-light waves-effect" href="#">예약확정</a>
-                                                                            <a class="dropdown-item waves-light waves-effect" href="#">취소</a>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <button id="btnUpdate" class="btn waves-effect waves-light btn-success btn-outline-success">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-																		  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-																		  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-																	</svg> 수정</button>
-                                                                    <button class="btn waves-effect waves-light btn-danger btn-outline-danger">
-                                                                    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-																		  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																		  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-																		</svg> 삭제</button>
-                                                                </td>
-                                                                
-                                                            </tr>
-                                                           
+                                                            
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -242,20 +212,123 @@
 	
 	
 	
-	<script type="text/javascript">
-    $(document).ready(function() {
-        // 등록 버튼 클릭 시 예약 등록 페이지로 이동
-        $("#btnRegister").click(function() {
-            window.location.href = '<c:url value="/adminReservationInsertForm.do" />';
-        });
-        
-   		// 수정 버튼 클릭 시 사용자 ID를 가져와서 페이지로 이동
-        $("#btnUpdate").click(function() {
-            var userId = $(this).closest("tr").find(".userId").text();
-            window.location.href = '<c:url value="/adminReservationInsertForm.do" />?userId=' + userId;
-        });
-        
-    });
+	
+    <script type="text/javascript">
+  //페이지 로드가 완료되면
+    if (window.addEventListener) window.addEventListener("load", reservationList, false);
+	else if (window.attachEvent) window.attachEvent("onload", reservationList);
+	else window.onload = reservationList;
+	function reservationList() {
+		
+		dataList()
+		
+		console.log("로드 확인용 ")
+   		
+    	
+   		// 수정 버튼 클릭 시 예약상태 변경 
+		$("#btnUpdate").click(function() {
+            // Collect reservation updates
+                let updates = []; // Initialize an array to hold the updates
+            $(".reservationList tbody tr").each(function() {
+                //var reservationId = $(this).find(".reservationId").text().trim();
+                //var updatedStatus = $(this).find(".reservationStatusSelect").val();
+				
+				let reservationId = $(this).find(".reservationId").text().trim();
+                let updatedStatus = $(this).find(".reservationStatusSelect").val();
+				
+                
+             // Only add valid updates to the array
+                if (reservationId && updatedStatus) {
+                    updates.push({
+                        reservationId: reservationId,
+                        reservationStatus: updatedStatus
+                    });
+                }
+                
+                $.ajax({
+                    url: '/updateReservationStatus.do',
+                    type: 'POST',
+                    contentType: 'application/json;charset=UTF-8', // Set correct content type for JSON
+                    data: JSON.stringify(updates), // Convert updates array to JSON string
+                    success: function(response) {
+                        if (response.error === 'N') {
+                            alert("예약 상태가 성공적으로 업데이트되었습니다.");
+                            location.reload(); // Reload to reflect the updated status
+                        } else {
+                            alert("업데이트에 실패했습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error updating reservation status:", error);
+                        alert("오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+        });       
+     
+	} 
+    
+  //리스트 데이터
+  
+  function dataList() {
+	console.log("data List들어오는지 확인")
+	$.post('/getAdminReservationList.do', function(data) {  // 괄호 수정
+		console.log("post 요청 들어오는지 확인")
+	    if ($.trim(data.error) == 'N') {
+	    	console.log("data : " , data);  // cosole -> console 오타 수정
+	        var dataMap = data.dataMap.dataMap.dataMap;
+	    	console.log("dataMap : " , dataMap);  // cosole -> console 오타 수정
+	        
+	    	// dataMap에서 dataMap 배열을 가져옴
+			var listData = data.dataMap.dataMap;  // 이 부분이 핵심
+			console.log("listData: ", listData);
+			
+	    	var html = '';
+	        
+	        $.each(listData, function(key, values) {
+	            html+= '<tr>';
+	            //html+= '    <td>' + ((data.totalCnt - (data.page - 1 ) * data.recordCnt) - key) + '</td>';
+	            html+= '    <td>' + (key + 1) + '</td>';
+	            html+= '    <td><a href="adminReservationInfo.do?reservationId=' + encodeURIComponent($.trim(values.reservationId)) + '"style="text-decoration: underline;">' + $.trim(values.reservationId) + '</a></td>';
+	            html+= '    <td>' + $.trim(values.userId) + '</td>'; // 사용자 ID (비회원인 경우 null)
+	            html+= '    <td>' + $.trim(values.reservationNm) + '</td>'; // 예약자명
+	            html+= '    <td>' + $.trim(values.reservationCnt) + '</td>';
+	            html+= '    <td>' + $.trim(values.reservationPhone) + '</td>'; // 예약자 연락처
+	            html+= '    <td>' + $.trim(values.reservationEmail) + '</td>'; // 예약자 이메일
+	            html+= '    <td>' + $.trim(values.classNm) + '(' + $.trim(values.classId) + ')</td>'; // 클래스명
+	            html+= '    <td>' + $.trim(values.reservationDt) + '</td>'; // 예약일자
+	            html+= '    <td>' + $.trim(values.timeStart) + '</td>'; // 시작시간
+	            html+= '    <td>' + $.trim(values.timeEnd) + '</td>'; // 종료시간
+	            html+= '    <td>' + $.trim(values.reservationStatus) + '</td>'; // 예약상태
+	            html+= '    <td>' + $.trim(values.reservationType) + '</td>'; // 회원/비회원 구분 
+	            html+= '    <td>' + $.trim(values.regDt) + '</td>'; // 등록일시
+	            html+= '</tr>';
+	        });
+	        
+	        //if (data.list.length == 0){ 
+	        //    html+= '<tr><td colspan="9" class="nodata">데이터가 존재하지 않습니다.</td></tr>';
+	        //}
+	        
+	        $('.reservationList tbody').append(html);
+	        $('.totalCnt').text(numberWithCommas(data.totalCnt));
+	        
+	        // 페이징을 만든다
+	        //paging('.paging', data.page, data.pageCnt, data.totalCnt);
+	    }
+	    
+	    // $('.userList tbody').children('tr.loading').remove('');
+	});
+  }
+    			/*
+    			$('.totalCnt').html(numberWithCommas($.trim(data.totalCnt)));
+    			$('.page').html(numberWithCommas($.trim(data.page)));
+    			$('.pageCnt').html(numberWithCommas($.trim(data.pageCnt)));
+    			*/
+    			// 페이징을 만든다
+    			//paging('.paging', data.page, data.pageCnt, data.totalCnt);
+    		// $('.userList tbody').children('tr.loading').remove('');
+   
+
 	</script>
 	
 </body>

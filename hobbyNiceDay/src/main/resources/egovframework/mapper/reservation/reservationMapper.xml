@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReservationDAO"><!-- egovframework.com.classes.service.impl.ClassDAO -->
+
+
+    <!-- 남은 좌석 계산 -->
+    <!-- 
+    <select id="getRemainingSeats" parameterType="map" resultType="int">
+        SELECT 
+            (cd.MAX_PARTICIPANTS - IFNULL(SUM(r.RESERVATION_CNT), 0)) AS remaining_seats
+        FROM 
+            TB_CLASS_DETAIL cd
+        LEFT JOIN 
+            TB_RESERVATION r 
+        ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID 
+        AND r.RESERVATION_DT = #{reservationDate}
+        WHERE 
+            cd.CLASS_DETAIL_ID = #{classDetailId}
+        GROUP BY 
+            cd.CLASS_DETAIL_ID
+    </select>
+ -->
+    <!-- 예약 등록 -->
+    <insert id="insertReservation" parameterType="ReservationVO">
+        INSERT INTO TB_RESERVATION (
+							            USER_ID
+							            <!-- , CLASS_ID -->
+							            , CLASS_DETAIL_ID
+							            , RESERVATION_DT
+							            , RESERVATION_CNT
+							            , RESERVATION_NM
+							            , RESERVATION_PHONE
+							            , RESERVATION_EMAIL
+							            , RESERVATION_ETC
+							            , RESERVATION_TYPE
+							            , RESERVATION_STATUS
+							            , REG_IP
+							            , REG_ID
+							            , REG_DT
+							            )
+        VALUES (
+		              #{userId}
+		            <!-- , #{classId} -->
+		            , #{classDetailId}
+		            , #{reservationDt}
+		            , #{reservationCnt}
+		            , #{reservationNm}
+		            , #{reservationPhone}
+		            , #{reservationEmail}
+		            , #{reservationEtc}
+		            , #{reservationType}
+		            , #{reservationStatus}
+		            , #{regIp}
+		            , #{regId}
+		            , NOW()
+       			 )
+    </insert>
+    
+    <!-- 예약 등록 시 예약번호 업데이트 -->
+     <!-- RESERVATION_NUM 업데이트 쿼리 추가 -->
+    <update id="updateReservationNum" parameterType="ReservationVO">
+        UPDATE TB_RESERVATION
+        SET RESERVATION_NUM = CONCAT(#{reservationNum}, '-', #{reservationId})
+        WHERE RESERVATION_ID = #{reservationId}
+    </update>
+    
+    <!-- 관리자 예약 전체 목록 조회 -->
+	<select id="getAdminReservationList" resultType="EgovMap">
+	    SELECT 
+			      r.RESERVATION_ID
+				, c.CLASS_ID -- 클래스 정보
+				, r.CLASS_DETAIL_ID
+				, r.USER_ID
+				, r.RESERVATION_DT
+				, r.RESERVATION_CNT
+				, r.RESERVATION_NM
+				, r.RESERVATION_PHONE
+				, r.RESERVATION_EMAIL
+				, r.RESERVATION_ETC
+				, r.RESERVATION_TYPE
+				, r.RESERVATION_STATUS
+				, r.REG_IP
+				, r.REG_ID
+				, r.REG_DT
+				, r.UPDT_ID
+				, r.UPDT_IP
+				, r.UPDT_DT
+				, r.CONFM_ID
+				, r.CONFM_IP
+				, r.CONFM_DT
+				, cd.TIME_START
+				, cd.TIME_END
+				, c.CLASS_NM
+				, c.CLASS_MAX_CNT
+				, c.CLASS_CATE_BIG
+				, c.CLASS_CATE_SMALL
+				, c.CLASS_DSCRPTN
+				, c.LOCATION
+				, c.CLASS_AGE_MIN
+				, c.CLASS_PRICE
+				, c.CLASS_POST
+				, c.START_DT
+				, c.END_DT
+		 FROM TB_RESERVATION r
+		 LEFT JOIN TB_CLASS_DETAIL cd 
+		 ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID
+		 LEFT JOIN  TB_CLASS c ON cd.CLASS_ID = c.CLASS_ID;
+	</select>
+	
+	
+	<!-- 관리자 페이지 회원 상세보기 화면 조회 -->
+	<select id="getReservationInfo" parameterType="String" resultType="ReservationVO">
+    	SELECT 
+			      r.RESERVATION_ID
+				, c.CLASS_ID -- 클래스 정보
+				, r.CLASS_DETAIL_ID
+				, r.USER_ID
+				, r.RESERVATION_DT
+				, r.RESERVATION_CNT
+				, r.RESERVATION_NM
+				, r.RESERVATION_PHONE
+				, r.RESERVATION_EMAIL
+				, r.RESERVATION_ETC
+				, r.RESERVATION_TYPE
+				, r.RESERVATION_STATUS
+				, r.REG_IP
+				, r.REG_ID
+				, r.REG_DT
+				, r.UPDT_ID
+				, r.UPDT_IP
+				, r.UPDT_DT
+				, r.CONFM_ID
+				, r.CONFM_IP
+				, r.CONFM_DT
+				, DATE_FORMAT(cd.TIME_START, '%H:%i') as TIME_START 
+				, DATE_FORMAT(cd.TIME_END, '%H:%i') as TIME_END 
+				, c.CLASS_NM
+				, c.CLASS_MAX_CNT
+				, c.CLASS_CATE_BIG
+				, c.CLASS_CATE_SMALL
+				, c.CLASS_DSCRPTN
+				, c.LOCATION
+				, c.CLASS_AGE_MIN
+				, c.CLASS_PRICE
+				, c.CLASS_POST
+				, c.START_DT
+				, c.END_DT
+		 FROM TB_RESERVATION r
+		 LEFT JOIN TB_CLASS_DETAIL cd 
+		 ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID
+		 LEFT JOIN  TB_CLASS c ON cd.CLASS_ID = c.CLASS_ID
+    	 WHERE r.RESERVATION_ID = #{reservationId}
+	</select>
+	
+	
+	<!-- 관리자 헤더 예약 대기 승인 요청 알림 데이터 -->
+	<select id="getAdminPendingReservationList" resultType="EgovMap">
+	    SELECT 
+			      r.RESERVATION_ID
+				, c.CLASS_ID -- 클래스 정보
+				, r.CLASS_DETAIL_ID
+				, r.USER_ID
+				, r.RESERVATION_DT
+				, r.RESERVATION_CNT
+				, r.RESERVATION_NM
+				, r.RESERVATION_PHONE
+				, r.RESERVATION_EMAIL
+				, r.RESERVATION_ETC
+				, r.RESERVATION_TYPE
+				, r.RESERVATION_STATUS
+				, r.REG_IP
+				, r.REG_ID
+				, r.REG_DT
+				, r.UPDT_ID
+				, r.UPDT_IP
+				, r.UPDT_DT
+				, r.CONFM_ID
+				, r.CONFM_IP
+				, r.CONFM_DT
+				, cd.TIME_START
+				, cd.TIME_END
+				, c.CLASS_NM
+				, c.CLASS_MAX_CNT
+				, c.CLASS_CATE_BIG
+				, c.CLASS_CATE_SMALL
+				, c.CLASS_DSCRPTN
+				, c.LOCATION
+				, c.CLASS_AGE_MIN
+				, c.CLASS_PRICE
+				, c.CLASS_POST
+				, c.START_DT
+				, c.END_DT
+		 FROM TB_RESERVATION r
+		 LEFT JOIN TB_CLASS_DETAIL cd 
+		 ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID
+		 LEFT JOIN  TB_CLASS c ON cd.CLASS_ID = c.CLASS_ID
+		 WHERE r.RESERVATION_STATUS = 'stay'
+	</select>
+	
+	
+	<!-- 관리자 예약상태 변경 -->
+	<update id="updateReservationStatus" parameterType="map">
+	    UPDATE TB_RESERVATION
+	       SET RESERVATION_STATUS = #{lastLoginDt}
+	     WHERE RESERVATION_ID = #{reservationId}
+	</update>
+	
+	
+	
+	<!-- 관리자 예약 정보 수정  -->
+	<update id="updateReservationInfo" parameterType="reservationVO">
+	    UPDATE TB_RESERVATION
+	       SET 
+	       		RESERVATION_DT = #{reservationDt}
+ 				, RESERVATION_CNT = #{reservationCnt}
+	            , RESERVATION_NM =  #{reservationNm}
+	            , RESERVATION_PHONE = #{reservationPhone}
+	            , RESERVATION_EMAIL = #{reservationEmail} 
+	            , RESERVATION_ETC = #{reservationEtc}
+	            , RESERVATION_STATUS = #{reservationStatus}
+	            , UPDT_IP = #{updtIp}
+	            , UPDT_ID = #{updtId}
+	            , UPDT_DT = NOW()
+	     WHERE RESERVATION_ID = #{reservationId}
+	</update>
+	
+	
+	<!--  특정 날짜에 클래스 시간대별 예약 가능 좌석 수 조회-->
+	<select id="getAvailableTimeSlots" parameterType="map" resultType="EgovMap">
+	
+		
+		SELECT 
+		    cd.CLASS_DETAIL_ID
+		    ,c.CLASS_ID
+		    ,r.RESERVATION_ID 
+		    ,r.RESERVATION_DT
+		    ,CONCAT(DATE_FORMAT(cd.TIME_START, '%H:%i'), ' - ', DATE_FORMAT(cd.TIME_END, '%H:%i')) AS timeRange <!-- 시간대를 문자열로 표시-->
+		    ,c.CLASS_MAX_CNT <!-- 전체 수강 가능 인원--> 
+		    ,IFNULL(SUM(r.RESERVATION_CNT),0) as sumAllreservation <!-- 모든 예약자 수 -->
+		    ,(c.CLASS_MAX_CNT - IFNULL(SUM(r.RESERVATION_CNT), 0)) AS availableSeatsWithAllReservations  <!--  모든 예약 상태를 포함한 예약 가능 좌석 (예약 상태 상관없이 모든 예약을 포함) -->
+		    ,IFNULL((SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END)),0) as sumAprovedReservation <!-- 예약 승인 된 예약자 수 -->
+		    ,(c.CLASS_MAX_CNT - IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END), 0)) AS availableSeatsWithApprovedReservations <!--  확정된 예약만 포함한 예약 가능 좌석 (RESERVATION_STATUS = '예약승인' 인 경우만 포함) -->
+		FROM 
+		    tb_class_detail cd
+		JOIN 
+		    tb_class c ON cd.CLASS_ID = c.CLASS_ID  <!-- tb_class와 조인하여 CLASS_MAX_CNT 가져오기-->
+		LEFT JOIN 
+		    tb_reservation r ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID 
+		    AND r.RESERVATION_DT = #{reservationDt} <!-- 예약 날짜-->
+		where c.CLASS_ID = #{classId}
+		GROUP BY 
+		    cd.CLASS_DETAIL_ID, cd.TIME_START, cd.TIME_END, c.CLASS_MAX_CNT
+		
+	</select>
+	
+	<!-- 월별 예약가능 날짜 여부 확인 (임시) -->
+	
+	<select id="getMonthlyAvailableTimeSlots" resultType="EgovMap" parameterType="UserVO">
+	
+	SELECT  
+	    cd.CLASS_DETAIL_ID,
+	    c.CLASS_ID,
+	    r.RESERVATION_ID,
+	    r.RESERVATION_DT,
+	    CONCAT(DATE_FORMAT(cd.TIME_START, '%H:%i'), ' - ', DATE_FORMAT(cd.TIME_END, '%H:%i')) AS timeRange,
+	    c.CLASS_MAX_CNT,
+	    IFNULL(SUM(r.RESERVATION_CNT), 0) AS sumAllreservation,
+	    (c.CLASS_MAX_CNT - IFNULL(SUM(r.RESERVATION_CNT), 0)) AS availableSeatsWithAllReservations,
+	    IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END), 0) AS sumAprovedReservation,
+	    (c.CLASS_MAX_CNT - IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END), 0)) AS availableSeatsWithApprovedReservations
+	FROM  
+	    tb_class_detail cd
+	JOIN  
+	    tb_class c ON cd.CLASS_ID = c.CLASS_ID
+	LEFT JOIN  
+	    tb_reservation r ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID 
+	    AND r.RESERVATION_DT BETWEEN '2024-10-01' AND '2024-10-31' -- Date range for the month 월별 날짜 넣어야함
+	WHERE 
+	    c.CLASS_ID = 6 -- 클래스 id 넣어야함
+	GROUP BY  
+	    r.RESERVATION_DT, cd.CLASS_DETAIL_ID, cd.TIME_START, cd.TIME_END, c.CLASS_MAX_CNT
+	ORDER BY 
+	    r.RESERVATION_DT, cd.TIME_START;
+	
+	</select>
+	
+	<!-- 회원 예약목록  -->
+	<select id="getMyReservationList" resultType="EgovMap" parameterType="UserVO">
+	    SELECT 
+			      r.RESERVATION_ID
+				, c.CLASS_ID -- 클래스 정보
+				, r.CLASS_DETAIL_ID
+				, r.USER_ID
+				, r.RESERVATION_DT
+				, r.RESERVATION_CNT
+				, r.RESERVATION_NM
+				, r.RESERVATION_PHONE
+				, r.RESERVATION_EMAIL
+				, r.RESERVATION_ETC
+				, r.RESERVATION_TYPE
+				, r.RESERVATION_STATUS
+				, r.REG_IP
+				, r.REG_ID
+				, r.REG_DT
+				, r.UPDT_ID
+				, r.UPDT_IP
+				, r.UPDT_DT
+				, r.CONFM_ID
+				, r.CONFM_IP
+				, r.CONFM_DT
+				, cd.TIME_START
+				, cd.TIME_END
+				, c.CLASS_NM
+				, c.CLASS_MAX_CNT
+				, c.CLASS_CATE_BIG
+				, c.CLASS_CATE_SMALL
+				, c.CLASS_DSCRPTN
+				, c.LOCATION
+				, c.CLASS_AGE_MIN
+				, c.CLASS_PRICE
+				, c.CLASS_POST
+				, c.START_DT
+				, c.END_DT
+		 FROM TB_RESERVATION r
+		 LEFT JOIN TB_CLASS_DETAIL cd 
+		 ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID
+		 LEFT JOIN  TB_CLASS c ON cd.CLASS_ID = c.CLASS_ID
+		 WHERE r.USER_ID = #{userId}
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>
+	

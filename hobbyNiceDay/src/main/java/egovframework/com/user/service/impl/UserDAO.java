@@ -13,7 +13,7 @@ import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-
+import egovframework.com.cmm.ClassVO;
 import egovframework.com.cmm.UserVO;
 
 
@@ -85,4 +85,22 @@ public class UserDAO extends EgovAbstractMapper {
 		List<EgovMap> resultJoin = selectList("UserDAO.getAdminUserList");
 		return resultJoin;
 	}
+	
+	// 관리자페이지 회원 상세보기 화면 조회 
+	public UserVO getUserInfo(String userId) throws Exception {
+		return (UserVO) selectOne("UserDAO.getUserInfo", userId);
+		
+	}
+	
+	
+	// 카카오 로그인 기존 회원인지 확인
+	public UserVO getUserBySNSId(String snsId,  String snsProvider) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("snsId", snsId);
+	    params.put("snsProvider", snsProvider);
+	    //return sqlSession.selectOne("UserDAO.getUserBySNSId", params);
+	    return (UserVO) selectOne("UserDAO.getUserBySNSId", params);
+    }
+	
+	
 }

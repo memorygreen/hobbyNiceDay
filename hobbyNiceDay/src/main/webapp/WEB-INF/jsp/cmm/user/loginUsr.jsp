@@ -50,9 +50,13 @@
 <link rel="stylesheet" href="<c:url value='/css/style.css' />"
 	type="text/css">
 
-
-<script type="text/javascript">
-	
+<!-- 네아로 SDK
+(1) LoginWithNaverId Javascript SDK
+ -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
+ 
+ <!--  카카오 로그인 sdk -->
+ <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 </script>
 
 <style>
@@ -146,6 +150,18 @@
     outline: none; /* 기본 파란색 외곽선 제거 */
 
 }
+
+
+/*241030 수 임시 일반로그인 표*/
+/*
+.generalLoginTable tr{
+	border: 1px solid #000;
+}
+
+.generalLoginTable td{
+	border: 1px solid #000;
+}*/
+
 </style>
 
 </head>
@@ -200,23 +216,61 @@
 				<div class="jy_margin_1" style="height:50px"></div>
 				
 				<!-- 회원가입 폼 시작 -->
-				<h6 class="checkout__title">회원정보 입력</h6>
 				<div class="row">
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>ID<span>*</span></p>
-							<input type="text" id="userId" name="userId" autocomplete="new-password" required /> 
+					<div class="col-lg-7">
+					<h6 class="checkout__title">일반 로그인</h6>
+					
+						<table style="width: 100%; " class="generalLoginTable"> <!-- border: 1px solid #000; border-collapse: collapse; -->
+							<tr>
+								<td style="width: 80%;">
+									<div class="checkout__input">
+										<p>ID<span>*</span></p>
+										<input type="text" id="userId" name="userId" autocomplete="new-password" required placeholder="ID를 입력해주세요"/> 
+										
+									</div>
+								</td>
+								<td rowspan="2" >
+									<a href="#" class="primary-btn loginBtn">로그인</a>
+								</td>
+							</tr>
 							
-						</div>
+							<tr>
+								<td>
+									<div class="checkout__input">
+										<p>비밀번호<span>*</span></p>
+										<input type="password" id="passwd" name="passwd" autocomplete="new-password" required  placeholder="비밀번호를 입력해주세요"/>
+									</div>
+								
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="2"  style="text-align: center;">
+									<a href="/joinForm.do" id="joinBtn" style="margin-right: 30px;"><span>회원가입</span></a>
+									<span>      </span>
+									<a href="/" id="listBtn" style="margin-left: 30px;">메인화면</a></td> <!--class="primary-btn listBtn"  -->
+								</td>
+							</tr>
+						</table>
+						
+						
+						
+						
 					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>비밀번호<span>*</span></p>
-							<input type="password" id="passwd" name="passwd" autocomplete="new-password" required />
+					<div class="col-lg-5">
+					
+						<h6 class="checkout__title">sns 로그인</h6>
+						
+						<!-- 네이버 로그인 버튼 생성 위치 -->
+				   		<div id="naverIdLogin"></div>
+				   		<div id="naver_id_login"></div>
+				   		
+				   		<!-- 카카오 로그인 버튼  -->
+				   		<div class="kakao-btn" onclick="kakaoLogin()"> 
+				    		<a>
+				    			<img src="<c:url value='/images/img/kakao_login_medium_wide.png' />" alt="카카오 로그인 버튼" >
+				    		</a>
+						
 						</div>
 					</div>
 					
@@ -230,14 +284,15 @@
 		<!-- checkout Form 끝 -->
 
 		</form>
-
-		<button type="reset" class="primary-btn">취소</button>
 		
-		<a href="#" class="primary-btn loginBtn">로그인</a>
-		<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
-	
-
-		<!-- 회원가입 폼 끝-->
+		
+		
+		
+   		<!-- <a href="javascript:kakaoLogin()">
+   		<img src="https://developers.kakao.com/static/images/m/product/sub/kakaoLogin.png"></a>
+   		 -->
+   		
+		<!-- 로그인 폼 끝-->
 
 
 	</div>
@@ -285,76 +340,100 @@
 	var userIdCk = false;
 	function userData() {
 		
-		// 사용자ID 중복체크 - 가져옴
+		// 네이버 로그인 관련
 		
-		/*
-		$('#userIdCk').click(function(e) {
-			e.preventDefault();
-			var userId = $('#userId').val();
-		    console.log("userId: ", userId);  // 입력한 ID 확인
-		    if ($.trim(userId) != '') {
-				$.post('joinIdCheck.do', {'userId':$('#userId').val()}).done(function(data) {
-					console.log("AJAX 응답: ", data);  // 응답 데이터 확인
-					if (data.error == 'N') {
-						idCheck = true;
-						alert('사용가능한 아이디 입니다.');
-						$('#userId').prop('readonly', true);
-					} else {
-						idCheck = false;
-						alert(data.errorMsg);
-					    console.log("data.errorMsg: ", data.errorMsg);  // 입력한 ID 확인
-
-						$('#userId').prop('readonly', false);
-						$('#userId').focus();
-					}
-				}).fail(function() {
-		            alert("AJAX 요청에 실패했습니다.");
-		        });
-			} else {
-				idCheck = false;
-		        alert('ID가 중복인지 확인하세요.');
-			}
-		});
+		/*동의하기 페이지 url
+		https://nid.naver.com/oauth2.0/authorize
+		?response_type=token
+				&client_id=nTM2zP9ui0F2yerONFez
+				&state=da8fda31-d2b0-4859-a09b-32aaf9fec26f
+				&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fuser%2Fcallback
+				&version=js-2.0.0
+				&svctype=1
 		*/
 		
-		$('#userIdCk').click(
-				function(e) {
-					e.preventDefault(); // 링크 기본 동작 막기
-					
-					var userId = $('#userId').val(); // 입력된 ID 값 가져오기
+		// 오류 페이지 코드
+		/* http://localhost:8080/user/callback
+		#access_token=AAAAPg67DuD_U8MPFclHg__juHEl1WIvinr58yh8IS3m1MGiiuDWNbNCPzMjNjeK30nOnL3IIlASUtsYgIZo_37FeQA
+		&state=da8fda31-d2b0-4859-a09b-32aaf9fec26f&
+		token_type=bearer&
+		expires_in=3600
+		*/
+		
+		
+		console.log("네이버 타는지 확인 ")
+		// (2) LoginWithNaverId Javascript 설정 정보 및 초기화
+		var naverLogin = new naver.LoginWithNaverId(
+		    {
+		        clientId: "nTM2zP9ui0F2yerONFez", // 본인의 Client ID로 수정, 띄어쓰기는 사용하지 마세요.
+		        callbackUrl: "http://localhost:8080/joinExtlUsrNaverForm.do", // 본인의 callBack url로 수정하세요.
+		        isPopup: true, // 팝업을 통한 연동처리 여부
+		        loginButton: {color: "white", type: 3, height: 60},  // 네이버 로그인버튼 디자인 설정. 한번 바꿔보세요:D
+		    	// callbackHandle: true // callback 페이지가 분리되었을 경우에 callback처리를 해줄 수 있도록 설정
+		    }
+	    );
+		console.log("네이버 동의하기", naverLogin)
+		// (3) 네아로 로그인 정보를 초기화하기 위하여 init을 호출
+		naverLogin.init();
+		console.log("네이버 초기화")
 
-					if (userId === "") {
-						alert("ID를 입력하세요."); // 자영 : 이미 필수체크인데?
-						return;
-					}
-
-					// AJAX를 이용해 서버로 ID 중복 확인 요청 보내기
-					
-					$.ajax({
-			            url: '<c:url value="/joinIdCheck.do"/>', // 서버에서 처리할 URL
-			            type: 'POST',
-			            data: { userId: userId }, // 입력된 ID 전달
-			            success: function(response) {
-			            	console.log("성공 시 response",response)
-			            	console.log("성공 시 response",response.exist)
-			                if (response.exist == true) {
-			                    $('#userIdMsg').text("이미 사용 중인 ID입니다.").css("color", "red");
-			                } else {
-			                	userIdCk = true;
-			                    $('#userIdMsg').text("사용 가능한 ID입니다.").css("color", "green");
-			                }
-			            },
-			            error: function() {
-			                alert("ID 중복 확인 중 오류가 발생했습니다.");
-			            }
-			        });
-					
-					
+		
+		// 새로 다시 넣어보기
+		/*
+		var naver_id_login = new naver_id_login("nTM2zP9ui0F2yerONFez", "http://localhost:8080/cmm/user/loginUsr.jsp");
+	  	var state = naver_id_login.getUniqState();
+	  	naver_id_login.setButton("green", 3,50);
+	  	naver_id_login.setDomain("http://localhost:8080");
+	  	naver_id_login.setState(state);
+	  	naver_id_login.setPopup();
+	  	
+	  	naver_id_login.init_naver_id_login();
+	  	*/
+		
+		// gpt 의 솔루션
+		/*
+	    var naverLogin = new naver.LoginWithNaverId({
+	        clientId: "nTM2zP9ui0F2yerONFez", // 본인의 Client ID로 수정
+	        callbackUrl: "http://localhost:8080/user/callback", // 콜백 URL 설정
+	        isPopup: false, // 팝업 방식이 아닌 페이지 리다이렉트 방식으로 설정
+	        loginButton: {color: "green", type: 3, height: 50}, // 버튼 설정
+	        callbackHandle: true
+	    });
+	    naverLogin.init(); // 네이버 로그인 초기화
+	
+	    // 버튼을 페이지에 추가
+	    naverLogin.setButton("green", 3, 50);
+	    */
+		
+		// 카카오 로그인
+		// 출처 : https://velog.io/@dev_h_o/Spring-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-api-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0REST-API
+		/*function kakaoLogin() {
+				$.ajax({
+					 url:'/memberLoginForm/getKakaoAuthUrl',
+					 type:'post',
+					 async: false,
+					 dataType: 'text',
+					 success: function (res) {
+					   location.href = res;
+					 }
 				});
+			}
+	    */
+	    
+	    // 카카오 로그인 관련 
+		window.Kakao.init("5dd23d272be8396574b776bacd38ec63") // restAPI키 : 4GG6BZHFVLLPXEYSzoytVtdziZHbhM0i//  js 키 : 5dd23d272be8396574b776bacd38ec63 // 7a4940699916889409beca8302597c24 (?)
+		console.log("카카오  SDK 초기화 여부 확인 : ", Kakao.isInitialized()); // SDK 초기화 여부 확인
+				// 출처 : https://velog.io/@eksql3835/Spring-Security%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B8%B0%EB%8A%A5SNS%EB%A1%9C%EA%B7%B8%EC%9D%B8-API
+			
+		/*		
+		function getCookie(name) {
+		    var parts = document.cookie.split(name + '=');
+		    if (parts.length === 2) { return parts[1].split(';')[0]; }
+		  }
+		*/
 		
-		
-
-		
+				
+				
 		// 로그인 버튼 클릭 시 
 		$('.loginBtn').click(function(e) {
 			e.preventDefault();
@@ -379,73 +458,6 @@
 			}
 			
 
-			
-			
-			// 전자정부에서 가져온 함수
-			
-			<!--
-			function actionLogin() {
-
-			    if (document.loginForm.id.value =="") {
-			        alert("아이디를 입력하세요");
-			        return false;
-			    } else if (document.loginForm.password.value =="") {
-			        alert("비밀번호를 입력하세요");
-			        return false;
-			    } else {
-			        document.loginForm.action="<c:url value='/uat/uia/actionLogin.do'/>";
-			        //document.loginForm.j_username.value = document.loginForm.userSe.value + document.loginForm.username.value;
-			        //document.loginForm.action="<c:url value='/j_spring_security_check'/>";
-			        document.loginForm.submit();
-			    }
-			}
-
-			function setCookie (name, value, expires) {
-			    document.cookie = name + "=" + escape (value) + "; path=/; expires=" + expires.toGMTString();
-			}
-
-			function getCookie(Name) {
-			    var search = Name + "="
-			    if (document.cookie.length > 0) { // 쿠키가 설정되어 있다면
-			        offset = document.cookie.indexOf(search)
-			        if (offset != -1) { // 쿠키가 존재하면
-			            offset += search.length
-			            // set index of beginning of value
-			            end = document.cookie.indexOf(";", offset)
-			            // 쿠키 값의 마지막 위치 인덱스 번호 설정
-			            if (end == -1)
-			                end = document.cookie.length
-			            return unescape(document.cookie.substring(offset, end))
-			        }
-			    }
-			    return "";
-			}
-
-			function saveid(form) {
-			    var expdate = new Date();
-			    // 기본적으로 30일동안 기억하게 함. 일수를 조절하려면 * 30에서 숫자를 조절하면 됨
-			    if (form.checkId.checked)
-			        expdate.setTime(expdate.getTime() + 1000 * 3600 * 24 * 30); // 30일
-			    else
-			        expdate.setTime(expdate.getTime() - 1); // 쿠키 삭제조건
-			    setCookie("saveid", form.id.value, expdate);
-			}
-
-			function getid(form) {
-			    form.checkId.checked = ((form.id.value = getCookie("saveid")) != "");
-			}
-
-			function fnInit() {
-			    var message = document.loginForm.message.value;
-			    if (message != "") {
-			        alert(message);
-			    }
-			    getid(document.loginForm);
-			}
-			//-->
-			
-			
-			
 			
 			if (confirm("로그인을 하시겠습니까?")) {
 				var form = $('#loginForm')[0];
@@ -480,11 +492,51 @@
 			
 			
 			
-		})// 회원가입 버튼 클릭 끝
+		})// 로그인 버튼 클릭 끝
+		
+		
 	};// 전체 불러오기 끝
 		
+	
+	
+	// 전역 설정
 		
-		
+		// 카카오 로그인 관련
+		function kakaoLogin(){
+			console.log("kakaoLogin 함수 타는 지 확인 ")
+			Kakao.Auth.login({
+			//window.Kakao.Auth.login({
+				success: function(authObj){
+				console.log("로그인 성공", authObj) // 여기 탔다!
+				
+				// 서버로 액세스 토큰 전송
+              		sendTokenToServer(authObj.access_token);
+				
+			    Kakao.Auth.authorize({
+				      //redirectUri: 'http://localhost:8080/kakaoCallback'// 'http://localhost:8081/controller/ProductList.do', //
+				      redirectUri: 'http://localhost:8080/joinExtlUsrForm.do'
+				    });
+				
+				}
+				});
+			}
+
+			
+			// 카카오 엑세스 토큰 전달 ajax (gpt추가 )
+			function sendTokenToServer(accessToken) {
+		        // Ajax를 통해 서버로 액세스 토큰 전달
+		        $.ajax({
+		            url: '/kakaoCallback', //  'http://localhost:8080/kakaoCallback'
+		            type: 'POST',
+		            data: { token: accessToken },
+		            success: function(response) {
+		                window.location.href = '/'; // '/mainPage.do';
+		            },
+		            error: function(error) {
+		                console.log(error);
+		            }
+		        });
+		    }
 		
 	// 유효성 검사 함수
 	function requiredEmpty() {

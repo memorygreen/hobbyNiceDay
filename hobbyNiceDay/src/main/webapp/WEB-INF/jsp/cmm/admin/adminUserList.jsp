@@ -169,15 +169,17 @@
                                         <!-- Hover table card end -->
                                         
                                         <button id="btnUpdate" class="btn waves-effect waves-light btn-success btn-outline-success">
-	                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-																			  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-																			  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-																		</svg> 수정</button>
-	                                                                    <button class="btn waves-effect waves-light btn-danger btn-outline-danger">
-	                                                                    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-																			  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																			  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-																			</svg> 삭제</button>
+	                                    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+											  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+											  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+											</svg> 수정
+										</button>
+                                        <button class="btn waves-effect waves-light btn-danger btn-outline-danger">
+                                        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+												<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+												<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+											</svg> 삭제
+										</button>
                                        
                                         <!-- Contextual classes table starts -->
                                         <!-- Contextual classes table ends -->
@@ -271,8 +273,8 @@
 	        $.each(listData, function(key, values) {
 	            html+= '<tr>';
 	            //html+= '    <td>' + ((data.totalCnt - (data.page - 1 ) * data.recordCnt) - key) + '</td>';
-	            html+= '    <td></td>';
-	            html += '    <td><a href="#" style="text-decoration: underline;">' + $.trim(values.userId) + '</a></td>';
+	            html+= '    <td>' + (key + 1) + '</td>';
+	            html += '    <td><a href="adminUserInfo.do?userId=' + encodeURIComponent($.trim(values.userId)) + '"style="text-decoration: underline;">' + $.trim(values.userId) + '</a></td>';
 	            html+= '    <td>' + $.trim(values.userName) + '</td>';
 	            html+= '    <td>' + $.trim(values.sex) + '</td>';
 	            html+= '    <td>' + formatDate($.trim(values.brthdy)) + '</td>';
@@ -282,11 +284,11 @@
 	            html+= '    <td>' + $.trim(values.mbtlnum) + '</td>';
 	            html+= '    <td>' + $.trim(values.userSe) + '</td>';
 	            html+= '    <td>' + $.trim(values.loginCnt) + '</td>';
-	            html+= '    <td>' + $.trim(values.lastLoginDt) + '</td>';
+	            html+= '    <td>' + (values.lastLoginDt ? formatDateString($.trim(values.lastLoginDt)) : '') + '</td>';
 	            html+= '    <td>' + $.trim(values.loginErrCnt) + '</td>';
 	            html+= '    <td>' + $.trim(values.loginRestricted) + '</td>';
-	            html+= '    <td>' + $.trim(values.lastLoginDt) + '</td>';
-	            html+= '    <td>' + $.trim(values.updtDt) + '</td>';
+	            html+= '    <td>' + (values.updtDt ? formatDateString($.trim(values.updtDt)) : '') + '</td>';
+
 	        });
 	        
 	        //if (data.list.length == 0){ 
@@ -337,6 +339,24 @@ function calculateAge(birthdate) {
 
     return age;
 }
+
+// 날짜 데이터 yyyy-MM-dd HH:mm:ss 형식으로 변환하는 함수
+function formatDateString(dateString) {
+    // 1. 원본 문자열을 Date 객체로 변환
+    var date = new Date(dateString);
+
+    // 2. 연도, 월, 일, 시간, 분, 초를 가져오기
+    var year = date.getFullYear();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+    var day = ('0' + date.getDate()).slice(-2);
+    var hours = ('0' + date.getHours()).slice(-2);
+    var minutes = ('0' + date.getMinutes()).slice(-2);
+    var seconds = ('0' + date.getSeconds()).slice(-2);
+
+    // 3. 포맷팅된 문자열 만들기
+    return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+}
+
 
 	</script>
     

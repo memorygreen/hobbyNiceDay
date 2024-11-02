@@ -60,6 +60,13 @@
 	    FROM TB_USER
 	</select>
 	
+	<!-- 관리자 페이지 회원 상세보기 화면 조회 -->
+	<select id="getUserInfo" parameterType="String" resultType="UserVO">
+    	SELECT * 
+    	FROM TB_USER
+    	WHERE USER_ID = #{userId}
+	</select>
+	
 	
 	<!-- 로그인 처리를 위한 resultMap -->
 	<resultMap id="resultLogin" type="egovframework.com.cmm.UserVO">
@@ -97,7 +104,6 @@
 	
 	
 	<!-- 로그인 성공 시 로그인 시간 업데이트  -->
-	<!-- userMapper.xml -->
 	<update id="updateLastLoginDt" parameterType="map">
 	    UPDATE TB_USER
 	    SET LAST_LOGIN_DT = #{lastLoginDt},
@@ -114,7 +120,6 @@
 	</update>
 	
 	<!-- 로그인 실패 시 로그인실패횟수 업데이트  -->
-	<!-- userMapper.xml -->
 	<update id="updateLoginErrCnt" parameterType="map">
 	    UPDATE TB_USER
 	    SET LOGIN_ERR_CNT = LOGIN_ERR_CNT +1 
@@ -127,5 +132,13 @@
 	    SET LOGIN_RESTRICTED = #{loginRestricted}
 	    WHERE USER_ID = #{userId}
 	</update>
+	
+	<!-- sns 로그인 기존회원인지 확인 -->
+    <select id="getUserBySNSId" parameterType="String" resultType="UserVO">
+        SELECT *
+        FROM TB_USER
+        WHERE USER_ID = #{snsId}
+          AND SNS_PROVIDER = #{snsProvider}
+    </select>
 	
 </mapper>

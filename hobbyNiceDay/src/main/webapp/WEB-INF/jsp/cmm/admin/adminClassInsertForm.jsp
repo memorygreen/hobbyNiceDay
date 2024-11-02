@@ -347,7 +347,7 @@
 	                                                                <th colspan="2"  width="5%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="timeStart">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 시작시간</i>
+			                                                            	<i class="icofont icofont-ui-email"> *  클래스 시작시간</i>
 			                                                           	</label>
 			                                                           	</span>
    																		<input type="time" id="timeStart" name="timeStart[]" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip">
@@ -356,7 +356,7 @@
 	                                                                <th colspan="2" width="5%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="timeEnd">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 종료시간 </i>
+			                                                            	<i class="icofont icofont-ui-email"> * 클래스 종료시간 </i>
 			                                                           	</label>
 			                                                           	</span>
    																		<input type="time" id="timeEnd" name="timeEnd[]" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip">
@@ -701,10 +701,18 @@
 			}
 			
 			
+			
+			
 			if ($.trim($('#classCateBig').val()) == ''){
 				alert('클래스 대분류를 선택해주세요');
 				$('#classCateBig').focus();
 				return false;
+			}
+			
+			if ($('#classCateBig').val() === 'etc' && $.trim($('#classCateSmallText').val()) == '') {
+			    alert('기타 항목을 선택하셨습니다. 소분류를 입력해주세요.');
+			    $('#classCateSmallText').focus();
+			    return false;
 			}
 			
 			if ($.trim($('#classCateSmall').val()) == ''){
@@ -719,17 +727,53 @@
 				$('#classMaxCnt').focus();
 			}
 			
-			if (!$.isNumeric($('#classMaxCnt').val())) {
-			    alert('참가자 수는 숫자여야 합니다.');
-			    $('#classMaxCnt').focus();
-			    return false;
+			
+			
+			if ($.trim($('#classAgeMin').val()) == '' ){
+				alert('최소수강가능연령 입력해주세요.');
+				$('#classAgeMin').focus();
+				return false;
 			}
 			
-			if ($('#classCateBig').val() === 'etc' && $.trim($('#classCateSmallText').val()) == '') {
-			    alert('기타 항목을 선택하셨습니다. 소분류를 입력해주세요.');
-			    $('#classCateSmallText').focus();
-			    return false;
+			
+			if ($.trim($('#classPrice').val()) == '' ){
+				alert('클래스 가격을 입력해주세요.');
+				$('#classPrice').focus();
+				return false;
 			}
+			
+			if($('select[name=classPost]').val()===''){
+				alert("클래스 게시여부를 선택해주세요.");
+				$('select[name="classPost"]').focus();
+				return false;
+			}
+			
+			if ($.trim($('#startDt').val()) == '' ){
+				alert('클래스 시작일자를 입력해주세요.');
+				$('#startDt').focus();
+				return false;
+			}
+			
+			if ($.trim($('#endDt').val()) == '' ){
+				alert('클래스 종료일자를 입력해주세요.');
+				$('#endDt').focus();
+				return false;
+			}
+			
+			if ($.trim($('#timeStart').val()) == '' ){
+				alert('클래스 시작 시간을 입력해주세요.');
+				$('#timeStart').focus();
+				return false;
+			}
+			
+			if ($.trim($('#timeEnd').val()) == '' ){
+				alert('클래스 종료시간을 입력해주세요.');
+				$('#timeEnd').focus();
+				return false;
+			}
+			
+			
+			
 			
 			
 			// 유효성 검사 - 미입력

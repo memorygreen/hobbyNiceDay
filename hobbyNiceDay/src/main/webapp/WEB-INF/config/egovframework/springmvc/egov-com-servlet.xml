@@ -46,7 +46,7 @@
             <mvc:mapping path="/uat/uia/*.do"/>
             <mvc:exclude-mapping path="/uat/uia/actionLogin.do"/>
             <mvc:exclude-mapping path="/uat/uia/egovLoginUsr.do"/>
-		    <bean class="egovframework.com.cmm.interceptor.AuthenticInterceptor" />
+		    <bean class="egovframework.com.cmm.interceptor.AuthenticInterceptor" /> <!-- 인터셉터 등록하는곳? -->
         </mvc:interceptor>
     </mvc:interceptors>
 
@@ -54,5 +54,20 @@
     <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>
     
     <mvc:annotation-driven/>
-
+    
+    <!-- Static resources configuration -->
+    <!-- 241102 자영 경로 넣기  -->
+	<!-- <mvc:resources mapping="/files/**" location="/static/files/" /> -->
+	<!--  <mvc:resources mapping="/resources/**" location="/resources/" />-->
+	
+ 	<!-- <mvc:resources mapping="/files/**" location="/resouces/**" /> --> 
+	
+	<!-- <mvc:resources mapping="/files/**" location="file:///C:/Users/user/git/hobbyNiceDay/hobbyNiceDay/src/main/resources/static/files/" /> -->
+	
+	<!--<mvc:resources mapping="/files/**" location="/resources/static/files/" />  -->
+	
+	<!-- webapp으로 이동 -->
+	<mvc:resources mapping="/files/**" location="/resources/files/" />
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 </beans>

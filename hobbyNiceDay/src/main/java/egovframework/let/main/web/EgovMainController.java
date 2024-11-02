@@ -1,21 +1,35 @@
 package egovframework.let.main.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import egovframework.com.classes.service.ClassService;
+import egovframework.com.cmm.ClassVO;
 import egovframework.com.cmm.ComDefaultVO;
-import egovframework.let.cop.bbs.service.BoardVO;
-import egovframework.let.cop.bbs.service.EgovBBSManageService;
+//import egovframework.let.cop.bbs.service.BoardVO;
+//import egovframework.let.cop.bbs.service.EgovBBSManageService;
 
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 /**
  * 템플릿 메인 페이지 컨트롤러 클래스(Sample 소스)
@@ -35,12 +49,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Controller@SessionAttributes(types = ComDefaultVO.class)
 public class EgovMainController {
+	
+	
+	 @Resource(name = "ClassService")
+	    private ClassService classService;
+	    
+	    
 
 	/**
 	 * EgovBBSManageService
 	 */
-	@Resource(name = "EgovBBSManageService")
-    private EgovBBSManageService bbsMngService;
+//	@Resource(name = "EgovBBSManageService")
+//    private EgovBBSManageService bbsMngService;
 
 	/**
 	 * 메인 페이지에서 각 업무 화면으로 연계하는 기능을 제공한다.
@@ -63,36 +83,41 @@ public class EgovMainController {
 	 * @param model
 	 * @exception Exception Exception
 	 */
-	@RequestMapping(value = "/cmm/main/mainPage.do")
-	public String getMgtMainPage(HttpServletRequest request, ModelMap model)
-	  throws Exception{
+//	@RequestMapping(value = "/cmm/main/mainPage.do")
+//	public String getMgtMainPage(HttpServletRequest request, ModelMap model)
+//	  throws Exception{
+//
+//		// 공지사항 메인 컨텐츠 조회 시작 ---------------------------------
+//		BoardVO boardVO = new BoardVO();
+//		boardVO.setPageUnit(5);
+//		boardVO.setPageSize(10);
+//		boardVO.setBbsId("BBSMSTR_AAAAAAAAAAAA");
+//
+//		PaginationInfo paginationInfo = new PaginationInfo();
+//
+//		paginationInfo.setCurrentPageNo(boardVO.getPageIndex());
+//		paginationInfo.setRecordCountPerPage(boardVO.getPageUnit());
+//		paginationInfo.setPageSize(boardVO.getPageSize());
+//
+//		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+//		boardVO.setLastIndex(paginationInfo.getLastRecordIndex());
+//		boardVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+//
+//		Map<String, Object> map = bbsMngService.selectBoardArticles(boardVO, "BBSA02");
+//		model.addAttribute("notiList", map.get("resultList"));
+//
+//		boardVO.setBbsId("BBSMSTR_BBBBBBBBBBBB");
+//		map = bbsMngService.selectBoardArticles(boardVO, "BBSA02");
+//		model.addAttribute("galList", map.get("resultList"));
+//
+//		// 공지사항 메인컨텐츠 조회 끝 -----------------------------------
+//
+//		return "main/main";
+//	}
+	
 
-		// 공지사항 메인 컨텐츠 조회 시작 ---------------------------------
-		BoardVO boardVO = new BoardVO();
-		boardVO.setPageUnit(5);
-		boardVO.setPageSize(10);
-		boardVO.setBbsId("BBSMSTR_AAAAAAAAAAAA");
-
-		PaginationInfo paginationInfo = new PaginationInfo();
-
-		paginationInfo.setCurrentPageNo(boardVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(boardVO.getPageUnit());
-		paginationInfo.setPageSize(boardVO.getPageSize());
-
-		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		boardVO.setLastIndex(paginationInfo.getLastRecordIndex());
-		boardVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-
-		Map<String, Object> map = bbsMngService.selectBoardArticles(boardVO, "BBSA02");
-		model.addAttribute("notiList", map.get("resultList"));
-
-		boardVO.setBbsId("BBSMSTR_BBBBBBBBBBBB");
-		map = bbsMngService.selectBoardArticles(boardVO, "BBSA02");
-		model.addAttribute("galList", map.get("resultList"));
-
-		// 공지사항 메인컨텐츠 조회 끝 -----------------------------------
-
-		return "main/main";
-	}
+	
+	
+	
 
 }

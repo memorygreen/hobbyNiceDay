@@ -1,4 +1,5 @@
 package egovframework.com.user.web;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,20 +9,28 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.egovframe.rte.fdl.cryptography.EgovEnvCryptoService;
 import org.egovframe.rte.fdl.cryptography.EgovPasswordEncoder;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -30,6 +39,7 @@ import com.google.gson.JsonObject;
 import com.ibm.icu.text.SimpleDateFormat;
 
 import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.NaverVO;
 import egovframework.com.cmm.UserVO;
 import egovframework.com.user.service.UserService;
 
@@ -73,8 +83,13 @@ public class UserController {
             System.out.println("clientIp"+ clientIp);
             // UserVO에 클라이언트 IP 설정
             userVO.setRegIp(clientIp);
+
+            // 세션에서 sns_provider 값 가져와서 userVO에 설정
+            HttpSession session = request.getSession();
+            String snsProvider = (String) session.getAttribute("sns_provider");
+            userVO.setSnsProvider(snsProvider); // userVO에 snsProvider 설정
             
-         	System.out.println("userVO"+ userVO);		
+         	System.out.println("회원 가입 시 입력할 userVO"+ userVO);		
         	
          	/* 회원가입 서비스 호출*/
             int resultJoin = userService.joinUser(userVO);
@@ -194,7 +209,7 @@ public class UserController {
 
      }
     
-    // 전체 회원 목록 조회 기능
+    // 관리자페이지 전체 회원 목록 조회 기능
     @RequestMapping(value = "/getAdminUserList.do", method = RequestMethod.POST,  produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<String> adminUserAllList(Model model) throws Exception{
@@ -233,7 +248,17 @@ public class UserController {
     // 로그인 페이지로 이동
     @RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
     public String loginForm() throws Exception{
+    	System.out.println("로그인 페이지로 이동 완료");
     	return "/cmm/user/loginUsr";
+    }
+    
+    
+ // 리턴 URL을 세션에 저장하고 로그인 페이지로 리다이렉트
+    @RequestMapping(value = "/setUrlLoginForm.do")
+    public String setReturnUrlAndRedirectToLogin(@RequestParam("returnUrl") String returnUrl, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("returnUrl", returnUrl); // 리턴할 URL 세션에 저장
+        return "redirect:/loginForm.do"; // 로그인 페이지로 리다이렉트
     }
     
     // 로그인 기능
@@ -255,8 +280,22 @@ public class UserController {
 			if (resultVO != null && resultVO.getUserId() != null && !resultVO.getUserId().equals("") && loginPolicyYn) {
 				System.out.println("로그인 성공");
 
-				// 2. 로그인 성공 시 세션에 사용자 정보 저장 -> 안됨
-	            request.getSession().setAttribute("UserVO", resultVO);
+	            
+		         // 2. 로그인 성공 시 세션에 사용자 정보 저장
+	            HttpSession session = request.getSession(true); // request 객체로 세션을 생성/가져옴
+	            // session.setAttribute("userId", resultVO.getUserId()); // userId를 세션에 저장
+	            session.setAttribute("userVO", resultVO); // UserVO 객체 저장 // 로그인 결과인 resultVO를 세션에 저장
+	            // Session의 유효 시간 설정 (1800초 = 30분)
+	            session.setMaxInactiveInterval(1800);
+	            
+	            System.out.println("세션에 저장된 userId: " + session.getAttribute("userId"));
+	            System.out.println("세션에 저장된 userVO: " + session.getAttribute("userVO"));
+		        
+	            
+	            
+	            
+	            
+	            
 	            // IP 주소 가져오기
 	            String clientIp = getClientIp(request);
 				
@@ -271,6 +310,21 @@ public class UserController {
 		            jsonObj.addProperty("errorMsg", "마지막 로그인 시간 업데이트 실패");
 		            System.out.println("마지막 로그인 시간 업데이트 실패 jsonObj"+ jsonObj);
 				}
+				
+				
+				
+				
+				// 로그인 성공 시 리턴할 URL 확인 (클래스 상세화면 비회원 예약하기 클릭 시 로그인 화면 이동->로그인 완료 후 예약상세화면으로 리다이렉트)
+	            String returnUrl = (String) session.getAttribute("returnUrl");
+	            if (returnUrl != null && !returnUrl.isEmpty()) {
+	                session.removeAttribute("returnUrl"); // 세션에서 리턴 URL 제거
+	                jsonObj.addProperty("returnUrl", returnUrl); // 리턴할 URL을 JSON에 추가
+	            } else {
+	                jsonObj.addProperty("returnUrl", "/cmm/main/mainPage.do"); // 기본 리턴 URL
+	            }
+	            
+				
+				
 			} else {
 				System.out.println("로그인 실패");
 	            // userId가 null일 경우 사용자 ID를 수동으로 설정
@@ -343,7 +397,18 @@ public class UserController {
     
     // 회원정보수정 페이지로 이동
     @RequestMapping(value = "/updateUsrForm.do", method = RequestMethod.GET)
-    public String updateUsrForm() {
+    public String updateUsrForm(HttpServletRequest request, Model model) throws Exception  {
+    	
+    	// 세션에 있는 id 가져오기
+    	HttpSession session = request.getSession();
+        UserVO sessionUserVo = (UserVO) session.getAttribute("userVO");
+    	String userId = sessionUserVo.getUserId();
+    	System.out.println("userId : " + userId);
+    	UserVO userInfo = userService.getUserInfo(userId);
+        System.out.println("관리자 페이지 회원 상세보기 데이터 조회 : "+ userInfo);
+        model.addAttribute("userInfo", userInfo);
+    	
+    	
     	return "/cmm/user/updateUsr";
     }
     
@@ -364,7 +429,433 @@ public class UserController {
 	}*/
 	
     
+    // 로그아웃
+
+    // 로그아웃 기능
+    @RequestMapping("/logout.do")
+    public String logout(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession(false); // 기존 세션 가져오기 새로운 세션을 생성하지 말고, 기존 세션만 가져오도록 지시하는 역할
+        
+        
+        if (session != null) { // 로그인 되어있는 경우
+        	
+        	//String snsProvider = (String) session.getAttribute("snsProvider");
+        	UserVO userVo = (UserVO) session.getAttribute("userVO");
+        	String snsProvider = userVo.getSnsProvider();
+        	System.out.println("snsProvider : " + snsProvider);
+        	
+        	if("k".equals(snsProvider)) { // 카카오 계정 로그아웃
+        		// 세션에서 Kakao Access Token 가져오기
+                String kakaoAccessToken = (String) session.getAttribute("kakaoAccessToken");
+                System.out.println("kakaoAccessToken"+ kakaoAccessToken);
+                // 카카오 로그아웃 API 호출
+                revokeKakaoAccessToken(kakaoAccessToken);
+                System.out.println("카카오 액세스 토큰이 무효화되었습니다.");
+        		
+        		
+        		session.invalidate(); // 세션 무효화
+        		System.out.println("카카오 계정 로그아웃: 세션이 무효화되었습니다.");
+        	}else if("n".equals(snsProvider)) { // 네이버 계정 로그아웃
+        		session.invalidate(); // 세션 무효화
+        		System.out.println("네이버 계정 로그아웃: 세션이 무효화되었습니다.");
+        	}else { // 일반회원 로그아웃
+        		session.invalidate(); // 세션 무효화
+        		System.out.println("로그아웃: 세션이 무효화되었습니다.");
+        		
+        	}
+        	
+        	
+        	
+        }
+
+        // 로그아웃 후 메인 페이지로 리다이렉트
+        return "redirect:/cmm/main/mainPage.do";
+    }
     
+    // 카카오 계정 로그아웃
+
+     // Kakao 액세스 토큰 무효화 메서드 추가
+	 private void revokeKakaoAccessToken(String accessToken) {
+	     String revokeUrl = "https://kapi.kakao.com/v1/user/logout";
+	     RestTemplate restTemplate = new RestTemplate();
+	
+	     HttpHeaders headers = new HttpHeaders();
+	     headers.add("Authorization", "Bearer " + accessToken);
+	     
+	     HttpEntity<String> entity = new HttpEntity<>(headers);
+	
+	     try {
+	         ResponseEntity<String> response = restTemplate.postForEntity(revokeUrl, entity, String.class);
+	         if (response.getStatusCode() == HttpStatus.OK) {
+	             System.out.println("카카오 로그아웃 성공: " + response.getBody());
+	         } else {
+	             System.out.println("카카오 로그아웃 실패: " + response.getStatusCode());
+	         }
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	         System.out.println("카카오 로그아웃 처리 중 오류 발생: " + e.getMessage());
+	     }
+	 }
+    // 카카오 로그인 redirect  
+    @RequestMapping(value = "/joinExtlUsrForm.do", method = RequestMethod.GET)
+    public String getAccessToken(@RequestParam("code") String code //  카카오 인증 후 리디렉션된 URL에서 쿼리 파라미터 code를 받아옴
+    		    				,HttpServletRequest request, Model model) throws Exception  {
+        
+    	// 2. 액세스 토큰 요청 설정
+    	String tokenUrl = "https://kauth.kakao.com/oauth/token"; //  카카오의 액세스 토큰을 요청할 URL
+        RestTemplate restTemplate = new RestTemplate(); // RestTemplate 객체는 RESTful API를 호출하기 위한 Spring의 기본 HTTP 클라이언트
+        
+        HttpHeaders headers = new HttpHeaders(); // HttpHeaders 객체는 요청 헤더를 설정
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED); // Content-Type을 application/x-www-form-urlencoded로 설정
+        
+        // 3. 토큰 요청 파라미터 구성
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); //params는 액세스 토큰 요청에 필요한 파라미터를 설정
+        params.add("grant_type", "authorization_code"); // grant_type은 "authorization_code"로 설정하여 인증 코드를 사용한 방식임을 나타냄
+        params.add("client_id", "5dd23d272be8396574b776bacd38ec63"); // 카카오 개발자 센터에서 발급받은 앱 키
+        params.add("redirect_uri", "http://localhost:8080/joinExtlUsrForm.do"); //  카카오 인증 후 리디렉션될 URL
+        params.add("code", code); // 앞서 받아온 인증 코드
+        
+        
+        // 4. 토큰 요청 전송
+        HttpEntity<MultiValueMap<String, String>> tokenRequest  = new HttpEntity<>(params, headers); // HttpEntity를 사용해 요청 본문과 헤더를 포함한 요청 객체를 만듦
+        ResponseEntity<String> response = restTemplate.postForEntity(tokenUrl, tokenRequest , String.class);// restTemplate.postForEntity 메서드를 사용해 토큰을 요청하고, 응답을 ResponseEntity로 받음
+        
+        
+        // 5. 토큰 응답 처리
+        if (response.getStatusCode() == HttpStatus.OK) { // 응답 코드가 200 OK인 경우, 응답 본문을 가져옴
+            // 액세스 토큰을 JSON에서 추출
+            String responseBody = response.getBody();
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson(responseBody, JsonObject.class); 
+            String accessToken = jsonObject.get("access_token").getAsString();// Gson을 사용해 JSON 형식의 응답 본문을 파싱하여 access_token 값을 추출, // 이 access_token은 이후 사용자 정보 요청에 사용
+            
+             
+            // 액세스 토큰을 세션에 저장
+            HttpSession session = request.getSession(true);
+            session.setAttribute("kakaoAccessToken", accessToken);
+            System.out.println("카카오 로그인 시 accessToken 세션에 추가 : " + accessToken);
+            
+            // 6. 액세스 토큰을 사용하여 사용자 정보 요청
+            String userInfoUrl = "https://kapi.kakao.com/v2/user/me"; // userInfoUrl : 사용자 정보를 요청할 카카오 API URL
+            HttpHeaders userInfoHeaders = new HttpHeaders(); // Authorization 헤더에 Bearer와 액세스 토큰을 포함해 사용자 정보 요청을 보냄
+            userInfoHeaders.add("Authorization", "Bearer " + accessToken); // restTemplate.exchange 메서드를 사용해 GET 요청을 보내고, 응답을 받음
+
+            HttpEntity<String> userInfoRequest = new HttpEntity<>(userInfoHeaders);
+            ResponseEntity<String> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest, String.class);
+            
+            // 7. 사용자 정보 응답 처리
+            if (userInfoResponse.getStatusCode() == HttpStatus.OK) { // 응답 코드가 200 OK인 경우, 응답 본문에서 사용자 정보를 JSON 형식으로 파싱
+                // 사용자 정보 응답 처리
+                String userInfoResponseBody = userInfoResponse.getBody();
+                JsonObject userInfo = gson.fromJson(userInfoResponseBody, JsonObject.class);
+                String kakaoUserId = userInfo.get("id").getAsString(); // id 필드를 추출하여 카카오 고유 사용자 ID를 가져옴
+                
+                
+
+                // 사용자 존재 여부 확인 추가
+                if (userService.joinIdCheck(kakaoUserId)) {  //사용자가 이미 존재하는지 확인
+                	System.out.println("SNS 카카오 로그인 시 기존 사용자 있는 경우 ");
+                    UserVO resultVO = userService.getUserBySNSId(kakaoUserId , "k");  // 여기서 snsId와 snsProvider를 함께 전달
+                    System.out.println("카카오 로그인 성공, 세션에 담을 값 : " + resultVO);
+                    
+                    //HttpSession session = request.getSession(true);
+                    session.setAttribute("userVO", resultVO);  //  // 기존 사용자 세션에 로그인 정보 저장
+                    System.out.println("기존 카카오 로그인 시 세션에 저장 된 userVO : " +  resultVO);
+                    
+                    
+                    // 1) 로그인한 IP 주소 가져오기
+                    String clientIp = getClientIp(request);
+                    System.out.println("sns 로그인 clientIp : "+ clientIp);
+
+                    // 2) 로그인 정보 업데이트 (로그인 일시, 로그인 횟수, 로그인 IP)
+                    int resultUpdtLoginDt = userService.updateLastLoginDt(resultVO.getUserId(), clientIp);
+                    if (resultUpdtLoginDt > 0) {  // 로그인 업데이트 성공
+                        System.out.println("SNS 로그인 - 마지막 로그인 일시 및 IP 업데이트 성공: " + resultUpdtLoginDt);
+                    } else {  // 실패 시 오류 로그 출력
+                        System.out.println("SNS 로그인 - 마지막 로그인 일시 및 IP 업데이트 실패");
+                    }
+
+                    
+                    
+                    return "redirect:/cmm/main/mainPage.do";  // 메인 페이지 또는 원하는 페이지로 이동
+                } else { // 신규 사용자일 경우 추가 정보 입력 페이지로 이동
+                	System.out.println("SNS 카카오 로그인 시 기존 사용자 없는 경우 ");
+                    HttpSession sessionNew = request.getSession();
+                    sessionNew.setAttribute("sns_provider", "k");  // 세션에 SNS 제공자 정보 저장
+                    model.addAttribute("kakaoUserId", kakaoUserId);   // 폼 제출 시 사용할 kakaoUserId 전달 // 사용자 정보를 Model에 추가하여 뷰에 전달
+                    
+                    return "/cmm/user/joinExtlUsr"; // 추가 정보 입력 페이지로 리디렉션
+                }
+                
+                /*
+                // (나중에 추가)세션에 SNS 제공자 정보 저장 (카카오: "k")
+                HttpSession session = request.getSession();
+                session.setAttribute("sns_provider", "k");
+                
+                
+                // 8. 모델에 사용자 정보 추가 및 뷰 반환
+                // 사용자 정보를 모델에 추가하여 전달
+                model.addAttribute("kakaoUserId", kakaoUserId); // 사용자 정보를 Model에 추가하여 뷰에 전달
+                model.addAttribute("userInfo", userInfo);
+                
+                return "/cmm/user/joinExtlUsr"; // joinExtlUsr JSP 파일을 반환하여 사용자 정보가 포함된 추가 정보 입력 화면을 표시
+                */
+                
+                
+            } else { // 9. 오류 처리: 토큰 요청이나 사용자 정보 요청이 실패할 경우
+            	
+                model.addAttribute("error", "사용자 정보 요청 실패: " + userInfoResponse.getStatusCode()); //  오류 메시지를 모델에 추가
+                return "error"; // 오류 페이지로 이동 //  오류 페이지로 리다이렉트
+            }
+        } else {
+            model.addAttribute("error", "액세스 토큰 요청 실패: " + response.getStatusCode());
+            return "error"; // 오류 페이지로 이동
+        }
+    }
+    
+    
+//    // 네이버 로그인 관련
+//    @RequestMapping("/naver.do")
+//    public String naver() throws Exception {
+//    	
+//        return "naver_login";
+//    }
+    
+    // 콜백함수
+    @RequestMapping(value="/callback", method=RequestMethod.GET)
+    public String callBack(HttpServletRequest request, Model model) throws Exception{
+    	System.out.println("콜백 페이지 호출");
+        //return "cmm/user/callback";
+//    	return "/joinExtlUsrForm.do";
+    	
+    	// gpt 솔루션
+    	// 콜백 URL에 포함된 파라미터를 처리
+        String accessToken = request.getParameter("access_token");
+        String state = request.getParameter("state");
+
+        // 토큰이 제대로 전달되었는지 확인
+        if (accessToken != null && !accessToken.isEmpty()) {
+            System.out.println("네이버 로그인 성공");
+
+            model.addAttribute("accessToken", accessToken);
+            return "cmm/user/callback"; // 실제로 사용할 JSP 파일의 경로로 변경
+        } else {
+            model.addAttribute("error", "인증에 실패했습니다.");
+            System.out.println("네이버 로그인 에러");
+            return "error"; // 에러 페이지로 이동
+        }
+    }
+    
+    
+    
+    /*
+ // 네이버 로그인 redirect (카카오 복붙)  
+    @RequestMapping(value = "/joinExtlUsrNaverForm.do", method = RequestMethod.GET)
+    public String joinExtlUsrNaverForm(HttpServletRequest request, Model model) throws Exception  {
+        
+    	// 2. 액세스 토큰 요청 설정
+    	//String tokenUrl = "https://kauth.kakao.com/oauth/token"; //  카카오의 액세스 토큰을 요청할 URL
+    	
+    	String tokenUrl = "https://nid.naver.com/oauth2.0/token"; //  네이버 접근 토큰 발급, 갱신, 삭제 요청 url 
+    	
+        RestTemplate restTemplate = new RestTemplate(); // RestTemplate 객체는 RESTful API를 호출하기 위한 Spring의 기본 HTTP 클라이언트
+        
+        HttpHeaders headers = new HttpHeaders(); // HttpHeaders 객체는 요청 헤더를 설정
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED); // Content-Type을 application/x-www-form-urlencoded로 설정
+        
+        // 3. 토큰 요청 파라미터 구성
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); //params는 액세스 토큰 요청에 필요한 파라미터를 설정
+        params.add("grant_type", "authorization_code"); // grant_type은 "authorization_code"로 설정하여 인증 코드를 사용한 방식임을 나타냄
+        params.add("client_id", "nTM2zP9ui0F2yerONFez"); // 네이버 개발자 센터에서 발급받은 앱 키
+        params.add("client_secret", "Fx_g2Y0Qzz"); // 네이버 개발자 센터에서 발급받은 앱 키
+        params.add("code", code); // 앞서 받아온 인증 코드
+        params.add("redirect_uri", "http://localhost:8080/joinExtlUsrNaverForm.do"); //  카카오 인증 후 리디렉션될 URL
+
+        // state
+        // response_type - 기본값 : code
+        // ex. https://nid.naver.com/oauth2.0/token
+         // ?grant_type=authorization_code
+         //&client_id=jyvqXeaVOVmV
+         // &client_secret=527300A0_COq1_XV33cf&code=EIc5bFrl4RibFls1&state=9kgsGTfH4j7IyAkg  
+
+        
+        // 4. 토큰 요청 전송
+        HttpEntity<MultiValueMap<String, String>> tokenRequest  = new HttpEntity<>(params, headers); // HttpEntity를 사용해 요청 본문과 헤더를 포함한 요청 객체를 만듦
+        ResponseEntity<String> response = restTemplate.postForEntity(tokenUrl, tokenRequest , String.class);// restTemplate.postForEntity 메서드를 사용해 토큰을 요청하고, 응답을 ResponseEntity로 받음
+        
+        
+        // 5. 토큰 응답 처리
+        if (response.getStatusCode() == HttpStatus.OK) { // 응답 코드가 200 OK인 경우, 응답 본문을 가져옴
+            // 액세스 토큰을 JSON에서 추출
+            String responseBody = response.getBody();
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson(responseBody, JsonObject.class); 
+            String accessToken = jsonObject.get("access_token").getAsString();// Gson을 사용해 JSON 형식의 응답 본문을 파싱하여 access_token 값을 추출, // 이 access_token은 이후 사용자 정보 요청에 사용
+
+            
+         // Step 2: Use access token to fetch user info
+            // 6. 액세스 토큰을 사용하여 사용자 정보 요청
+//            String userInfoUrl = "https://kapi.kakao.com/v2/user/me"; // userInfoUrl : 사용자 정보를 요청할 카카오 API URL
+            String userInfoUrl =  "https://openapi.naver.com/v1/nid/me"; // 네이버 접근 토큰을 이용하여 프로필 API 호출
+            HttpHeaders userInfoHeaders = new HttpHeaders(); // Authorization 헤더에 Bearer와 액세스 토큰을 포함해 사용자 정보 요청을 보냄
+            userInfoHeaders.add("Authorization", "Bearer " + accessToken); // restTemplate.exchange 메서드를 사용해 GET 요청을 보내고, 응답을 받음
+
+            HttpEntity<String> userInfoRequest = new HttpEntity<>(userInfoHeaders);
+            ResponseEntity<String> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest, String.class);
+            
+            // 7. 사용자 정보 응답 처리
+            if (userInfoResponse.getStatusCode() == HttpStatus.OK) { // 응답 코드가 200 OK인 경우, 응답 본문에서 사용자 정보를 JSON 형식으로 파싱
+                // 사용자 정보 응답 처리
+                String userInfoResponseBody = userInfoResponse.getBody();
+                JsonObject userInfo = gson.fromJson(userInfoResponseBody, JsonObject.class);
+                String naverUserId = userInfo.get("id").getAsString(); // id 필드를 추출하여 카카오 고유 사용자 ID를 가져옴
+                
+                
+
+                // 사용자 존재 여부 확인 추가
+                if (userService.joinIdCheck(naverUserId)) {  //사용자가 이미 존재하는지 확인
+                	System.out.println("SNS 카카오 로그인 시 기존 사용자 있는 경우 ");
+                    UserVO resultVO = userService.getUserBySNSId(naverUserId , "n");  // 여기서 snsId와 snsProvider를 함께 전달
+                    System.out.println("카카오 로그인 성공, 세션에 담을 값 : " + resultVO);
+                    
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("userVO", resultVO);  //  // 기존 사용자 세션에 로그인 정보 저장
+                   
+                    
+                    
+                    // 1) 로그인한 IP 주소 가져오기
+                    String clientIp = getClientIp(request);
+                    System.out.println("sns 로그인 clientIp : "+ clientIp);
+
+                    // 2) 로그인 정보 업데이트 (로그인 일시, 로그인 횟수, 로그인 IP)
+                    int resultUpdtLoginDt = userService.updateLastLoginDt(resultVO.getUserId(), clientIp);
+                    if (resultUpdtLoginDt > 0) {  // 로그인 업데이트 성공
+                        System.out.println("SNS 로그인 - 마지막 로그인 일시 및 IP 업데이트 성공: " + resultUpdtLoginDt);
+                    } else {  // 실패 시 오류 로그 출력
+                        System.out.println("SNS 로그인 - 마지막 로그인 일시 및 IP 업데이트 실패");
+                        
+                    }
+
+                    
+                    
+                    return "redirect:/cmm/main/mainPage.do";  // 메인 페이지 또는 원하는 페이지로 이동
+                } else { // 신규 사용자일 경우 추가 정보 입력 페이지로 이동
+                	System.out.println("SNS 카카오 로그인 시 기존 사용자 없는 경우 ");
+                    HttpSession session = request.getSession();
+                    session.setAttribute("sns_provider", "k");  // 세션에 SNS 제공자 정보 저장
+                    model.addAttribute("naverUserId", naverUserId);   // 폼 제출 시 사용할 kakaoUserId 전달 // 사용자 정보를 Model에 추가하여 뷰에 전달
+                    
+                    return "/cmm/user/joinExtlUsr"; // 추가 정보 입력 페이지로 리디렉션
+                }
+                
+                /*
+                // (나중에 추가)세션에 SNS 제공자 정보 저장 (카카오: "k")
+                HttpSession session = request.getSession();
+                session.setAttribute("sns_provider", "k");
+                
+                
+                // 8. 모델에 사용자 정보 추가 및 뷰 반환
+                // 사용자 정보를 모델에 추가하여 전달
+                model.addAttribute("kakaoUserId", kakaoUserId); // 사용자 정보를 Model에 추가하여 뷰에 전달
+                model.addAttribute("userInfo", userInfo);
+                
+                return "/cmm/user/joinExtlUsr"; // joinExtlUsr JSP 파일을 반환하여 사용자 정보가 포함된 추가 정보 입력 화면을 표시
+                //*
+                
+                
+            } else { // 9. 오류 처리: 토큰 요청이나 사용자 정보 요청이 실패할 경우
+            	
+                model.addAttribute("error", "사용자 정보 요청 실패: " + userInfoResponse.getStatusCode()); //  오류 메시지를 모델에 추가
+                return "error"; // 오류 페이지로 이동 //  오류 페이지로 리다이렉트
+            }
+        } else {
+            model.addAttribute("error", "액세스 토큰 요청 실패: " + response.getStatusCode());
+            return "error"; // 오류 페이지로 이동
+        }
+    }
+    */
+    
+    
+    // 네이버 로그인 정보
+    @RequestMapping(value="naverSave", method=RequestMethod.POST)
+    public @ResponseBody String naverSave(@RequestParam("ageN") String ageN
+							    		, @RequestParam("n_birthday") String birthdayN
+							    		, @RequestParam("n_email") String emailN
+							    		, @RequestParam("n_gender") String genderN
+							    		, @RequestParam("n_id") String idN
+							    		, @RequestParam("n_name") String nameN
+							    		//, @RequestParam("n_nickName") String n_nickName
+							    		)  throws Exception {
+	    System.out.println("###############     naverSave    ##############################");
+	    System.out.println("ageN : " + ageN);
+	    System.out.println("n_birthday : " + birthdayN);
+	    System.out.println("n_email : " + emailN);
+	    System.out.println("n_gender : " + genderN);
+	    System.out.println("n_id : " + idN);
+	    System.out.println("n_name : " + nameN);
+	    //System.out.println("n_nickName : " + n_nickName);
+	    System.out.println("#############################################");
+	    
+	    // naverVO에 저장
+	    NaverVO naver = new NaverVO();
+	    naver.setN_age(ageN);
+	    naver.setN_birthday(birthdayN);
+	    naver.setN_email(emailN);
+	    naver.setN_gender(genderN);
+	    naver.setN_id(idN);
+	    naver.setN_name(nameN);
+	    //naver.setN_nickName(n_nickName);
+	    
+	    
+	    System.out.println("zzzzz =" +naver.getN_age());
+	 
+	    String result = "no";
+	    
+	    if(naver!=null) {
+	        result = "ok";
+	    }
+	 
+	    return result;
+    
+    }
+
+    // sns 로그인 추가정보 입력 화면
+    /*
+    @RequestMapping(value="/joinExtlUsrForm.do", method=RequestMethod.GET)
+    public String joinExtlUsrForm() throws Exception{
+    	System.out.println("sns 추가 페이지 호출");
+        return "/cmm/main/joinExtlUsr";
+    }*/
+    
+    // 	sns 로그인 추가정보 입력 화면(카카오) (일단 리다이렉트 성공)
+    /*
+    @RequestMapping(value = "/joinExtlUsrForm.do", method = RequestMethod.GET)
+    public String getAccessToken(@RequestParam("code") String code, Model model) {
+    	   String tokenUrl = "https://kauth.kakao.com/oauth/token";
+    	    RestTemplate restTemplate = new RestTemplate();
+
+    	    HttpHeaders headers = new HttpHeaders();
+    	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+    	    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    	    params.add("grant_type", "authorization_code");
+    	    params.add("client_id", "5dd23d272be8396574b776bacd38ec63"); // YOUR_KAKAO_CLIENT_ID
+    	    params.add("redirect_uri", "http://localhost:8080/joinExtlUsrForm.do");
+    	    params.add("code", code);
+
+    	    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+    	    ResponseEntity<String> response = restTemplate.postForEntity(tokenUrl, request, String.class);
+
+    	    if (response.getStatusCode() == HttpStatus.OK) {
+    	        model.addAttribute("tokenResponse", response.getBody());
+    	        return "/cmm/user/joinExtlUsr"; // 실제 JSP 파일 경로로 수정
+    	    } else {
+    	        model.addAttribute("error", "액세스 토큰 요청 실패: " + response.getStatusCode());
+    	        return "error"; // 오류 페이지로 이동
+    	    }
+    	}
+
+    */
     
     
 }

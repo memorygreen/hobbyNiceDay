@@ -145,6 +145,11 @@
     border-color: #000; /* 테두리를 검정색으로 변경 */
     outline: none; /* 기본 파란색 외곽선 제거 */
 
+/*241030 약관 동의 포커스*/
+input[type="checkbox"]:focus {
+    outline: 2px solid #e53637; /* 체크박스에 포커스가 있을 때 테두리 색상 */
+}
+
 }
 </style>
 
@@ -346,13 +351,12 @@
 					</ul>
 				</div>
 				<!-- 이용약관 동의 체크박스 -->
-				<div class="checkout__input__checkbox">
-					<label for="agree1"> 사이트 이용약관에 동의합니다. 
-						<input type="checkbox" id="agree1" name="agree1" value="Y">
-						<span class="checkmark"></span>
-					</label>
-				</div>
+				<input type="checkbox" id="agree1" name="agree1" value="Y">
+				<label for="agree1"> 사이트 이용약관에 동의합니다. </label>
+				<!-- <span class="checkmark"></span> -->
+				
 				<div class="jy_margin_1" style="height:50px"></div>
+				
 				<!-- 이용약관2(개인정보 수집동의) 시작 -->
 				<h4>개인정보 수집/이용 동의</h4>
 				<div class="terms_wrap">
@@ -387,12 +391,12 @@
 				</div>
 
 				<!-- 개인정보 취급방침 동의 체크박스 -->
-				<div class="checkout__input__checkbox">
-					<label for="agree2">개인정보 취급방침에 동의합니다. <input
-						type="checkbox" id="agree2" name="agree2" value="Y" required>
-						<span class="checkmark"></span>
-					</label>
-				</div>
+				<!-- <div class="checkout__input__checkbox">
+				</div> -->
+					<input type="checkbox" id="agree2" name="agree2" value="Y" required>
+					<label for="agree2">개인정보 취급방침에 동의합니다.</label>
+					<!-- <span class="checkmark"></span> -->
+					
 				<!-- 이용약관2 끝 -->
 				
 				<div class="jy_margin_1" style="height:50px"></div>
@@ -400,28 +404,51 @@
 				<!-- 회원가입 폼 시작 -->
 				<h6 class="checkout__title">회원정보 입력</h6>
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>ID<span>*</span></p>
 							<input type="text" id="userId" name="userId" autocomplete="new-password" required /> 
+							
+						</div>
+					</div>
+					<div class="col-lg-5">
+						<div class="checkout__input">
+							<br/>
+							<br/>
 							<a href="#" id="userIdCk" class="primary-btn" />ID중복확인</a> 
 							<span id="userIdMsg"></span><!-- 중복 체크 결과를 표시할 영역 -->
 						</div>
 					</div>
-					<div class="col-lg-6">
+					
+				</div>
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>이름<span>*</span></p>
 							<input type="text" id="userName" name="userName" autocomplete="new-password" required />
 						</div>
 					</div>
-					<div class="col-lg-6">
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>비밀번호<span>*</span></p>
 							<input type="password" id="passwd" name="passwd" autocomplete="new-password" required />
+							
+						</div>
+					</div>
+					<div class="col-lg-5">
+						<div class="checkout__input">
+							<br/>
+							<br/>
 							<p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<p>
 						</div>
 					</div>
-					<div class="col-lg-6">
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>비밀번호 확인<span>*</span></p>
 							<input type="password" id="passwdCk" name="passwdCk" required />
@@ -431,14 +458,31 @@
 
 
 				<div class="row">
-					<div class="col-lg-6">
-						<div class="input_radio">
+					<div class="col-lg-7">
+						
 							<p>성별<span style="color: #e53637;">*</span></p>
-							<input type="radio" id="male" name="sex" value="M" / required>남성 
-							<input type="radio" id="female" name="sex" value="F" /> 여성
+							
+							<label for="male">
+								<input type="radio" id="male" name="sex" value="M" / required> 
+							남성</label>
+							
+							<label for="female">
+								<input type="radio" id="female" name="sex" value="F" />
+							여성</label>
+							
+						<div class="input_radio">
 						</div>
 					</div>
-					<div class="col-lg-6">
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
+						</br>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>생년월일<span>*</span></p>
 							<input type="date" id="brthdy" name="brthdy" required>
@@ -448,17 +492,29 @@
 
 
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>휴대전화<span>*</span></p>
-							<input type="text" id="mbtlnum" name="mbtlnum" required>
-							<p>휴대전화 번호를 '-'까지 입력해주세요. </p>
+							<input type="text" id="mbtlnum" name="mbtlnum" placeholder="휴대전화 번호를 '-'까지 입력해주세요. ex. 010-0000-0000" required>
 						</div>
 					</div>
-					<div class="col-lg-6">
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>이메일<span>*</span></p>
-							<input type="text" id="email" name="email" required>
+							<input type="text" id="email" name="email"  placeholder="ex. example@example.com" required>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="checkout__input" style="text-align: center;">
+							<a href="#" class="primary-btn joinBtn">회원가입</a>
+							<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
 						</div>
 					</div>
 				</div>
@@ -469,10 +525,8 @@
 		</form>
 
 		<!-- <input type="submit" value="회원가입" class="primary-btn" /> -->
-		<button type="reset" class="primary-btn">취소</button>
 		
-		<a href="#" class="primary-btn joinBtn">회원가입</a>
-		<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
+		
 	
 
 		<!-- 회원가입 폼 끝-->
@@ -539,6 +593,12 @@
 	var userIdCk = false;
 	function userData() {
 		
+		
+		// 성별 선택 시 포커스 지워지게 함
+		$('input:radio[name="sex"]').on('click', function() {
+		    $(this).css("outline", "none");
+		});
+		
 		// 사용자ID 중복체크
 		$('#userIdCk').click(
 				function(e) {
@@ -578,8 +638,10 @@
 			e.preventDefault();
 			
 			if (!$(':checkbox[name="agree1"]').is(':checked')) {
-				alert('회원이용약관에 동의하지 않으셨습니다.');
+				alert('사이트 이용약관에 동의하지 않으셨습니다.');
 				$('#agree1').focus();
+				$('.checkmark').focus();
+				
 				return false;
 			}
 			if (!$(':checkbox[name="agree2"]').is(':checked')) {
@@ -605,7 +667,7 @@
 				$('#passwd').focus();
 				return false;
 			}else if($('#passwd').val() != $('#passwdCk').val()){
-				alert('비밀번호를 다시 확인해주세요!');
+				alert('비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요');
 				$('#passwdCk').focus();
 				return false;
 			}
@@ -618,11 +680,15 @@
 			    return false;
 			}
 			
-			if(!$('input:radio[name=sex]').is(":checked")){
+			if(!$('input:radio[name="sex"]').is(":checked")){
 				alert("성별을 선택해주세요.");
-				$('#sex').focus();
+				$('#male').focus();
+			    $('#male').css("outline", "2px solid #e53637");  // 포커스가 된 라디오 버튼을 시각적으로 표시
+
 				return false;
 			}
+			
+			
 			
 			if ($.trim($('#brthdy').val()) == ''){
 				alert('생년월일을 입력해주세요');
@@ -657,7 +723,8 @@
 				@[A-Z0-9.-]+: @ 뒤에는 도메인 부분이 오며, 영문자, 숫자, 점(.), 하이픈(-)이 허용됩니다.
 				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
 			*/
-			if (!reg.test($('#email').val())) {
+			let emailReg = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+			if (!emailReg.test($('#email').val())) {
 			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
 			    $('#email').focus();
 			    return false;

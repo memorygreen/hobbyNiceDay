@@ -3,13 +3,6 @@
 <mapper namespace="ClassDAO"><!-- egovframework.com.classes.service.impl.ClassDAO -->
 	
 	
-	<!-- 클래스 예약가능일자 가져오기 (?) -->
-	<!-- <select id="selectAvailableDates" parameterType="map" resultType="ClassAvailableVO">
-	    SELECT *
-	    FROM TB_CLASS_AVAILABLE
-	    WHERE AVAILABLE_DATE BETWEEN #{start} AND #{end}
-	</select>
- -->
  
 	<!-- 클래스 등록 -->
 	<insert id="insertClass" parameterType="egovframework.com.cmm.ClassVO" useGeneratedKeys="true" keyProperty="classId">
@@ -22,6 +15,8 @@
 					        , CLASS_AGE_MIN
 					        , CLASS_PRICE
 					        , CLASS_MAX_CNT
+					        , START_DT
+					        , END_DT
 					        , REG_IP
 					        , REG_ID
 					        , REG_DT
@@ -38,6 +33,8 @@
 			        , #{classAgeMin}
 			        , #{classPrice}
 			        , #{classMaxCnt}
+			        , #{startDt}
+			        , #{endDt}
 			        , #{regIp}
 			        , #{regId}
 			        , NOW()
@@ -87,7 +84,7 @@
 	<insert id="insertClassDetail" parameterType="ClassVO" useGeneratedKeys="true" keyProperty="classDetailId"> <!-- 생성된 PK를 반환 -->
 	    INSERT INTO TB_CLASS_DETAIL (
 					 	    	  CLASS_ID
-						      	, MAX_PARTICIPANTS <!-- TB_CLASS 에 이미 있음  -->
+						      	<!-- , MAX_PARTICIPANTS TB_CLASS 에 이미 있음  -->
 						    	, AVAILABLE_CURRENT_CNT 
 					        	, AVAILABLE_SEATS <!-- 남은좌석수 -->
 					        	, AVAILABLE_STATUS
@@ -99,7 +96,7 @@
 						     	 )
 					    VALUES (
 							       #{classId}
-							      ,#{maxParticipants}
+							      <!-- ,#{maxParticipants} -->
 							      , 0 <!-- 현재 예약된 인원수 -->
 							      ,#{availableSeats} <!-- 남은좌석수 -->
 							      ,#{availableStatus}<!-- 예약가능 상태  -->
@@ -113,9 +110,84 @@
 	
 	
 	<!-- 관리자 클래스 전체 목록 조회 -->
-	<!-- 관리자 회원 전체 테이블 조회 -->
 	<select id="getAdminClassList" resultType="EgovMap">
 	    SELECT *
 	    FROM TB_CLASS
 	</select>
+	
+	
+	<!-- 메인화면 클래스 전체 목록 조회 -->
+	<select id="getMainClassList" resultType="EgovMap">
+	    SELECT *
+	    FROM TB_CLASS
+	    WHERE CLASS_POST = "Y"
+	</select>
+	
+	<!-- 클래스 상세보기 화면 조회 -->
+	<select id="getClassDetails" parameterType="int" resultType="ClassVO">
+    	<!-- SELECT * 
+    	FROM TB_CLASS 
+    	WHERE CLASS_ID = #{classId} -->
+    	
+    	SELECT 
+		    c.CLASS_ID,
+		    c.CLASS_NM,
+		    c.CLASS_DSCRPTN,
+		    c.LOCATION,
+		    c.CLASS_CATE_BIG,
+		    c.CLASS_CATE_SMALL,
+		    c.CLASS_AGE_MIN,
+		    c.CLASS_PRICE,
+		    c.CLASS_MAX_CNT,
+		    c.CLASS_POST,
+	        DATE_FORMAT(c.START_DT, '%Y-%m-%d') as START_DT,
+    		DATE_FORMAT(c.END_DT , '%Y-%m-%d') as END_DT,
+		    c.REG_DT AS CLASS_REG_DT,
+		    c.UPDT_DT AS CLASS_UPDT_DT,
+		    GROUP_CONCAT(DISTINCT CONCAT(hd.HOLIDAY_DT, '(', hd.HOLIDAY_DESC, ')') ORDER BY hd.HOLIDAY_DT SEPARATOR ', ') AS HOLIDAY_INFO,
+		    <!--GROUP_CONCAT(DISTINCT CONCAT(DATE_FORMAT(cd.TIME_START, '%H:%i'), '-', DATE_FORMAT(cd.TIME_END, '%H:%i')) ORDER BY cd.TIME_START SEPARATOR ', ') AS TIME_SETS  -->
+	        GROUP_CONCAT(DISTINCT CONCAT(cd.class_detail_id, '; ', DATE_FORMAT(cd.TIME_START, '%H:%i'), '-', DATE_FORMAT(cd.TIME_END, '%H:%i')) ORDER BY cd.TIME_START SEPARATOR ', ') AS TIME_SETS
+		FROM 
+		    TB_CLASS c
+		LEFT JOIN 
+		    TB_HOLIDAY hd 
+		    ON c.CLASS_ID = hd.CLASS_ID
+		LEFT JOIN 
+		    TB_CLASS_DETAIL cd
+		    ON c.CLASS_ID = cd.CLASS_ID
+		WHERE
+		    c.CLASS_ID = #{classId} <!-- 클래스아이디 -->
+		GROUP BY c.CLASS_ID;
+	</select>
+	
+	
+	
+	<!-- 이미지 등록 1개 테스트 -->
+	<insert id="saveItem" parameterType="ImgVO" useGeneratedKeys="true" keyProperty="imgId">
+    INSERT INTO TB_IMG (
+					        IMG_NM
+					        ,IMG_URL
+					        ,IMG_TYPE
+					        ,IMG_REP
+					        ,REG_IP
+					        ,REG_ID
+					        ,REG_DT
+					     )
+	    VALUES (
+		          #{imgNm}
+		         ,#{imgUrl}
+		         ,#{imgType}
+		         ,#{imgRep}
+		         ,#{regIp}
+		         ,#{regId}
+			     , NOW()
+			    )
+	</insert>
+	
+	<!-- 이미지 조회 테스트 -->
+	<select id="getImagesByClassId" parameterType="int" resultType="ImgVO">
+	    SELECT * FROM TB_IMG 
+	    WHERE IMG_ID = #{imgId}
+	</select>
+	
 </mapper>

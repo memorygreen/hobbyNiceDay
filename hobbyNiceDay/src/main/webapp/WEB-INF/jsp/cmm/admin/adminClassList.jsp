@@ -140,7 +140,6 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>순번</th>
-                                                                <th>클래스ID</th>
                                                                 <th>클래스명</th>
                                                                 <th>클래스 설명</th>
                                                                 <th>클래스 장소</th>
@@ -211,15 +210,15 @@
 
     <script type="text/javascript">
   //페이지 로드가 완료되면
-    if (window.addEventListener) window.addEventListener("load", userList, false);
-	else if (window.attachEvent) window.attachEvent("onload", userList);
-	else window.onload = userList;
-	function userList() {
+    if (window.addEventListener) window.addEventListener("load", classList, false);
+	else if (window.attachEvent) window.attachEvent("onload", classList);
+	else window.onload = classList;
+	function classList() {
 		
 		dataList()
 		
 		console.log("로드 확인용 ")
-    
+   
     
     	// 등록 버튼 클릭 시 회원 등록 페이지로 이동
         $("#btnRegister").click(function() {
@@ -262,9 +261,10 @@
 	        $.each(listData, function(key, values) {
 	            html+= '<tr>';
 	            //html+= '    <td>' + ((data.totalCnt - (data.page - 1 ) * data.recordCnt) - key) + '</td>';
-	            html+= '    <td></td>';
-	            html += '    <td><a href="#" style="text-decoration: underline;">' + $.trim(values.classId) + '</a></td>';
-	            html+= '    <td>' + $.trim(values.classNm) + '</td>';
+	            html+= '    <td>' + (key + 1) + '</td>';
+	            //html += '    <td><a href="#" style="text-decoration: underline;">' + $.trim(values.classId) + '</a></td>';
+	            html+= '    <td><a href="adminClassInfo.do?classId=' + encodeURIComponent($.trim(values.classId)) + '"style="text-decoration: underline;">' + $.trim(values.classNm) + '</a></td>';
+
 	            html+= '    <td>' + $.trim(values.classDscrptn) + '</td>';
 	            html+= '    <td>' + $.trim(values.location) + '</td>';
 	            html+= '    <td>' + $.trim(values.classCateBig) + '</td>';

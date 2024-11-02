@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CodeDAO"><!-- egovframework.com.classes.service.impl.ClassDAO -->
+	
+	<!-- 예약 상태 가져오는 코드(타입별로 구분하면 다 가능할듯) -->
+	 <select id="getCodesByType" parameterType="string" resultType="EgovMap">
+        SELECT 
+	        	CODE_VALUE
+	        	, CODE_NM
+        FROM TB_CODE
+        WHERE CODE_TYPE = #{codeType} 
+          AND CODE_USE_AT = 'Y'
+    </select>
+ 
+	
+</mapper>

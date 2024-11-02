@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -62,8 +63,13 @@
 </head>
 
 <body>
-
 	<noscript>자바스크립트를 지원하지 않는 브라우저에서는 일부 기능을 사용하실 수 없습니다.</noscript>
+
+	<!-- JSTL을 사용하여 세션에서 userId 확인 -->
+    <c:set var="userVO" value="${sessionScope.userVO}" />
+    <c:set var="isLoggedIn" value="${not empty userVO.userId}" />
+	
+
 
 	<!-- Page Preloder -->
 	<div id="preloder">
@@ -158,13 +164,11 @@
         <div class="product__details__content">
             <div class="container">
             
-            	
-	
-	
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="product__details__text">
-                            <h4>쿠키 만들기 클래스</h4>
+                            <h4>${classDetails.classNm}</h4> <!-- 클래스명 -->
+                            <!-- 
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -173,8 +177,14 @@
                                 <i class="fa fa-star-o"></i>
                                 <span> - 5 Reviews</span>
                             </div>
-                            <h3>39,000<span>\89,000</span></h3>
-                            <p>달콤한 쿠키를 직접만들 수 있는 클래스 입니다. 재료와 도구 모두 구비되어 있으며 재료비도 포함되어있습니다. </p>
+                             -->
+                            <h3>
+								<fmt:formatNumber value="${classDetails.classPrice}" type="currency" currencySymbol="₩" /><!-- 클래스 가격 -->
+								<!-- <span>\89,000</span> -->
+							</h3> 
+                            <p>${classDetails.classDscrptn}</p><!-- 클래스 설명 -->
+                            <!-- <p>장소 : ${classDetails.location}</p> -->
+                            <!-- 
                             <div class="product__details__option">
                                 <div class="product__details__option__size">
                                     <span>예약인원</span>
@@ -210,20 +220,32 @@
                                     </label>
                                 </div>
                             </div>
+                            
+                             -->
                             <div class="product__details__cart__option">
-                                <div class="quantity">
+                                <!-- <div class="quantity">
                                     <div class="pro-qty">
                                         <input type="text" value="1">
-                                         <input type="text" value="1">
                                     </div>
                                 </div>
-                                <a href="#" class="primary-btn">예약하기</a>
-                                <a href="#" class="primary-btn">비회원 예약하기</a>
+                                 -->
+                                <c:choose>
+	                        		<c:when test="${isLoggedIn}"> <!-- 로그인 한 경우 -->
+		                                <a href="/reservationUsrForm.do?classId=${classDetails.classId}" class="primary-btn">예약하기</a> <!-- 예약화면으로 이동 -->
+		                        	</c:when>
+		                         	<c:otherwise> <!-- 로그인 안 한 경우 -->
+									<a href="/setUrlLoginForm.do?returnUrl=${pageContext.request.requestURL}" class="primary-btn"   onclick="return confirmReservation()">예약하기</a>
+									<a href="/reservationNonUsrForm.do?classId=${classDetails.classId}" class="primary-btn">비회원 예약하기</a>
+		                         	</c:otherwise>
+	                        	</c:choose>     
+		                                
                             </div>
+                            <!-- 
                             <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                                 <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
                             </div>
+                             -->
                             <div class="product__details__last__option">
                                 
                                 <!-- 
@@ -231,19 +253,22 @@
                                 <img src="/images/img/shop-details/details-payment.png" alt="">
                                  -->
                                 <ul>
-                                    <li><span>소요시간 : </span>2시간</li>
-                                    <li><span>최대 예약가능 인원 수 : </span>4명</li>
-                                    <li><span>최소 수강가능 연령 : </span>만 7세</li>
+                                	<li><span>장소 : </span>${classDetails.location}</li>
+                                    <li><span>소요시간 : </span>약 2시간</li>
+                                    <li><span>최대 예약가능 인원 수 : </span>${classDetails.classMaxCnt}명</li>
+                                    <li><span>최소 수강가능 연령 : </span>만 ${classDetails.classAgeMin}세</li> <!-- 최소 수강가능 연령 -->
                                 </ul>
                             </div>
                             
                             
                             <!-- 달력추가 -->
-							<div id='calendar'></div>
+							<!-- <div id='calendar'></div> -->
                             
                         </div>
                     </div>
                 </div>
+                
+                <!-- 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__details__tab">
@@ -306,7 +331,16 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                    	</br>
+                    	</br>
+                    	</br>
+                    </div>
+        		</div>
             </div>
         </div>
     </section>
@@ -316,6 +350,7 @@
 	
 	
     <!-- Related Section Begin -->
+    <!-- 
     <section class="related spad">
         <div class="container">
             <div class="row">
@@ -464,7 +499,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- Related Section End -->
     
 	<!-- Footer Section Begin -->
@@ -565,7 +600,13 @@
 	<!-- 자영 달력 추가 -->
 	<!-- 참고용 : 공식문서 https://fullcalendar.io/docs/initialize-globals -->
 	<script>
+	/**/
 	
+	// 예약하기 버튼 클릭 시 
+	function confirmReservation() {
+        // Display alert and proceed if user clicks "OK"
+        return alert('로그인 후 예약하실 수 있습니다.');
+    }
 	  document.addEventListener('DOMContentLoaded', function() {
           var calendarEl = document.getElementById('calendar');
           var calendar = new FullCalendar.Calendar(calendarEl, {

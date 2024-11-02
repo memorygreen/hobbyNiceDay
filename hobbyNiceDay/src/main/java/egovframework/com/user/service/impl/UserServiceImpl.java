@@ -13,6 +13,7 @@ import org.egovframe.rte.fdl.cryptography.EgovCryptoService;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
 
+import egovframework.com.cmm.ClassVO;
 import egovframework.com.cmm.UserVO;
 import egovframework.let.utl.fcc.service.EgovNumberUtil;
 import egovframework.let.utl.fcc.service.EgovStringUtil;
@@ -22,7 +23,7 @@ import egovframework.let.utl.sim.service.EgovFileScrty;
 @Service("UserService")
 public class UserServiceImpl extends EgovAbstractServiceImpl implements egovframework.com.user.service.UserService {
     @Resource(name = "UserDAO")
-    private UserDAO UserDAO;
+    private UserDAO userDAO;
     
     
     /** 암호화서비스 - 복호화 하려고 가져옴 */
@@ -36,16 +37,28 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
         // 비밀번호 암호화
         String encryptedPassword = EgovFileScrty.encryptPassword(userVO.getPasswd(), userVO.getUserId());
         userVO.setPasswd(encryptedPassword);
-
+        
+        // 휴대폰 번호 암호화
+        String encryptedMbtlnum = EgovFileScrty.encode(userVO.getMbtlnum());
+        userVO.setMbtlnum(encryptedMbtlnum);
+        
+        // 생년월일 암호화
+        String encryptedBrthdy = EgovFileScrty.encode(userVO.getBrthdy());
+        userVO.setBrthdy(encryptedBrthdy);
+        
+        // 이메일 암호화
+        String encryptedEmail = EgovFileScrty.encode(userVO.getEmail());
+        userVO.setEmail(encryptedEmail);
+        
         // DAO 호출
-        int resultJoin = UserDAO.joinUser(userVO);
+        int resultJoin = userDAO.joinUser(userVO);
         return resultJoin;
     }
     
     // 회원가입 시 id 중복확인
     @Override
     public  boolean   joinIdCheck(String userId) throws Exception{
-    	int count = (Integer) UserDAO.joinIdCheck(userId);
+    	int count = (Integer) userDAO.joinIdCheck(userId);
         return count > 0;
     }
     
@@ -53,7 +66,12 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     // 관리자 회원 전체 테이블 조회
     @Override
     public List<EgovMap> getAdminUserList() throws Exception {
-        return UserDAO.getAdminUserList();  // 모든 사용자 리스트 가져오기
+        return userDAO.getAdminUserList();  // 모든 사용자 리스트 가져오기
+    }
+    
+    // 관리자페이지 회원 1명 정보 상세보기
+    public UserVO getUserInfo(String userId) throws Exception {
+    	return userDAO.getUserInfo(userId);
     }
     
     
@@ -66,7 +84,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
         vo.setPasswd(enpassword);
 
         // 2. 아이디와 암호화된 비밀번호가 DB와 일치하는지 확인한다.
-        UserVO userVo = UserDAO.loginUser(vo);
+        UserVO userVo = userDAO.loginUser(vo);
         System.out.println("로그인 성보 가져오기 "+ userVo);
 
         // 3. 로그인 제한 여부 확인
@@ -79,7 +97,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
         // 4. 로그인 실패 제한 (5회 이상 실패 시 제한)
         if (userVo != null && userVo.getLoginErrCnt() >= 5) {
             // LOGIN_RESTRICTED 컬럼을 Y로 업데이트
-            UserDAO.updateLoginRestricted(userVo.getUserId(), "Y");
+            userDAO.updateLoginRestricted(userVo.getUserId(), "Y");
             
             System.out.println("UserServiceImpl 로그인 제한인 경우");
             throw new Exception("로그인이 제한되었습니다. 관리자에게 문의하세요.");
@@ -88,7 +106,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
         // 5. 로그인 성공 여부 확인
         if (userVo != null && !userVo.getUserId().equals("") && !userVo.getPasswd().equals("")) {
             // 로그인 성공 시 로그인 실패 횟수를 0으로 초기화 (로그인 제한 걸리기 전)
-            int result = UserDAO.resetLoginErrCnt(userVo.getUserId());
+            int result = userDAO.resetLoginErrCnt(userVo.getUserId());
             System.out.println("로그인 성공 시 로그인 실패 횟수 0으로 초기화 : "+ result);
             return userVo;
         } else {
@@ -96,7 +114,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
             if (userVo != null) {
             	Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("userId", userVo.getUserId());
-                int result = UserDAO.updateLoginErrCnt(paramMap);
+                int result = userDAO.updateLoginErrCnt(paramMap);
                 System.out.println("로그인 실패 시 로그인 실패횟수 추가 " + result);
             }
             return null;  // 로그인 실패
@@ -116,7 +134,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
          
          paramMap.put("lastLoginDt", lastLoginDt);
          paramMap.put("lastLoginIp", clientIp);  // 로그인 시 IP
-    	 int result = UserDAO.updateLastLoginDt(paramMap);
+    	 int result = userDAO.updateLastLoginDt(paramMap);
     	 return result;
     }
     
@@ -125,9 +143,18 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     public int updateLoginErrCnt(String userId) throws Exception {
     	 Map<String, Object> paramMap = new HashMap<>();
          paramMap.put("userId", userId);
-    	 int result = UserDAO.updateLoginErrCnt(paramMap);
+    	 int result = userDAO.updateLoginErrCnt(paramMap);
     	 return result;
     }
+    
+    
+    
+    // 카카오 로그인 기존 회원인지 확인
+ 	public UserVO getUserBySNSId(String kakaoUserId,  String snsProvider) throws Exception {
+ 		 return userDAO.getUserBySNSId(kakaoUserId, snsProvider);  // DAO 메서드 호출
+ 	}
+
+    
     
 
 	/**

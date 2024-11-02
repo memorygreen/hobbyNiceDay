@@ -54,9 +54,36 @@ public class ClassDAO extends EgovAbstractMapper {
         return holidayVO.getHolidayId();  // 삽입된 휴무일의 ID 반환
     }
 
-	// 관리자 회원 테이블 전체 조회
+	// 관리자 클래스 테이블 전체 조회
 	public List<EgovMap> getAdminClassList() throws Exception {
 		List<EgovMap> result = selectList("ClassDAO.getAdminClassList");
 		return result;
 	}
+	
+	// 메인화면 클래스 테이블 전체 조회
+	public List<EgovMap> getMainClassList() throws Exception {
+		List<EgovMap> result = selectList("ClassDAO.getMainClassList");
+		return result;
+	}
+
+	// 클래스 상세보기 화면 조회 
+	public ClassVO getClassDetails(int classId) throws Exception {
+		return (ClassVO) selectOne("ClassDAO.getClassDetails", classId);
+		
+	}
+	
+	
+	// 241101
+	// 이미지 등록 테스트
+	public int saveItem(ImgVO imgVO) {
+		int result = insert("ClassDAO.saveItem", imgVO);
+		return 0;
+	}
+
+	// 이미지 조회 테스트 
+	public List<ImgVO> getImagesByClassId(int imgId) {
+		List<ImgVO> result =  selectList("ClassDAO.getImagesByClassId", imgId);
+		return result;
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
+import egovframework.com.cmm.ClassVO;
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.UserVO;
 // 회원 관련 서비스
@@ -24,6 +25,12 @@ public interface UserService {
 	public int updateLastLoginDt(String userId, String clientIp)  throws Exception;;
 	
 	// 로그인 실패 시 로그인실패횟수 업데이트 
-	public int updateLoginErrCnt(String userId)  throws Exception;;
+	public int updateLoginErrCnt(String userId)  throws Exception;
+	
+	// 관리자 페이지 회원 1명 정보 조회  
+	public UserVO getUserInfo(String userId) throws Exception;
+	
+	// 카카오 로그인 기존 회원인지 확인
+	public UserVO getUserBySNSId(String kakaoUserId,  String snsProvider) throws Exception;
 
 }

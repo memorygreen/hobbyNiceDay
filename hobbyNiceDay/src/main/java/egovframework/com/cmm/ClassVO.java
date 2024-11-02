@@ -44,9 +44,9 @@ public class ClassVO implements Serializable {
     private String classPost;  // 클래스 게시 여부
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date startDt; // 클래스 수강 시작일
+    private String startDt; // 클래스 수강 시작일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endDt; // 클래스 수강 종료일
+    private String endDt; // 클래스 수강 종료일
     
     
     // 이미지 관련 필드
@@ -59,8 +59,8 @@ public class ClassVO implements Serializable {
     
     // 휴무일 관련 필드
     private int holidayId;          // 휴무일 고유 ID (외래 키)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date holidayDt;
+    // @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String holidayDt;
     //private int holidayDt;          // 휴무일자
     private String holidayDesc;        // 휴무일 설명
     
@@ -83,6 +83,8 @@ public class ClassVO implements Serializable {
     private String timeStart; // 시작 시간
     private String timeEnd; // 종료 시간
     
+    private String reservationTime; // 예약시간대
+    
     // TB_CLASS_DETAIL 테이블 등록 관련 필드
     private String classDetailRegIp; // TB_CLASS_DETAIL 등록 IP
     private String classDetailRegId; // TB_CLASS_DETAIL 등록 ID
@@ -90,6 +92,10 @@ public class ClassVO implements Serializable {
     private String classDetailUpdtId; // TB_CLASS_DETAIL 수정 ID
     private String classDetailUpdtIp; // TB_CLASS_DETAIL 수정 IP
     private Date classDetailUpdtDt; // TB_CLASS_DETAIL 수정 일시
+    
+    // 클래스 관련 조회쿼리
+    private String timeSets; // 시간대 정보 (ex. 14:00-16:00)
+    private String holidayInfo; // 휴무일 날짜(설명) 모음
     
 
 }

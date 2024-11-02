@@ -139,23 +139,39 @@
 		</div>
 		<div class="row">
 			<!--  반복되는 코드로  -->
-			<c:forEach var="blog" items="${blogList}">
-	                <div class="col-lg-4 col-md-6 col-sm-6">
-	                    <div class="blog__item">
-	                        <div class="blog__item__pic set-bg" data-setbg="<c:url value='${blog.imageUrl}' />"></div>
-	                        <div class="blog__item__text">
-	                            <span>
-	                                <img src="<c:url value='/images/img/icon/calendar.png' />" alt=""> 
-	                                ${blog.date}
-	                            </span>
-	                            <h5>${blog.title}</h5>
-	                            <a href="${blog.link}">지금바로 예약하기</a>
-	                        </div>
+			<c:forEach var="classObj" items="${classList}">
+	            <div class="col-lg-4 col-md-6 col-sm-6">
+	                <div class="blog__item">
+	                
+	                 <c:forEach var="image" items="${images}">
+	                    <!-- <div class="blog__item__pic set-bg" data-setbg="<c:url value='${image.imgUrl}' />"></div> --> 
+	                    <div class="blog__item__pic">
+	                   		<img src="<c:url value='${image.imgUrl}' />" alt="${image.imgNm}" >
+	                   		<img src="<c:url value='files/${image.imgUrl}' />" alt="${image.imgNm}" >
+	                   		<img src="<c:url value='files/${image.imgNm}' />" alt="${image.imgNm}" >
+	                   		
+	                   		<!-- <img src="<c:url value='http://localhost:8080/files/${image.imgUrl}' />" alt="${image.imgNm}"> -->
+	                   		<!-- <img src='C:/Users/user/git/hobbyNiceDay/hobbyNiceDay/src/main/resources/static/files/${image.imgNm}' alt="${image.imgNm}" > -->
+	                   		<!-- src='resources -->
+	                   		
+	                   	</div>
+	                    <p>Image Name: ${image.imgNm}</p>
+         			    <p>Image Type: ${image.imgType}</p>
+                      </c:forEach>
+	                    <div class="blog__item__text">
+	                        <span>
+	                            <img src="<c:url value='/images/img/icon/calendar.png' />" alt=""> 
+	                            ${blog.date}
+	                        </span>
+	                        <h5>${classObj.classNm}</h5>
+	                        <a href="/classView.do?classId=${classObj.classId}">지금바로 예약하기</a> <!-- /classView.do -->
 	                    </div>
 	                </div>
+	            </div>
             </c:forEach>
-		
-		
+            
+			<!-- 예시1 -->
+			<!-- 
 			<div class="col-lg-4 col-md-6 col-sm-6">
 				<div class="blog__item">
 					<div class="blog__item__pic set-bg"
@@ -167,31 +183,8 @@
 						<a href="/classView.do">지금바로 예약하기</a>
 					</div>
 				</div>
-			</div>
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="blog__item">
-					<div class="blog__item__pic set-bg"
-						data-setbg="<c:url value='/images/classes/img_class_leader2.jpg' />"></div>
-					<div class="blog__item__text">
-						<span><img src="<c:url value='/images/img/icon/calendar.png' />"  alt=""> 21
-							February 2020</span>
-						<h5>가죽컵코스트 만들기 클래스</h5>
-						<a href="/classView.do"">지금바로 예약하기</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="blog__item">
-					<div class="blog__item__pic set-bg"
-						data-setbg="<c:url value='/images/classes/img_class_cookie2.jpg' />"></div>
-					<div class="blog__item__text">
-						<span><img src="<c:url value='/images/img/icon/calendar.png' />" alt=""> 28
-							February 2020</span>
-						<h5>쿠키 만들기 클래스</h5>
-						<a href="/classView.do"">지금바로 예약하기</a>
-					</div>
-				</div>
-			</div>
+			</div> -->
+			
 		</div>
 	</div>
 	</section>
@@ -540,7 +533,100 @@
 
 	<!-- Js Plugins -->
 	<jsp:include page="/WEB-INF/jsp/main/inc/commonJsPlugins.jsp" />
+	
+	
+	<script type="text/javascript">
+  //페이지 로드가 완료되면
+    if (window.addEventListener) window.addEventListener("load", userList, false);
+	else if (window.attachEvent) window.attachEvent("onload", userList);
+	else window.onload = userList;
+	function userList() {
+		
+		dataList()
+		
+		console.log("로드 확인용 ")
+    
+    
+    	// 등록 버튼 클릭 시 회원 등록 페이지로 이동
+        $("#btnRegister").click(function() {
+            window.location.href = '<c:url value="/adminUserInsertForm.do" />';
+        });
+    	
+   		// 수정 버튼 클릭 시 사용자 ID를 가져와서 페이지로 이동
+        $("#btnUpdate").click(function() {
+            var userId = $(this).closest("tr").find(".userId").text();
+            console.log("userId : ", userId)
+            if(userId){
+            	 console.log("userId 존재")
+            	window.location.href = '<c:url value="/adminUserInsertForm.do" />?userId=' + userId;
+            }else{
+            	console.log("userId 존재xxx")
+            	window.location.href = '<c:url value="/adminUserInsertForm.do" />';
+            }
+        });        
+     
+	} 
+    
+  //리스트 데이터
+  
+  function dataList() {
+	console.log("data List들어오는지 확인")
+	
+	/*
+	$.post('/getAdminUserList.do', function(data) {  // 괄호 수정
+		console.log("post 요청 들어오는지 확인")
+	    if ($.trim(data.error) == 'N') {
+	    	console.log("data : " , data);  // cosole -> console 오타 수정
+	        var dataMap = data.dataMap.dataMap.dataMap;
+	    	console.log("dataMap : " , dataMap);  // cosole -> console 오타 수정
+	        
+	    	// dataMap에서 dataMap 배열을 가져옴
+			var listData = data.dataMap.dataMap;  // 이 부분이 핵심
+			console.log("listData: ", listData);
+			
+	    	var html = '';
+	        var positionNm = '';
+	        
+	        $.each(listData, function(key, values) {
+	            html+= '<tr>';
+	            //html+= '    <td>' + ((data.totalCnt - (data.page - 1 ) * data.recordCnt) - key) + '</td>';
+	            html+= '    <td></td>';
+	            html += '    <td><a href="#" style="text-decoration: underline;">' + $.trim(values.userId) + '</a></td>';
+	            html+= '    <td>' + $.trim(values.userName) + '</td>';
+	            html+= '    <td>' + $.trim(values.sex) + '</td>';
+	            html+= '    <td>' + formatDate($.trim(values.brthdy)) + '</td>';
+	            //html+= '    <td>' + $.trim(values.ageSe) + '</td>'; 
+	            html+= '    <td>'+ calculateAge(formatDate($.trim(values.brthdy))) +'</td>';// 나이
+	            html+= '    <td>' + $.trim(values.email) + '</td>';
+	            html+= '    <td>' + $.trim(values.mbtlnum) + '</td>';
+	            html+= '    <td>' + $.trim(values.userSe) + '</td>';
+	            html+= '    <td>' + $.trim(values.loginCnt) + '</td>';
+	            html+= '    <td>' + $.trim(values.lastLoginDt) + '</td>';
+	            html+= '    <td>' + $.trim(values.loginErrCnt) + '</td>';
+	            html+= '    <td>' + $.trim(values.loginRestricted) + '</td>';
+	            html+= '    <td>' + $.trim(values.lastLoginDt) + '</td>';
+	            html+= '    <td>' + $.trim(values.updtDt) + '</td>';
+	        });
+	        
+	        //if (data.list.length == 0){ 
+	        //    html+= '<tr><td colspan="9" class="nodata">데이터가 존재하지 않습니다.</td></tr>';
+	        //}
+	        
+	        $('.userList tbody').append(html);
+	        $('.totalCnt').text(numberWithCommas(data.totalCnt));
+	        
+	        // 페이징을 만든다
+	        //paging('.paging', data.page, data.pageCnt, data.totalCnt);
+	    }
+	    
+	    // $('.userList tbody').children('tr.loading').remove('');
+	});
+  */
+  }
 
+	</script>
+	
+	
 	<!--공통 컴포넌트 불러오기-->
 	
 </body>
