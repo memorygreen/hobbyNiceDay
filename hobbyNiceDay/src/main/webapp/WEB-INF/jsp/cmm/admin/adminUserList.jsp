@@ -85,12 +85,14 @@
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                            <li >
+                                                <a href="index.html"> </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Bootstrap Tables</a>
+                                            <li >
+                                            	<a href="/adminClassList.do">회원관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Basic Tables</a>
+                                            <li >
+                                            	<a href="/adminClassInfo.do">회원목록 조회</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -115,15 +117,7 @@
                                             <div class="card-header">
                                                 <h5>회원</h5>
                                                 <span>현재 가입중인 회원 목록입니다. <code>TB_USER</code></span>
-                                                <div class="card-header-right">
-                                                    <ul class="list-unstyled card-option">
-                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-                                                        <li><i class="fa fa-trash close-card"></i></li>
-                                                    </ul>
-                                                </div>
+                                                
                                             </div> 
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
@@ -151,6 +145,7 @@
                                                                 <th>마지막 로그인일시</th>
                                                                 <th>로그인 실패 횟수</th>
                                                                 <th>로그인 제한 여부</th>
+                                                                <th>로그인제한</th>
                                                                 <th>마지막 수정일시</th>
                                                                 <th></th>
                                                             </tr>
@@ -277,7 +272,9 @@
 	            html += '    <td><a href="adminUserInfo.do?userId=' + encodeURIComponent($.trim(values.userId)) + '"style="text-decoration: underline;">' + $.trim(values.userId) + '</a></td>';
 	            html+= '    <td>' + $.trim(values.userName) + '</td>';
 	            html+= '    <td>' + $.trim(values.sex) + '</td>';
-	            html+= '    <td>' + formatDate($.trim(values.brthdy)) + '</td>';
+	            //html+= '    <td>' + formatDate($.trim(values.brthdy)) + '</td>';
+
+	            html+= '    <td>' + $.trim(values.brthdy) + '</td>';
 	            //html+= '    <td>' + $.trim(values.ageSe) + '</td>'; 
 	            html+= '    <td>'+ calculateAge(formatDate($.trim(values.brthdy))) +'</td>';// 나이
 	            html+= '    <td>' + $.trim(values.email) + '</td>';
@@ -287,6 +284,16 @@
 	            html+= '    <td>' + (values.lastLoginDt ? formatDateString($.trim(values.lastLoginDt)) : '') + '</td>';
 	            html+= '    <td>' + $.trim(values.loginErrCnt) + '</td>';
 	            html+= '    <td>' + $.trim(values.loginRestricted) + '</td>';
+	            //html += '   <td><a href="adminUserRestrictedClear.do?userId=' + encodeURIComponent($.trim(values.userId)) + '"style="text-decoration: underline;" class="btn waves-effect waves-light btn-success btn-outline-success">해제</a></td>';
+	            // 로그인 제한 상태에 따라 버튼 표시
+                if (values.loginRestricted === 'Y') {
+                    // 제한 해제 버튼
+                    html += '    <td><a href="adminUserRestrictedClear.do?userId=' + encodeURIComponent($.trim(values.userId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-success btn-outline-success">해제</a></td>';
+                } else {
+                    // 로그인 제한 버튼
+                    html += '    <td><a href="adminUserRestricted.do?userId=' + encodeURIComponent($.trim(values.userId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-danger btn-outline-danger">제한</a></td>';
+                }
+	            
 	            html+= '    <td>' + (values.updtDt ? formatDateString($.trim(values.updtDt)) : '') + '</td>';
 
 	        });

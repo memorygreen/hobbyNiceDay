@@ -76,8 +76,9 @@ public class ClassDAO extends EgovAbstractMapper {
 	// 241101
 	// 이미지 등록 테스트
 	public int saveItem(ImgVO imgVO) {
-		int result = insert("ClassDAO.saveItem", imgVO);
-		return 0;
+		insert("ClassDAO.saveItem", imgVO);
+		int result = imgVO.getImgId();
+		return result;
 	}
 
 	// 이미지 조회 테스트 
@@ -86,4 +87,33 @@ public class ClassDAO extends EgovAbstractMapper {
 		return result;
 	}
 	
+	// 관리자 - 클래스 삭제
+
+    // 클래스 세부 정보 삭제
+    public int deleteClassDetailByClassId(int classId) {
+        return delete("ClassDAO.deleteClassDetailByClassId", classId);
+    }
+
+    // 클래스에 연결된 img_id 조회
+    public int findImgIdByClassId(int classId) {
+        Integer imgId = selectOne("ClassDAO.findImgIdByClassId", classId);
+        return (imgId != null) ? imgId : 0;
+    }
+
+    // 이미지 삭제
+    public int deleteImageById(int imgId) {
+        return delete("ClassDAO.deleteImageById", imgId);
+    }
+
+    // 휴일 정보 삭제
+    public int deleteHolidayByClassId(int classId) {
+        return delete("ClassDAO.deleteHolidayByClassId", classId);
+    }
+
+    // 클래스 삭제
+    public int deleteClassById(int classId) {
+        return delete("ClassDAO.deleteClassById", classId);
+    }
+    
 }
+	

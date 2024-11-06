@@ -47,16 +47,17 @@ public class ClassVO implements Serializable {
     private String startDt; // 클래스 수강 시작일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String endDt; // 클래스 수강 종료일
+    private int classTimeTaken; // 클래스 소요시간 
     
     
     // 이미지 관련 필드
+    
     private int imgId;           // 클래스 이미지 ID
 //    private String imgUrl;           // 클래스 이미지 파일이 저장된 경로 (URL)
     private MultipartFile imgUrl;  // 파일 업로드를 처리하기 위해 MultipartFile로 변경
     private String imgNm;           // 클래스 이미지 파일명 (원본 파일명)
     private String imgFilePath;    // 이미지 저장 경로
 
-    
     // 휴무일 관련 필드
     private int holidayId;          // 휴무일 고유 ID (외래 키)
     // @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -97,5 +98,15 @@ public class ClassVO implements Serializable {
     private String timeSets; // 시간대 정보 (ex. 14:00-16:00)
     private String holidayInfo; // 휴무일 날짜(설명) 모음
     
+    
+    // getter
+    public int getClassTimeTaken() {
+        return classTimeTaken;
+    }
+
+    // setter
+    public void setClassTimeTaken(int classTimeTaken) {
+        this.classTimeTaken = classTimeTaken;
+    }
 
 }

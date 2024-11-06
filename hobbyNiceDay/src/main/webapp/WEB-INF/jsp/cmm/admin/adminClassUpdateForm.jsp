@@ -136,8 +136,8 @@
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <div class="page-header-title">
-                                            <h5 class="m-b-10">클래스 등록 페이지</h5>
-                                            <p class="m-b-0">새로운 클래스를 등록하는 페이지입니다.</p>
+                                            <h5 class="m-b-10">클래스 수정 페이지</h5>
+                                            <p class="m-b-0">등록되어 있는 클래스를 수정하는 페이지입니다.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -250,7 +250,6 @@
 			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" placeholder="클래스 대분류를 선택해주세요" title="클래스 대분류를 선택해주세요"  data-toggle="tooltip" required>
 			                                                            	<option value="">선택</option> <!-- 클래스 대분류 코드를 가져와야 함 (tb_code) -->
 			                                                            	<option value="crafts">공예</option>
-			                                                            	<option value="cooking_baking">요리&베이킹</option>
 			                                                            	<option value="art">미술</option>
 			                                                            	<option value="music">음악</option>
 			                                                            	<option value="exercise">운동</option>
@@ -269,10 +268,6 @@
 			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
 			                                                            	
 			                                                            </select>
-			                                                            
-			                                                            
-			                                                            <!-- 직접 입력용 소분류 입력란 (기타 선택 시 표시) -->
-    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
 			                                                         </th>
 	                                                                
 	                                                            </tr>
@@ -312,11 +307,13 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 게시 여부</i>
 			                                                           	</label>
 			                                                           	</span><select id="classPost" name="classPost"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required>
-			                                                            	<option value="">선택</option> 
+			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
 			                                                            	<option value="Y">게시</option>
 			                                                            	<option value="N">미게시</option>
 			                                                            </select>
 			                                                            
+			                                                            <!-- 직접 입력용 소분류 입력란 (기타 선택 시 표시) -->
+    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
 			                                                         </th>
                                                                 	
 	                                                            </tr>
@@ -663,12 +660,6 @@
 	            { value: 'taekwondo', text: '태권도' },
 	            { value: 'fitness', text: '피트니스' },
 	            { value: 'climbing', text: '클라이밍' }
-	        ],
-	        cooking_baking: [ // 요리 & 베이킹 대분류 추가
-	            { value: 'korean_cuisine', text: '한식' }, // 한식 소분류
-	            { value: 'western_cuisine', text: '양식' }, // 양식 소분류
-	            { value: 'bakery', text: '제과제빵' }, // 제과제빵 소분류
-	            { value: 'dessert', text: '디저트' } // 디저트 소분류
 	        ]
 	    };
 
@@ -745,7 +736,6 @@
 			if ($.trim($('#classMaxCnt').val()) == '' ){
 				alert('최대 참가자수를 입력해주세요.');
 				$('#classMaxCnt').focus();
-				return false;
 			}
 			
 			
@@ -769,19 +759,11 @@
 				return false;
 			}
 			
-			if ($.trim($('#classTimeTaken').val()) == '' ){
-				alert('클래스 소요시간을을 입력해주세요.');
-				$('#classTimeTaken').focus();
-				return false;
-			}
-			
 			if ($.trim($('#startDt').val()) == '' ){
 				alert('클래스 시작일자를 입력해주세요.');
 				$('#startDt').focus();
 				return false;
 			}
-			
-			
 			
 			if ($.trim($('#endDt').val()) == '' ){
 				alert('클래스 종료일자를 입력해주세요.');

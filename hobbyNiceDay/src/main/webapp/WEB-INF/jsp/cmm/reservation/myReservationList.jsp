@@ -232,6 +232,7 @@
                                     <th>예약시간대</th>
                                     <th>예약인원수</th>
                                     <th>예약상태</th>
+                                    <th>예약취소</th>
                                 </tr>
                             </thead>
                             
@@ -339,6 +340,12 @@
 	
 	
 	<script type="text/javascript">
+	// 브라우저 히스토리를 조작하여 뒤로가기 비활성화
+	 history.replaceState(null, null, location.href);
+	    window.onpopstate = function () {
+	        history.go(1);
+	    };
+	
   //페이지 로드가 완료되면
     if (window.addEventListener) window.addEventListener("load", reservationList, false);
 	else if (window.attachEvent) window.attachEvent("onload", reservationList);
@@ -384,6 +391,11 @@
 			var listData = data.dataMap.dataMap;  // 이 부분이 핵심
 			console.log("listData: ", listData);
 			
+			// statusMap을 가져와서 JavaScript 객체로 변환
+            var statusMap = data.dataMap.statusMap;
+            console.log("statusMap: ", statusMap);
+            
+            
 	    	var html = '';
 	        
 	        $.each(listData, function(key, values) {
@@ -400,8 +412,30 @@
 	            html+= '    <td>' + $.trim(values.timeStart) + '-' + $.trim(values.timeEnd) + '</td>'; // 시작시간
 	            //html+= '    <td>' + $.trim(values.timeEnd) + '</td>'; // 종료시간
 	            html+= '    <td>' + $.trim(values.reservationCnt) + '명</td>'; // 예약인원수
-	            html+= '    <td>' + $.trim(values.reservationStatus) + '</td>'; // 예약상태
+	            // html+= '    <td>' + $.trim(values.reservationStatus) + '</td>'; // 예약상태
+	            
+	            
+	         // 예약상태를 statusMap을 이용하여 한글로 변환
+                var statusKorean = statusMap[values.reservationStatus] || values.reservationStatus; // 한글 변환된 상태가 없을 경우, 기본값 사용
+                html += '    <td>' + $.trim(statusKorean) + '</td>';
+
+	            
+	            
 //	            html+= '    <td>' + $.trim(values.regDt) + '</td>'; // 등록일시
+
+
+				if (values.reservationStatus === 'stay') {
+                    // 접수완료 버튼
+                    html += '    <td><a href="myReservationCancel.do?reservationId=' + encodeURIComponent($.trim(values.reservationId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-danger btn-outline-danger">예약취소</a></td>';
+                } else if (values.reservationStatus === 'approved') { // 접수완료
+                	html += '' // 나중에 확인 필요                     
+                } else if (values.reservationStatus === 'reject') { // 접수취소
+                    // 접수취소 버튼 
+                	html += '' // 나중에 확인 필요
+                }else{ // 예약 취소 cancle
+                	html += '' 
+                }
+
 	            html+= '</tr>';
 	        });
 	        
@@ -410,7 +444,7 @@
 	        //}
 	        
 	        $('.reservationList tbody').append(html);
-	        $('.totalCnt').text(numberWithCommas(data.totalCnt));
+	        // $('.totalCnt').text(numberWithCommas(data.totalCnt));
 	        
 	        // 페이징을 만든다
 	        //paging('.paging', data.page, data.pageCnt, data.totalCnt);

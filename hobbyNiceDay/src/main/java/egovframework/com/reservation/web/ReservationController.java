@@ -55,7 +55,7 @@ public class ReservationController {
     // 회원 예약하기 페이지로 이동
     @RequestMapping(value = "/reservationUsrForm.do", method = RequestMethod.GET)
     public String reservationUsrForm(@RequestParam("classId") String classId, Model model) throws Exception{
-    	
+    	System.out.println("회원 클래스 예약 페이지 이동했는지 확인 ");
     	// 해당 클래스 정보 가져오기 
     	int intClassId = Integer.parseInt(classId); // classId int형 : 문자열->정수 변환
         ClassVO classDetails = classService.getClassDetails(intClassId);
@@ -128,12 +128,7 @@ public class ReservationController {
     
     
     
-    
-    
-    
-    
-    
-    // 관리자 페이지 예약 목록 가져오는 기능
+    // 관리자 페이지 예약 목록(전체) 가져오는 기능
     @RequestMapping(value = "/getAdminReservationList.do", method = RequestMethod.POST,  produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<String> getAdminReservationList(Model model) throws Exception{
@@ -150,17 +145,15 @@ public class ReservationController {
 		    	
 		    	 
 		    	// 예약 상태 공통코드 가져오는 리스트
-
-		    	 // Fetch the status codes for reservation status and map CODE_VALUE to CODE_NM
 		        List<EgovMap> statusCodes = codeService.getCodesByType("reservation_status"); // Make sure to implement this in your service
 		        
 		        System.out.println("예약 상태 공통코드 가져오는 리스트 : " + statusCodes);
 		        Map<String, String> statusMap = new HashMap<>();
 		        for (EgovMap code : statusCodes) {
-		            statusMap.put((String) code.get("CODE_VALUE"), (String) code.get("CODE_NM"));
+		        	System.out.println("code : " + code);
+		            statusMap.put((String) code.get("codeValue"), (String) code.get("codeNm"));
+		            System.out.println("각각 statusMap : " + statusMap);
 		        }
-		    	
-		    	
 		    	System.out.println("공통코드 반복문 돌리고 나서 : " + statusMap);
 		    	
 		    	
@@ -234,6 +227,85 @@ public class ReservationController {
     public ResponseEntity<String> getAdminPendingReservationList(Model model) throws Exception{
 
     	System.out.println("관리자 승인대기(stay) 예약 목록 조회 됐는지 확인");
+    	
+    	JsonObject jsonObj = new JsonObject();
+    	HashMap<String, Object> retMap = new  HashMap<>();
+    	HashMap<String, Object> listMap = new  HashMap<>();
+    	 try {
+		    	
+		    	List<EgovMap> listData = new ArrayList<EgovMap>();
+		    	listData = reservationService.getAdminPendingReservationList();  // 모든 사용자 정보 가져오기
+		    	System.out.println("listData 확인 : "+ listData);
+		    	
+		    	
+		    	// 예약일자, 등록일시 포맷 설정
+		    	// 날짜 형식을 변환하기 위한 포맷터 생성
+		        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        
+		        // 시간 형식을 변환하기 위한 SimpleDateFormat 객체 생성
+		        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+		        
+		        // 리스트의 각 데이터를 순회하며, 날짜 필드를 형식에 맞게 변환
+		        for (EgovMap item : listData) {
+		            Date reservationDt = (Date) item.get("reservationDt");
+		            Date regDt = (Date) item.get("regDt");
+
+		            Object timeStartObj = item.get("timeStart");
+		            Object timeEndObj = item.get("timeEnd");
+		            
+		            if (reservationDt != null) {
+		                // reservationDt 필드를 yyyy-MM-dd 형식의 문자열로 변환
+		                item.put("reservationDt", dateFormat.format(reservationDt));
+		            }
+		            if (regDt != null) {
+		                // regDt 필드를 yyyy-MM-dd HH:mm:ss 형식의 문자열로 변환
+		                item.put("regDt", dateTimeFormat.format(regDt));
+		            }
+		            
+		            if (timeStartObj instanceof Time) {
+		                // timeStart를 HH:mm 형식의 문자열로 변환
+		                String formattedTimeStart = timeFormat.format((Time) timeStartObj);
+		                item.put("timeStart", formattedTimeStart);
+		            }
+		            if (timeEndObj instanceof Time) {
+		                // timeEnd를 HH:mm 형식의 문자열로 변환
+		                String formattedTimeEnd = timeFormat.format((Time) timeEndObj);
+		                item.put("timeEnd", formattedTimeEnd);
+		            }
+		        }
+		    	
+		        // 변환된 listData를 HashMap에 추가
+		    	listMap.put("dataMap", listData); // hashMap에 담기
+		    	System.out.println("listMap 확인 : "+ listMap);
+		        
+		    	retMap.put("error", "N");
+				retMap.put("dataMap", listMap);
+				System.out.println("retMap 확인 : "+ retMap);
+		        
+				
+				 // JSON으로 변환 
+				Gson gson = new GsonBuilder()
+						        .create();
+			    String jsonStr = gson.toJson(retMap);  // retMap을 JSON 문자열로 변환
+			    System.out.println("jsonStr 확인 : " + jsonStr);
+			     return ResponseEntity.ok(jsonStr);  // 변환된 JSON 문자열 반환
+    	 } catch (Exception e) {
+    		 	retMap.put("error", "Y");
+    		 	retMap.put("errorMsg", "승인 대기 예약 목록 조회 중 발생했습니다.");
+    		 	
+    	        e.printStackTrace();  // 예외 출력
+    	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 에러 발생");
+    	 }
+     }
+    
+    // 관리자 예약현황(통계) 페이지 이동 
+    @RequestMapping(value = "/adminStatusList.do", method = RequestMethod.POST,  produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public ResponseEntity<String> adminStatusList(Model model) throws Exception{
+
+    	System.out.println("관리자 예약 현황(통계) 목록 조회 됐는지 확인");
     	
     	JsonObject jsonObj = new JsonObject();
     	HashMap<String, Object> retMap = new  HashMap<>();
@@ -400,12 +472,41 @@ public class ReservationController {
     }
     
     
+    // 관리자 - 예약 승인 기능 
+    @RequestMapping(value = "/adminReservationApproved.do", method = RequestMethod.GET)
+    public String adminReservationApproved(@RequestParam("reservationId") String reservationId, Model model, HttpServletRequest request) throws Exception {
+        // 서비스 호출하여 제한 해제
+    	
+    	int intReservationId = Integer.parseInt(request.getParameter("reservationId"));
+        int result = reservationService.adminReservationApproved(intReservationId);
+        if (result > 0) {
+            model.addAttribute("message", "관리자 예약승인(접수)이 완료되었습니다.");
+        } else {
+            model.addAttribute("message", "관리자 예약승인(접수)에 실패했습니다.");
+        }
+        return "redirect:/adminReservationList.do";
+    }
     
+    
+ // 관리자 - 접수최소 기능 
+    @RequestMapping(value = "/adminReservationReject.do", method = RequestMethod.GET)
+    public String adminReservationReject(@RequestParam("reservationId") String reservationId, Model model, HttpServletRequest request) throws Exception {
+        // 서비스 호출하여 제한 해제
+    	
+    	int intReservationId = Integer.parseInt(request.getParameter("reservationId"));
+        int result = reservationService.adminReservationReject(intReservationId);
+        if (result > 0) {
+            model.addAttribute("message", "관리자 접수취소가 완료되었습니다.");
+        } else {
+            model.addAttribute("message", "관리자 접수취소에 실패했습니다.");
+        }
+        return "redirect:/adminReservationList.do";
+    }
     
     // 241029
-    // 예약날짜 예야가능 시간대, 예약가능 인원수 조회 기능
+    // 회원 예약 화면 - 예약날짜 예약가능 시간대, 예약가능 인원수 조회 기능
     // 특정 날짜에 클래스 시간대별 예약 가능 좌석 수 조회
-    @RequestMapping(value = "/getAvailableTimeSlots.do", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/getDayAvailableTimeSlots.do", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<String> getAvailableTimeSlots(
             @RequestParam("classId") String classId,
@@ -428,7 +529,7 @@ public class ReservationController {
             // 서비스 호출하여 시간대별 예약 가능 정보를 가져오기
             List<EgovMap> availableTimeSlots = reservationService.getAvailableTimeSlots(intClassId, reservationDt);
             
-            System.out.println("db에서 조회해 온 availableTimeSlots : " + availableTimeSlots);
+            System.out.println("특정 날짜 선택 시 시간대 조회 : db에서 조회해 온 availableTimeSlots : " + availableTimeSlots);
             
             
             response.put("error", "N");
@@ -472,14 +573,20 @@ public class ReservationController {
 //            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //            System.out.println("startDate : " + startDate);
             
+        	System.out.println("월별 예약정보 조회  startDate : " + startDate);
+        	System.out.println("월별 예약정보 조회  endDate : " + endDate);
+        	
+        	
             // classId int로 형 변환
         	int intClassId = Integer.parseInt(classId); // classId int형 : 문자열->정수 변환
         	System.out.println("intClassId : " + intClassId);
             // 서비스 호출하여 시간대별 예약 가능 정보를 가져오기
-            List<EgovMap> availableTimeSlots = reservationService.getMonthlyAvailableTimeSlots(intClassId, startDate, endDate);
-
             
-            System.out.println("db에서 조회해 온 availableTimeSlots : " + availableTimeSlots);
+        	
+        	List<EgovMap> availableTimeSlots = reservationService.getMonthlyAvailableTimeSlots(intClassId, startDate, endDate);
+            
+            
+            System.out.println("db에서 조회해 온 월별 availableTimeSlots : " + availableTimeSlots);
             
             
             response.put("error", "N");
@@ -612,7 +719,22 @@ public class ReservationController {
 		        }
 		    	
 		    	
+		        
+		     // 예약 상태 공통코드 가져오는 리스트
+		        List<EgovMap> statusCodes = codeService.getCodesByType("reservation_status"); // Make sure to implement this in your service
+		        
+		        System.out.println("예약 상태 공통코드 가져오는 리스트 : " + statusCodes);
+		        Map<String, String> statusMap = new HashMap<>();
+		        for (EgovMap code : statusCodes) {
+		        	System.out.println("code : " + code);
+		            statusMap.put((String) code.get("codeValue"), (String) code.get("codeNm"));
+		            System.out.println("각각 statusMap : " + statusMap);
+		        }
+		    	System.out.println("공통코드 반복문 돌리고 나서 : " + statusMap);
+		    	
+		        
 		    	listMap.put("dataMap", listData); // hashMap에 담기
+		    	listMap.put("statusMap", statusMap); // 예약상태 공통코드 담아온 거 넣기
 		    	System.out.println("listMap 확인 : "+ listMap);
 		        
 		    	retMap.put("error", "N");

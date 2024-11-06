@@ -20,6 +20,10 @@
             cd.CLASS_DETAIL_ID
     </select>
  -->
+ 
+ 
+ 
+ 
     <!-- 예약 등록 -->
     <insert id="insertReservation" parameterType="ReservationVO">
         INSERT INTO TB_RESERVATION (
@@ -207,6 +211,20 @@
 	
 	
 	
+	<!-- 관리자 페이지 - 예약승인  -->
+	<update id="adminReservationApproved" parameterType="map">
+	    UPDATE TB_RESERVATION
+	    SET RESERVATION_STATUS = #{reservationStatus}
+	    WHERE RESERVATION_ID = #{reservationId}
+	</update>
+	
+	<!-- 관리자 페이지 - 접수취소  -->
+	<update id="adminReservationReject" parameterType="map">
+	    UPDATE TB_RESERVATION
+	    SET RESERVATION_STATUS = #{reservationStatus}
+	    WHERE RESERVATION_ID = #{reservationId}
+	</update>
+	
 	<!-- 관리자 예약 정보 수정  -->
 	<update id="updateReservationInfo" parameterType="reservationVO">
 	    UPDATE TB_RESERVATION
@@ -225,7 +243,7 @@
 	</update>
 	
 	
-	<!--  특정 날짜에 클래스 시간대별 예약 가능 좌석 수 조회-->
+	<!--  일별 특정 날짜에 클래스 시간대별 예약 가능 좌석 수 조회-->
 	<select id="getAvailableTimeSlots" parameterType="map" resultType="EgovMap">
 	
 		
@@ -236,9 +254,13 @@
 		    ,r.RESERVATION_DT
 		    ,CONCAT(DATE_FORMAT(cd.TIME_START, '%H:%i'), ' - ', DATE_FORMAT(cd.TIME_END, '%H:%i')) AS timeRange <!-- 시간대를 문자열로 표시-->
 		    ,c.CLASS_MAX_CNT <!-- 전체 수강 가능 인원--> 
-		    ,IFNULL(SUM(r.RESERVATION_CNT),0) as sumAllreservation <!-- 모든 예약자 수 -->
-		    ,(c.CLASS_MAX_CNT - IFNULL(SUM(r.RESERVATION_CNT), 0)) AS availableSeatsWithAllReservations  <!--  모든 예약 상태를 포함한 예약 가능 좌석 (예약 상태 상관없이 모든 예약을 포함) -->
-		    ,IFNULL((SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END)),0) as sumAprovedReservation <!-- 예약 승인 된 예약자 수 -->
+		    ,IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT 
+                    WHEN r.RESERVATION_STATUS = 'stay' THEN r.RESERVATION_CNT 
+                    ELSE 0 END), 0) AS sumAllreservation <!-- 모든 예약 건(예약대기 + 접수완료)-->
+		    ,(c.CLASS_MAX_CNT - IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT 
+	                                       WHEN r.RESERVATION_STATUS = 'stay' THEN r.RESERVATION_CNT 
+	                                       ELSE 0 END), 0)) AS availableSeatsWithAllReservations <!-- 모든 예약건(예약대기+접수완료) 제외 이용가능 좌석-->
+		   ,IFNULL((SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END)),0) as sumAprovedReservation <!-- 예약 승인 된 예약자 수 -->
 		    ,(c.CLASS_MAX_CNT - IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END), 0)) AS availableSeatsWithApprovedReservations <!--  확정된 예약만 포함한 예약 가능 좌석 (RESERVATION_STATUS = '예약승인' 인 경우만 포함) -->
 		FROM 
 		    tb_class_detail cd
@@ -253,36 +275,48 @@
 		
 	</select>
 	
-	<!-- 월별 예약가능 날짜 여부 확인 (임시) -->
 	
-	<select id="getMonthlyAvailableTimeSlots" resultType="EgovMap" parameterType="UserVO">
-	
-	SELECT  
-	    cd.CLASS_DETAIL_ID,
-	    c.CLASS_ID,
-	    r.RESERVATION_ID,
-	    r.RESERVATION_DT,
-	    CONCAT(DATE_FORMAT(cd.TIME_START, '%H:%i'), ' - ', DATE_FORMAT(cd.TIME_END, '%H:%i')) AS timeRange,
-	    c.CLASS_MAX_CNT,
-	    IFNULL(SUM(r.RESERVATION_CNT), 0) AS sumAllreservation,
-	    (c.CLASS_MAX_CNT - IFNULL(SUM(r.RESERVATION_CNT), 0)) AS availableSeatsWithAllReservations,
-	    IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END), 0) AS sumAprovedReservation,
-	    (c.CLASS_MAX_CNT - IFNULL(SUM(CASE WHEN r.RESERVATION_STATUS = 'approved' THEN r.RESERVATION_CNT ELSE 0 END), 0)) AS availableSeatsWithApprovedReservations
-	FROM  
-	    tb_class_detail cd
-	JOIN  
-	    tb_class c ON cd.CLASS_ID = c.CLASS_ID
-	LEFT JOIN  
-	    tb_reservation r ON cd.CLASS_DETAIL_ID = r.CLASS_DETAIL_ID 
-	    AND r.RESERVATION_DT BETWEEN '2024-10-01' AND '2024-10-31' -- Date range for the month 월별 날짜 넣어야함
-	WHERE 
-	    c.CLASS_ID = 6 -- 클래스 id 넣어야함
-	GROUP BY  
-	    r.RESERVATION_DT, cd.CLASS_DETAIL_ID, cd.TIME_START, cd.TIME_END, c.CLASS_MAX_CNT
-	ORDER BY 
-	    r.RESERVATION_DT, cd.TIME_START;
-	
-	</select>
+   <!-- 월별 예약가능 날짜 여부 확인 -->
+   <select id="getMonthlyAvailableTimeSlots" resultType="EgovMap" parameterType="map">
+   <![CDATA[
+         WITH RECURSIVE date_range AS (
+		    SELECT #{startDate} AS RESERVATION_DT -- 월시작일자
+			UNION ALL
+			SELECT DATE_ADD(RESERVATION_DT, INTERVAL 1 DAY)
+			FROM date_range
+			WHERE RESERVATION_DT < #{endDate} -- 월종료일자
+			)
+		SELECT 
+		    date_range.RESERVATION_DT,
+		    c.CLASS_MAX_CNT * (SELECT COUNT(*) FROM tb_class_detail WHERE class_id = #{classId, jdbcType=INTEGER}) AS CLASS_MAX_CNT,
+		    IFNULL(SUM(r.sumReservationCnt), 0) AS sumReservationCnt,
+		    (c.CLASS_MAX_CNT * (SELECT COUNT(*) FROM tb_class_detail WHERE class_id = #{classId, jdbcType=INTEGER}) - IFNULL(SUM(r.sumReservationCnt), 0)) AS availableSeatsWithAllReservations,
+		    IFNULL(SUM(r.sumApprovedReservationCnt), 0) AS sumApprovedReservationCnt,
+		    (c.CLASS_MAX_CNT * (SELECT COUNT(*) FROM tb_class_detail WHERE class_id = #{classId, jdbcType=INTEGER}) - IFNULL(SUM(r.sumApprovedReservationCnt), 0)) AS availableSeatsWithApprovedReservations
+		FROM 
+		    date_range
+		LEFT JOIN 
+		    (SELECT
+		        RESERVATION_DT,
+		        SUM(CASE WHEN RESERVATION_STATUS IN ('approved', 'stay') THEN RESERVATION_CNT ELSE 0 END) AS sumReservationCnt,
+		        SUM(CASE WHEN RESERVATION_STATUS = 'approved' THEN RESERVATION_CNT ELSE 0 END) AS sumApprovedReservationCnt
+		     FROM
+		        tb_reservation
+		     WHERE
+		        CLASS_DETAIL_ID IN (SELECT CLASS_DETAIL_ID FROM tb_class_detail WHERE CLASS_ID = #{classId, jdbcType=INTEGER}) -- 클래스 ID 
+		     GROUP BY
+		        RESERVATION_DT
+		    ) r ON date_range.RESERVATION_DT = r.RESERVATION_DT
+		LEFT JOIN 
+		    tb_class c ON c.CLASS_ID = #{classId, jdbcType=INTEGER} -- 클래스 ID 
+		GROUP BY 
+		    date_range.RESERVATION_DT
+		ORDER BY 
+		    date_range.RESERVATION_DT;
+		
+   ]]> 
+   </select>
+   
 	
 	<!-- 회원 예약목록  -->
 	<select id="getMyReservationList" resultType="EgovMap" parameterType="UserVO">

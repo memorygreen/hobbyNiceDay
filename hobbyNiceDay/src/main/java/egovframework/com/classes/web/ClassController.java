@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.egovframe.rte.fdl.cryptography.EgovEnvCryptoService;
 import org.egovframe.rte.fdl.cryptography.EgovPasswordEncoder;
@@ -31,6 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import egovframework.com.classes.service.ClassService;
 import egovframework.com.cmm.ClassVO;
@@ -73,16 +76,16 @@ public class ClassController {
 	    // 클래스 목록을 모델에 추가
 	    model.addAttribute("classList", listData);
 	    
-	    
+	    /*
 	    // 241102 이미지 가져오기 테스트
-	    int imgId= 7; // 임시로 지정
+	    int imgId= 15; // 임시로 지정
 		
         List<ImgVO> images = classService.getImagesByClassId(imgId);
         // model.addAttribute("classDetails", classDetails);
         System.out.println("메인 이미지 정보 : " + images);
         
         model.addAttribute("images", images);
-	    
+	    */
 	    
 
 	    // 메인 페이지 JSP로 이동
@@ -93,14 +96,17 @@ public class ClassController {
     
     
     
-    
+    // public ResponseEntity<String> imgTestinsert(@ModelAttribute("imgVO") ImgVO imgVO, MultipartFile imgFile, HttpServletRequest request) throws Exception {
+
+	//, @RequestParam(value = "imgNm" , required = false) MultipartFile imgFile
     
     // 관리자 클래스 등록 기능
     @RequestMapping(value = "/insertClass.do", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> insertClass(@ModelAttribute("classVO") ClassVO classVO
-    										    , @RequestParam(value = "imgNm" , required = false) MultipartFile imgFile
-    											, HttpServletRequest request) throws Exception {
+    										 ,@ModelAttribute("imgVO") ImgVO imgVO
+    										 , MultipartFile imgFile
+    										 , HttpServletRequest request) throws Exception {
     	System.out.println("관리자 클래스 등록 기능 들어왔는지 확인");
     	JsonObject jsonObj = new JsonObject();
 
@@ -111,11 +117,52 @@ public class ClassController {
     		System.out.println("clientIp"+ clientIp);
     		classVO.setRegIp(clientIp);
     		
+    		
+    		// 세션에 있는 id 가져오기
+        	HttpSession session = request.getSession();
+            UserVO sessionUserVo = (UserVO) session.getAttribute("userVO");
+        	String userId = sessionUserVo.getUserId();
+        	System.out.println("세션 userId : " + userId);
+        	
+    		// 클래스id 가져오기
+        	//int classId = classVO.getClassId();
+
+    		// 1. 이미지 저장 처리
+    		// 1. 파일이 있을 때만 처리
+    		 if (imgFile != null && !imgFile.isEmpty()) {
+	           // String imgFilePath = saveImg(imgFile);  // 파일 저장
+	            String imgFileName = imgFile.getOriginalFilename();  // 파일명 추출
+	            System.out.println("imgFileName : " + imgFileName);
+	            
+	            // 이미지 등록 
+	            imgVO.setImgType("class"); // 임시로 클래스 로 지정    	
+	    		imgVO.setImgRep("y"); // 임시로 클래스 대표 이미지로 지정
+	    		
+	    		imgVO.setRegId(userId); // 등록자 id
+	    		imgVO.setRegIp(clientIp); // 세션 ip값
+	    		System.out.println("이미지 등록할 imgVO : " + imgVO);
+	    		
+	        	String savePath = request.getServletContext().getRealPath("/resources/uploadImg"); // 실제 이미지가 저장될 경로
+	        	System.out.println("이미지 저장될 경로 : " + savePath);
+	        	
+	            int imgId = classService.saveItem(imgVO, imgFile, savePath);
+	            System.out.println("이미지 업로드 후 반환 imgId : " + imgId);
+	            
+	            classVO.setImgId(imgId); // 등록한 이미지의 이미지id를 클래스vo 에 저장
+	            
+	            System.out.println("이미지 업로드 후 classVO : " + classVO);
+	            
+                
+            } else { // 파일이 없을 경우 기본값 처리 또는 경로를 null로 설정
+            	System.out.println("파일 없는 경우 classVO의 imgUrl -> null 처리");
+                // classVO.setImgFilePath(null);  // 필요에 따라 null 또는 기본값으로 설정
+            }
+    		
 
             // 3. 클래스 정보 저장
             /* 클래스 등록 서비스 호출*/
     		int affectedRows = classService.insertClass(classVO);
-    		System.out.println("클래스 들어갔는지 classId 생성됐나 확인 : " + affectedRows); // 1을 반환하고 있음 
+    		System.out.println("클래스 들어갔는지 classId 생성됐나 확인 : " + affectedRows + "개 성공"); // 1을 반환하고 있음 
     		int classId = classVO.getClassId(); // 생성된 classId 가져오기
             System.out.println("생성된 classVO에서 classId 가져오기 : " + classId); // 확인 필요
             
@@ -130,57 +177,6 @@ public class ClassController {
     		
             System.out.println(classVO);
             
-    		// 이미지 저장 처리
-    		// 1. 파일이 있을 때만 처리
-    		 if (imgFile != null && !imgFile.isEmpty()) {
-	           // String imgFilePath = saveImg(imgFile);  // 파일 저장
-	            String imgFileName = imgFile.getOriginalFilename();  // 파일명 추출
-    		
-    		
-//    		if (classVO.getImgUrl() != null && !classVO.getImgUrl().isEmpty()) {
-//                String imgFilePath = saveImg(classVO.getImgUrl());  // 파일 저장
-//                String imgFileName = classVO.getImgUrl().getOriginalFilename();  // 파일명 추출
-//                
-                // 파일 경로 및 파일명 classVO에 설정
-//                classVO.setImgFilePath(imgFilePath);
-//                classVO.setImgNm(imgFileName);
-//                //System.out.println("imgUrl : " + imgUrl);
-//                System.out.println("이미지 파일이 처리되었습니다: " + imgFileName);
-//               
-//                ImgVO imgVO = new ImgVO();
-//                imgVO.setImgUrl(imgFilePath);
-//                imgVO.setImgNm(imgFileName);
-//                System.out.println("imgVO : " + imgVO);
-//                
-//                // 2. DB에 이미지 정보 저장 후 ID 반환
-//                int imgId = classService.insertImage(imgVO);  // DB에 이미지 저장
-//                classVO.setImgId(imgId);  // 이미지 ID 설정
-//                System.out.println("imgId : "  + imgId);
-                
-            } else {
-                // 파일이 없을 경우 기본값 처리 또는 경로를 null로 설정
-            	System.out.println("파일 없는 경우 classVO의 imgUrl -> null 처리");
-                classVO.setImgFilePath(null);  // 필요에 따라 null 또는 기본값으로 설정
-            }
-    		
-    		// + imgUrl 이 있으면 이미지 업로드 처리, 없으면 넘어감(null 허용이니까)
-        	// 1. 이미지 업로드 처리
-//    		MultipartFile file = classVO.getImgUrl();
-//    		String fileName = file.getOriginalFilename();
-//    		String filePath = "/uploads/" + fileName;
-//    		file.transferTo(new File(filePath));  // 파일 저장
-//    		classVO.setImgUrl(filePath);  // 파일 경로 저장
-            
-    		
-    		/*
-            String imgUrl = saveImg(imgFile);
-            System.out.println("imgUrl : " + imgUrl);
-            classVO.setImgUrl(imgUrl);  // 이미지 URL 설정
-            ImgVO imgVO = new ImgVO();         // ImgVO 객체 생성
-            imgVO.setImgUrl(imgUrl);           // 이미지 URL 설정
-            int imgId = classService.insertImage(imgVO);  // 이미지 정보 저장 후 ID 반환
-            classVO.setImgId(imgId);           // 클래스에 이미지 ID 설정
-            */
             
     		// + 휴무일이 있으면 등록처리 ,없으면 넘어감(null 허용)
             // 2. 휴무일 등록 처리
@@ -328,31 +324,6 @@ public class ClassController {
      }
    
     
-    
-    // 이미지 파일 저장 메소드
-    /*
-    private String saveImg(MultipartFile imgFile) throws IOException {
-        String fileName = imgFile.getOriginalFilename();
-        // 이미지 파일을 저장할 디렉토리 설정
-        String saveDir = "C:/Users/user/Desktop/saveClassImg";
-        
-        // 디렉토리가 존재하지 않으면 생성
-        File directory = new File(saveDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        
-        // 파일 저장 경로 설정
-        String filePath = saveDir + "/" + fileName;
-        
-        // 파일 저장
-        imgFile.transferTo(new File(filePath));
-        
-        // 저장된 파일 경로 반환 (필요 시, 파일 경로를 반환하거나 파일명을 반환)
-        return filePath;
-    }*/
-    
-    
 
 	// 241101 추가 이미지 업로드 테스트 ㅌ페이지 불러오기 
 	@RequestMapping(value = "/imgTest.do")
@@ -362,57 +333,6 @@ public class ClassController {
 	    return "cmm/user/imgTest";
 	}
 	
-	
-    // 241101 이미지 업로드 테스트
-    //@RequestMapping(value ="/imgTestinsert.do")
-    
-    @RequestMapping(value = "/imgTestinsert.do", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<String> imgTestinsert(@ModelAttribute("imgVO") ImgVO imgVO, MultipartFile imgFile, HttpServletRequest request) throws Exception {
-        	
-    		Map<String, Object> response = new HashMap<>();
-    		JsonObject jsonObj = new JsonObject();
-    		try {
-    			System.out.println("이미지 업로드 탔는지 확인, "  + imgVO);
-		    		int intClassId= 11; 
-		    	   // 판매자
-		    		String clientIp = getClientIp(request);
-		    		
-		    		
-		    		imgVO.setImgType("class"); // 임시로 클래스 로 지정    	
-		    		imgVO.setImgRep("y"); // 임시로 클래스 대표 이미지로 지정
-		    		
-		    		imgVO.setRegId("admin"); // 임시로 관리자 id 
-		    		imgVO.setRegIp(clientIp); // 세션 ip값
-		    		
-		    		
-		            int imgId = classService.saveItem(intClassId, imgVO, imgFile);
-		           
-		            System.out.println("이미지 업로드 테스트 등록 성공했는지 확인 : " + imgId);
-		      
-		            response.put("error", "N");
-		            response.put("imgId", imgId); // Return saved image ID or any required data
-		            
-		            
-//		            jsonObj.addProperty("error", "N");
-//		            jsonObj.addProperty("imgId", imgId);
-		            //return "redirect:/cmm/user/imgTest";
-    		} catch (Exception e) {
-    			System.out.println("이미지 업로드 예외 발생 catch 문");
-    	        response.put("error", "Y");
-    	        
-    	        response.put("errorMsg", e.getMessage());
-    	        
-//    	        jsonObj.addProperty("error", "Y");
-//    	        jsonObj.addProperty("errorMsg", e.getMessage());
-    	    } 
-    		
-    		Gson gson = new Gson();
-    		String jsonStr = gson.toJson(response);
-    		System.out.println("이미지 업로드 테스트 리턴 직전 : " + jsonStr);
-    		//return response;
-    		return ResponseEntity.ok(jsonStr);  // 변환된 JSON 문자열 반환
-    }
     
     
     // 이미지 조회 테스트
@@ -471,7 +391,85 @@ public class ClassController {
         return "/cmm/classes/classView";  // JSP 페이지로 이동
     }
     
-   
+    // 관리자 - 클래스 삭제 기능
+ // 클래스 삭제 메서드 추가
+    @RequestMapping(value = "/deleteClass.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> deleteClass(@RequestParam("classId") int classId) {
+        JsonObject jsonObj = new JsonObject();
+        
+        try {
+            // 클래스 삭제 서비스 호출
+            int deletedCount = classService.deleteClass(classId);
+            
+            if (deletedCount > 0) {
+                jsonObj.addProperty("error", "N");
+                jsonObj.addProperty("message", "클래스 삭제가 성공적으로 완료되었습니다.");
+            } else {
+                jsonObj.addProperty("error", "Y");
+                jsonObj.addProperty("errorMsg", "클래스를 찾을 수 없거나 이미 삭제되었습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObj.addProperty("error", "Y");
+            jsonObj.addProperty("errorMsg", "클래스 삭제 중 오류가 발생했습니다. 관리자에게 문의하세요.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj.toString());
+        }
+        
+        return ResponseEntity.ok(jsonObj.toString());
+    }
+    
+    
+    // 관리자 클래스 상세보기 페이지 이동
+    @RequestMapping(value = "/adminClassInfo.do", method = RequestMethod.GET)
+    public String adminClassInfo(@RequestParam("classId") String classId, Model model)  throws Exception{
+    	
+    	 try {
+    	        System.out.println("관리자 페이지 클래스 상세보기 페이지 이동 들어왔는 지 확인 ");
+    	        int intClassId = Integer.parseInt(classId); // classId를 정수로 변환
+    	        ClassVO classDetails = classService.getClassDetails(intClassId);
+    	        System.out.println("관리자 페이지 클래스 상세보기 데이터 조회 : " + classDetails);
+    	        
+    	        model.addAttribute("classDetails", classDetails);
+    	    } catch (NumberFormatException e) {
+    	        System.out.println("classId 변환 오류: " + e.getMessage());
+    	        model.addAttribute("error", "잘못된 클래스 ID입니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    } catch (Exception e) {
+    	        System.out.println("클래스 상세보기 조회 오류: " + e.getMessage());
+    	        e.printStackTrace();
+    	        model.addAttribute("error", "클래스 상세보기 중 오류가 발생했습니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    }
+    	
+        return "/cmm/admin/adminClassInfo";  // JSP 페이지로 이동
+    }
+    
+    
+    // 관리자 클래스 1건 수정하기 페이지 이동
+    @RequestMapping(value = "/adminClassUpdateForm.do", method = RequestMethod.GET)
+    public String adminClassUpdateForm(@RequestParam("classId") String classId, Model model)  throws Exception{
+    	
+    	 try {
+    	        System.out.println("관리자 페이지 클래스 수정 페이지 이동 들어왔는 지 확인 ");
+    	        int intClassId = Integer.parseInt(classId); // classId를 정수로 변환
+    	        ClassVO classDetails = classService.getClassDetails(intClassId);
+    	        System.out.println("관리자 페이지 클래스 수정 데이터 조회 : " + classDetails);
+    	        
+    	        model.addAttribute("classDetails", classDetails);
+    	    } catch (NumberFormatException e) {
+    	        System.out.println("classId 변환 오류: " + e.getMessage());
+    	        model.addAttribute("error", "잘못된 클래스 ID입니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    } catch (Exception e) {
+    	        System.out.println("클래스 수정 조회 오류: " + e.getMessage());
+    	        e.printStackTrace();
+    	        model.addAttribute("error", "클래스 수정 중 오류가 발생했습니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    }
+    	
+        return "/cmm/admin/adminClassUpdateForm";  // JSP 페이지로 이동
+    }
         
 }
     

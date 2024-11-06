@@ -295,10 +295,9 @@
 	                                                        	
 	                                                        	<tr>
 		                                                        	<td colspan="3">
-		                                                        		<button type="button" id="joinBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</button>
-	                                                        
-				                                                        <!-- 취소 -->
-				                                                        <button type="button" id="ListBtn" class="btn btn-danger waves-effect waves-light">목록</button>
+		                                                        		<button type="button" id="updateBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</button>
+				                                                        <a href="/adminUserList.do" id="ListBtn" class="btn btn-warning waves-effect waves-light">목록</a>
+				                                                        <button type="button" id="deleteBtn" class="btn btn-danger waves-effect waves-light"  onclick="deleteUser('${userInfo.userId}')">삭제</button>
 		                                                        	</td>
 	                                                        	</tr>    	
 	                                                            	                                                           
@@ -412,189 +411,19 @@
 	var userIdCk = false;
 	function userData() {
 		
-		// 사용자ID 중복체크
-		$('#userIdCk').click(
-				function(e) {
-					e.preventDefault(); // 링크 기본 동작 막기
-					
-					var userId = $('#userId').val(); // 입력된 ID 값 가져오기
-
-					if (userId === "") {
-						alert("ID를 입력하세요."); // 자영 : 이미 필수체크인데?
-						return;
-					}
-
-					// AJAX를 이용해 서버로 ID 중복 확인 요청 보내기
-					
-					$.ajax({
-			            url: '<c:url value="/joinIdCheck.do"/>', // 서버에서 처리할 URL
-			            type: 'POST',
-			            data: { userId: userId }, // 입력된 ID 전달
-			            success: function(response) {
-			            	console.log("성공 시 response",response)
-			            	console.log("성공 시 response",response.exist)
-			                if (response.exist == true) {
-			                    $('#userIdMsg').text("이미 사용 중인 ID입니다.").css("color", "red");
-			                } else {
-			                	userIdCk = true;
-			                    $('#userIdMsg').text("사용 가능한 ID입니다.").css("color", "green");
-			                }
-			            },
-			            error: function() {
-			                alert("ID 중복 확인 중 오류가 발생했습니다.");
-			            }
-			        });
-				});
 		
-		// 회원가입 버튼 클릭 시 
-		$('#joinBtn').click(function(e) {
-			console.log("회원가입 클릭 버튼 들어왔는지 확인 ")
-			e.preventDefault();
 			
-			if (!userIdCk) {
-				alert('아이디 중복확인을 해주세요.');
-				$('#userId').focus();
-				return false;
-			}
-			
-			if ($.trim($('#userName').val()) == ''){
-				alert('이름을 입력해주세요');
-				$('#userName').focus();
-				return false;
-			}
-			
-			if ($.trim($('#passwd').val()) == ''){
-				alert('비밀번호를 입력해주세요');
-				$('#passwd').focus();
-				return false;
-			}else if($('#passwd').val() != $('#passwdCk').val()){
-				alert('비밀번호를 다시 확인해주세요!');
-				$('#passwdCk').focus();
-				return false;
-			}
-			
-			// 비밀번호 형식 체크 (영문, 숫자, 특수문자 포함 8~15자)
-			let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-			if (!reg.test($('#passwd').val())) {
-			    alert('비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.');
-			    $('#passwd').focus();
-			    return false;
-			}
-			
-			if(!$('input:radio[name=sex]').is(":checked")){
-				alert("성별을 선택해주세요.");
-				$('#sex').focus();
-				return false;
-			}
-			
-			if ($.trim($('#brthdy').val()) == ''){
-				alert('생년월일을 입력해주세요');
-				$('#brthdy').focus();
-				return false;
-			}
-			
-			if ($.trim($('#mbtlnum').val()) == ''){
-				alert('휴대전화 번호를 입력해주세요');
-				$('#mbtlnum').focus();
-				return false;
-			}
-			
-			// 휴대폰 번호 및 지역번호 형식 체크 (01X-XXXX-XXXX 또는 지역번호-XXXX-XXXX 형식)
-			// let phoneReg = /^(01[0|1|6|7|8|9])-\d{3,4}-\d{4}$/;	// 휴대폰 번호 형식 체크 (010, 011, 016, 017, 018, 019-1234-5678 형식)
-
-			let phoneReg = /^(01[0|1|6|7|8|9]-\d{3,4}-\d{4}|0\d{1,2}-\d{3,4}-\d{4})$/;
-			if (!phoneReg.test($('#mbtlnum').val())) {
-			    alert('휴대폰 번호 또는 일반 전화번호를 올바른 형식으로 입력해주세요. (ex. 010-0000-0000)');
-			    $('#mbtlnum').focus();
-			    return false;
-			}
-			
-			
-			if ($.trim($('#email').val()) == '' ){
-				alert('이메일을 입력해주세요.');
-				$('#email').focus();
-			}
-			// 이메일 형식 체크 (ex. exaple@naver.com)
-				/* 
-				^[A-Z0-9._%+-]+: 이메일의 첫 부분은 영문자, 숫자, 특수문자(._%+-)를 포함할 수 있습니다.
-				@[A-Z0-9.-]+: @ 뒤에는 도메인 부분이 오며, 영문자, 숫자, 점(.), 하이픈(-)이 허용됩니다.
-				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
-			*/
-			let emailReg = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-			if (!emailReg.test($('#email').val())) {
-			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
-			    $('#email').focus();
-			    return false;
-			}
-			
-			
-			// 유효성 검사 - 미입력
-			if (requiredEmpty()) {
-				return;
-			}
-			
-			
-			if (confirm("회원가입을 하시겠습니까?")) {
-				var form = $('#joinForm')[0];
-				var formData = new FormData(form);
-				
-				$.ajax({
-					url: 'joinUser.do',
-					processData: false,
-					contentType: false,
-					data: formData,
-					type: 'POST',
-					success: function(result){
-						console.log("회원가입 응답 result:", result);
-		                
-		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("회원가입 response:", response);
-
-		                if (response.error == 'N') {
-		                    alert("회원가입되었습니다.");
-		                    location.href = '/loginForm.do';
-		                } else if (response.error == 'Y') {
-		                    alert('회원가입 실패: ' + response.errorMsg);
-		                    location.href = '/joinForm.do';
-		                }
-					},
-					error: function() {
-		                alert("회원가입 중 오류가 발생했습니다.");
-		            }
-				});
-			}
-			
-			
-			
-		})// 회원가입 버튼 클릭 끝
+		
 	};// 전체 불러오기 끝
 		
-	// 유효성 검사 함수
-	function requiredEmpty() {
-		var empty = false;
-		$("*[required]").each(
-				function() {
-					if (empty)
-						return;
-					var input = $(this), value = input.val();
-					if (empty = !value) {
-						var label = $(
-								"label[for='" + input.attr("id") + "']")
-								.html();
-						if (label)
-							alert(label.replace("<br>", "")
-									+ "을(를) 입력하십시오.");
-						else
-							alert("필수값이 입력되지 않았습니다.");
-						input.focus();
-					}
 
-				});
-		return empty;
-	}
-
-		
+	function deleteUser(userId) {
+	    if (confirm("삭제하시겠습니까?")) {
+	        window.location.href = 'adminUserDelete.do?userId=' + encodeURIComponent(userId);
+	    }
+	}	
+	
+	
 	</script>
     
 </body>

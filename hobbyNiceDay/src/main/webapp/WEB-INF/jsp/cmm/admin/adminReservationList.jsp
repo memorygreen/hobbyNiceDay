@@ -90,12 +90,14 @@
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                            <li>
+                                                <a href="index.html"></a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Bootstrap Tables</a>
+                                            <li>
+                                            	<a href="/adminReservationList.do">예약관리</a> > 
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Basic Tables</a>
+                                            <li>
+                                            	<a href="/adminReservationList.do">예약목록</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -119,17 +121,9 @@
                                         <!-- Hover table card start -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>예약현황</h5>
+                                                <h5>예약목록</h5>
                                                 <span>현재 등록중인 예약 목록입니다. <code>TB_RESERVATION</code></span>
-                                                <div class="card-header-right">
-                                                    <ul class="list-unstyled card-option">
-                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-                                                        <li><i class="fa fa-trash close-card"></i></li>
-                                                    </ul>
-                                                </div>
+                                                
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">
@@ -156,6 +150,7 @@
                                                                 <th>시작시간</th>
                                                                 <th>종료시간</th>
                                                                 <th>예약상태</th>
+                                                                <th>예약승인</th>
                                                                 <th>회원/비회원</th>
                                                                 <th>예약등록일시</th>
                                                             </tr>
@@ -283,6 +278,11 @@
 			var listData = data.dataMap.dataMap;  // 이 부분이 핵심
 			console.log("listData: ", listData);
 			
+			
+			// statusMap을 가져와서 JavaScript 객체로 변환
+            var statusMap = data.dataMap.statusMap;
+            console.log("statusMap: ", statusMap);
+            
 	    	var html = '';
 	        
 	        $.each(listData, function(key, values) {
@@ -299,7 +299,26 @@
 	            html+= '    <td>' + $.trim(values.reservationDt) + '</td>'; // 예약일자
 	            html+= '    <td>' + $.trim(values.timeStart) + '</td>'; // 시작시간
 	            html+= '    <td>' + $.trim(values.timeEnd) + '</td>'; // 종료시간
-	            html+= '    <td>' + $.trim(values.reservationStatus) + '</td>'; // 예약상태
+	            //html+= '    <td>' + $.trim(values.reservationStatus) + '</td>'; // 예약상태
+	            
+	         // 예약상태를 statusMap을 이용하여 한글로 변환
+                var statusKorean = statusMap[values.reservationStatus] || values.reservationStatus; // 한글 변환된 상태가 없을 경우, 기본값 사용
+                html += '    <td>' + $.trim(statusKorean) + '</td>';
+
+	         // 로그인 제한 상태에 따라 버튼 표시
+                if (values.reservationStatus === 'stay') {
+                    // 접수완료 버튼
+                    html += '    <td><a href="adminReservationApproved.do?reservationId=' + encodeURIComponent($.trim(values.reservationId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-success btn-outline-success">접수완료</a></td>';
+                } else if (values.reservationStatus === 'approved') {
+                    // 접수취소 버튼 
+                    html += '    <td><a href="adminReservationReject.do?reservationId=' + encodeURIComponent($.trim(values.reservationId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-danger btn-outline-danger">접수취소</a></td>';
+                } else if (values.reservationStatus === 'reject') {
+                    // 접수취소 버튼 
+                    html += '    <td><a href="adminReservationApproved.do?reservationId=' + encodeURIComponent($.trim(values.reservationId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-success btn-outline-success">접수완료</a></td>';
+                }else{ // 예약 취소 cancle
+                	html += '' // 나중에 확인 필요
+                }
+	            
 	            html+= '    <td>' + $.trim(values.reservationType) + '</td>'; // 회원/비회원 구분 
 	            html+= '    <td>' + $.trim(values.regDt) + '</td>'; // 등록일시
 	            html+= '</tr>';

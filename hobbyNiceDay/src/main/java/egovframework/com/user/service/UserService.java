@@ -32,5 +32,15 @@ public interface UserService {
 	
 	// 카카오 로그인 기존 회원인지 확인
 	public UserVO getUserBySNSId(String kakaoUserId,  String snsProvider) throws Exception;
-
+	
+	// 로그인 실패 5회 시 로그인 제한 
+	public int updateLoginRestricted(UserVO userVO) throws Exception;
+	
+	// 관리자 - 로그인 제한 해제 기능
+	public int clearLoginRestriction(String userId) throws Exception;
+	
+	// 관리자 - 회원 삭제 기능
+	public int deleteUser(String userId) throws Exception;
+	
+	
 }

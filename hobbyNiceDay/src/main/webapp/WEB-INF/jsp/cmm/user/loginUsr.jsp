@@ -277,20 +277,11 @@
 				</div>
 
 
-				
-
-
 		</div>
 		<!-- checkout Form 끝 -->
 
 		</form>
 		
-		
-		
-		
-   		<!-- <a href="javascript:kakaoLogin()">
-   		<img src="https://developers.kakao.com/static/images/m/product/sub/kakaoLogin.png"></a>
-   		 -->
    		
 		<!-- 로그인 폼 끝-->
 
@@ -340,85 +331,48 @@
 	var userIdCk = false;
 	function userData() {
 		
-		// 네이버 로그인 관련
 		
-		/*동의하기 페이지 url
-		https://nid.naver.com/oauth2.0/authorize
-		?response_type=token
-				&client_id=nTM2zP9ui0F2yerONFez
-				&state=da8fda31-d2b0-4859-a09b-32aaf9fec26f
-				&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fuser%2Fcallback
-				&version=js-2.0.0
-				&svctype=1
-		*/
+		  //id 입력제한
+		  $('#userId').on('input', function() {
+		      // id 정규표현식 : 영어 대소문자, 숫자만 허용
+		      let validChars = /^[A-Za-z0-9]*$/;
+		      
+		      // 현재입력된 id
+		      let userId = $(this).val();
+		      
+		      // 제한된 문자 입력 or 15글자 초과 -> 수정
+		      if (!validChars.test(userId) || userId.length > 15) {
+		          // 불필요한 문자 제거, 15글자 초과시 15글자로 제한
+		          $(this).val(userId.replace(/[^A-Za-z0-9]/g, '').substring(0, 15));
+		          
+		          // 15글자 이상 -> 메시지 
+		          $('#userIdMsg').text("ID는 영어 대소문자와 숫자만 허용하며 최대 15글자까지 입력 가능합니다.").css("color", "red");
+		      } else {
+		          $('#userIdMsg').text(""); // 조건만족 시 메시지 제거
+		      }
+ 		 });
 		
-		// 오류 페이지 코드
-		/* http://localhost:8080/user/callback
-		#access_token=AAAAPg67DuD_U8MPFclHg__juHEl1WIvinr58yh8IS3m1MGiiuDWNbNCPzMjNjeK30nOnL3IIlASUtsYgIZo_37FeQA
-		&state=da8fda31-d2b0-4859-a09b-32aaf9fec26f&
-		token_type=bearer&
-		expires_in=3600
-		*/
-		
-		
-		console.log("네이버 타는지 확인 ")
-		// (2) LoginWithNaverId Javascript 설정 정보 및 초기화
-		var naverLogin = new naver.LoginWithNaverId(
-		    {
-		        clientId: "nTM2zP9ui0F2yerONFez", // 본인의 Client ID로 수정, 띄어쓰기는 사용하지 마세요.
-		        callbackUrl: "http://localhost:8080/joinExtlUsrNaverForm.do", // 본인의 callBack url로 수정하세요.
-		        isPopup: true, // 팝업을 통한 연동처리 여부
-		        loginButton: {color: "white", type: 3, height: 60},  // 네이버 로그인버튼 디자인 설정. 한번 바꿔보세요:D
-		    	// callbackHandle: true // callback 페이지가 분리되었을 경우에 callback처리를 해줄 수 있도록 설정
-		    }
-	    );
-		console.log("네이버 동의하기", naverLogin)
-		// (3) 네아로 로그인 정보를 초기화하기 위하여 init을 호출
-		naverLogin.init();
-		console.log("네이버 초기화")
+		  
+		  // 비밀번호 입력제한
+		  
+		// 비밀번호 유효성 검증 정규식: 공백 제외, 영문자, 숫자, 특수문자 포함 8~15자
+		  const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9])[A-Za-z0-9!@#$%^*+=-]{8,15}$/;
 
+		  $('#passwd').on('input', function() {
+			    let password = $(this).val();
+			    
+			    // 공백 or 15글자 초과 시 삭제
+			    password = password.replace(/\s/g, '').substring(0, 15);
+			    $(this).val(password);
+			    
+			    // 정규표현식 확인
+			    if (!passwordRegEx.test(password)) {
+			        $('#userPasswdMsg').text("비밀번호는 공백 없이 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.").css("color", "red");
+			    } else {
+			        $('#userPasswdMsg').text(""); // 메시지 삭제
+			    }
+			});
 		
-		// 새로 다시 넣어보기
-		/*
-		var naver_id_login = new naver_id_login("nTM2zP9ui0F2yerONFez", "http://localhost:8080/cmm/user/loginUsr.jsp");
-	  	var state = naver_id_login.getUniqState();
-	  	naver_id_login.setButton("green", 3,50);
-	  	naver_id_login.setDomain("http://localhost:8080");
-	  	naver_id_login.setState(state);
-	  	naver_id_login.setPopup();
-	  	
-	  	naver_id_login.init_naver_id_login();
-	  	*/
-		
-		// gpt 의 솔루션
-		/*
-	    var naverLogin = new naver.LoginWithNaverId({
-	        clientId: "nTM2zP9ui0F2yerONFez", // 본인의 Client ID로 수정
-	        callbackUrl: "http://localhost:8080/user/callback", // 콜백 URL 설정
-	        isPopup: false, // 팝업 방식이 아닌 페이지 리다이렉트 방식으로 설정
-	        loginButton: {color: "green", type: 3, height: 50}, // 버튼 설정
-	        callbackHandle: true
-	    });
-	    naverLogin.init(); // 네이버 로그인 초기화
-	
-	    // 버튼을 페이지에 추가
-	    naverLogin.setButton("green", 3, 50);
-	    */
-		
-		// 카카오 로그인
-		// 출처 : https://velog.io/@dev_h_o/Spring-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-api-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0REST-API
-		/*function kakaoLogin() {
-				$.ajax({
-					 url:'/memberLoginForm/getKakaoAuthUrl',
-					 type:'post',
-					 async: false,
-					 dataType: 'text',
-					 success: function (res) {
-					   location.href = res;
-					 }
-				});
-			}
-	    */
 	    
 	    // 카카오 로그인 관련 
 		window.Kakao.init("5dd23d272be8396574b776bacd38ec63") // restAPI키 : 4GG6BZHFVLLPXEYSzoytVtdziZHbhM0i//  js 키 : 5dd23d272be8396574b776bacd38ec63 // 7a4940699916889409beca8302597c24 (?)
@@ -469,12 +423,14 @@
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
+					dataType: 'json',
+					//success: function(result){
+					success: function(response){
 						//console.log("회원가입 응답 result:", result);
 		                
 		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("로그인 response:", response);
+		                //var response = JSON.parse(result);
+						//console.log("로그인 response:", response);
 
 		                if (response.error == 'N') {
 		                    alert("로그인되었습니다.");
@@ -497,8 +453,87 @@
 		
 	};// 전체 불러오기 끝
 		
+
+	// 네이버 로그인 관련
+	
+	/*동의하기 페이지 url
+	https://nid.naver.com/oauth2.0/authorize
+	?response_type=token
+			&client_id=nTM2zP9ui0F2yerONFez
+			&state=da8fda31-d2b0-4859-a09b-32aaf9fec26f
+			&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fuser%2Fcallback
+			&version=js-2.0.0
+			&svctype=1
+	*/
+	
+	// 오류 페이지 코드
+	/* http://localhost:8080/user/callback
+	#access_token=AAAAPg67DuD_U8MPFclHg__juHEl1WIvinr58yh8IS3m1MGiiuDWNbNCPzMjNjeK30nOnL3IIlASUtsYgIZo_37FeQA
+	&state=da8fda31-d2b0-4859-a09b-32aaf9fec26f&
+	token_type=bearer&
+	expires_in=3600
+	*/
 	
 	
+	console.log("네이버 타는지 확인 ")
+	// (2) LoginWithNaverId Javascript 설정 정보 및 초기화
+	var naverLogin = new naver.LoginWithNaverId(
+	    {
+	        clientId: "nTM2zP9ui0F2yerONFez", // 본인의 Client ID로 수정, 띄어쓰기는 사용하지 마세요.
+	        callbackUrl: "http://localhost:8080/joinExtlUsrNaverForm.do", // 본인의 callBack url로 수정하세요.
+	        isPopup: true, // 팝업을 통한 연동처리 여부
+	        loginButton: {color: "white", type: 3, height: 60},  // 네이버 로그인버튼 디자인 설정. 한번 바꿔보세요:D
+	    	// callbackHandle: true // callback 페이지가 분리되었을 경우에 callback처리를 해줄 수 있도록 설정
+	    }
+    );
+	console.log("네이버 동의하기", naverLogin)
+	// (3) 네아로 로그인 정보를 초기화하기 위하여 init을 호출
+	naverLogin.init();
+	console.log("네이버 초기화")
+
+	
+	// 새로 다시 넣어보기
+	/*
+	var naver_id_login = new naver_id_login("nTM2zP9ui0F2yerONFez", "http://localhost:8080/cmm/user/loginUsr.jsp");
+  	var state = naver_id_login.getUniqState();
+  	naver_id_login.setButton("green", 3,50);
+  	naver_id_login.setDomain("http://localhost:8080");
+  	naver_id_login.setState(state);
+  	naver_id_login.setPopup();
+  	
+  	naver_id_login.init_naver_id_login();
+  	*/
+	
+	// gpt 의 솔루션
+	/*
+    var naverLogin = new naver.LoginWithNaverId({
+        clientId: "nTM2zP9ui0F2yerONFez", // 본인의 Client ID로 수정
+        callbackUrl: "http://localhost:8080/user/callback", // 콜백 URL 설정
+        isPopup: false, // 팝업 방식이 아닌 페이지 리다이렉트 방식으로 설정
+        loginButton: {color: "green", type: 3, height: 50}, // 버튼 설정
+        callbackHandle: true
+    });
+    naverLogin.init(); // 네이버 로그인 초기화
+
+    // 버튼을 페이지에 추가
+    naverLogin.setButton("green", 3, 50);
+    */
+	
+	// 카카오 로그인
+	// 출처 : https://velog.io/@dev_h_o/Spring-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-api-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0REST-API
+	/*function kakaoLogin() {
+			$.ajax({
+				 url:'/memberLoginForm/getKakaoAuthUrl',
+				 type:'post',
+				 async: false,
+				 dataType: 'text',
+				 success: function (res) {
+				   location.href = res;
+				 }
+			});
+		}
+    */
+	/*******************/
 	// 전역 설정
 		
 		// 카카오 로그인 관련

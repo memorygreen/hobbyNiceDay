@@ -45,9 +45,16 @@ public interface ReservationService {
 	
 	// 월별 예약가능 정보 조회 테이블 
 	public List<EgovMap> getMonthlyAvailableTimeSlots(int classId, String startDate, String endDate) throws Exception;
-		
+	
+	// 관리자 - 예약 승인(접수)기능
+	public int adminReservationApproved(int reservationId)  throws Exception;
+	
+	// 관리자 - 접수 취소 기능
+	public int adminReservationReject(int reservationId)  throws Exception;
 	// 예약 등록 시 예약번호 생성
     // public String generateReservationNum(ReservationVO reservationVO) throws Exception;
 	
+	
+	// 예약 삭제 시 
 	
 }

@@ -19,6 +19,7 @@ import egovframework.com.cmm.ImgVO;
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.ReservationVO;
 import egovframework.com.cmm.UserVO;
+import egovframework.let.utl.sim.service.EgovFileScrty;
 
 
 
@@ -42,13 +43,54 @@ public class ReservationDAO extends EgovAbstractMapper {
 	
 	// 관리자 예약 테이블 전체 조회
 	public List<EgovMap> getAdminReservationList() throws Exception {
+		
 		List<EgovMap> result = selectList("ReservationDAO.getAdminReservationList");
+		
+		
+
+
+	    // 복호화
+	    for (EgovMap reservation : result) {
+	    	//이메일 복호화
+	        String encryptedEmail = (String) reservation.get("reservationEmail");
+	        if (encryptedEmail != null) {
+	            String decryptedEmail = EgovFileScrty.decode(encryptedEmail);
+	            reservation.put("reservationEmail", decryptedEmail);
+	            System.out.println("reservation : " + reservation);
+	        }
+	        
+	        // 전화번호 복호화
+	        String encryptedMbtlnum = (String) reservation.get("reservationPhone");
+	        if (encryptedMbtlnum != null) {
+	            String decryptedMbtlnum = EgovFileScrty.decode(encryptedMbtlnum);
+	            reservation.put("reservationPhone", decryptedMbtlnum);
+
+	            System.out.println("reservation : " + reservation);
+	        }
+	        
+	    }
+		
+		
+		
 		return result;
 	}
 	
 	// 관리자페이지 예약 1건 상세보기 화면 조회 
 	public ReservationVO getReservationInfo(String reservationId) throws Exception {
-		return (ReservationVO) selectOne("ReservationDAO.getReservationInfo", reservationId);
+		ReservationVO reservationVO= (ReservationVO) selectOne("ReservationDAO.getReservationInfo", reservationId);
+		
+		// 개인정보 복호화
+		if (reservationVO != null) {
+	        // 이메일 복호화
+	        String decryptedEmail = EgovFileScrty.decode(reservationVO.getReservationEmail());
+	        reservationVO.setReservationEmail(decryptedEmail);;
+	        
+	        // 연락처 복호화
+	        String decryptedMbtlnum = EgovFileScrty.decode(reservationVO.getReservationPhone());
+	        reservationVO.setReservationPhone(decryptedMbtlnum);
+	    }
+		
+		return reservationVO;
 	}
 	
 	// 예약 등록
@@ -109,11 +151,40 @@ public class ReservationDAO extends EgovAbstractMapper {
 	}
 	
 	// 월별 예약가능 날짜 조회 
-	public List<EgovMap> getMonthlyAvailableTimeSlots(Map<String, Object> params) {
-		List<EgovMap> result = selectList("ReservationDAO.getMyReservationList", params);
-
+	public List<EgovMap> getMonthlyAvailableTimeSlots(int classId, String startDate, String endDate) {
+		
+		Map<String, Object> params = new HashMap<>();
+	    params.put("classId", classId);
+	    params.put("startDate", startDate);
+	    params.put("endDate", endDate);
+		System.out.println("reservationDAO getMonthlyAvailableTimeSlots params : " + params);
+		
+		List<EgovMap> result = selectList("ReservationDAO.getMonthlyAvailableTimeSlots", params);
 		return result;
 	}
-
+	
+	// 관리자페이지 - 예약승인 (접수완료)
+	public int adminReservationApproved(int reservationId) {
+		
+		Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("reservationId", reservationId);
+	    paramMap.put("reservationStatus", "approved");
+	    
+		
+	    int result = update("ReservationDAO.adminReservationApproved", paramMap);
+	    return result;
+	}
+	
+	// 관리자 페이지 - 접수취소(예약거절)
+	public int adminReservationReject(int reservationId) {
+		
+		Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("reservationId", reservationId);
+	    paramMap.put("reservationStatus", "reject");
+	    
+		
+	    int result = update("ReservationDAO.adminReservationReject", paramMap);
+	    return result;
+	}	
 	
 }

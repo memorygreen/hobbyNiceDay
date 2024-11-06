@@ -330,8 +330,12 @@
 	                                                        			 -->
 	                                                        			<a href="/adminReservationUpdateForm.do?reservationId=${reservationInfo.reservationId}" id="updateBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</a>
 	                                                        
-				                                                        <!-- 취소 -->
-				                                                        <button type="button" id="ListBtn" class="btn btn-danger waves-effect waves-light">목록</button>
+				                                                        <!-- 목록 -->
+				                                                        <a href="/adminReservationList.do" id="ListBtn" class="btn btn-warning waves-effect waves-light">목록</a>
+				                                                        
+				                                                        <!-- 삭제 -->
+				                                                        <button type="button" id="deleteBtn" class="btn btn-danger waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">삭제</button>
+	                                                        			 
 		                                                        	</td>
 	                                                        	</tr>    	
 	                                                            	                                                           

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import egovframework.com.cmm.ClassVO;
@@ -80,7 +81,7 @@ public class ClassServiceImpl extends EgovAbstractServiceImpl implements egovfra
     // 241101
     // 이미지 등록 테스트
     @Override
-    public int saveItem(int intClassId, ImgVO imgVO , MultipartFile imgFile) throws Exception{
+    public int saveItem(ImgVO imgVO , MultipartFile imgFile, String savePath) throws Exception{
 
         String oriImgName = imgFile.getOriginalFilename();
         String imgNm = "";
@@ -90,8 +91,13 @@ public class ClassServiceImpl extends EgovAbstractServiceImpl implements egovfra
         // 절대경로(테스트)
         String projectPath = "C:/Users/user/git/hobbyNiceDay/hobbyNiceDay/src/main/resources/static/files";
         
+        
+        System.out.println("다른 경로 : "+ savePath);
         // 파일경로 존재하지 않을 경우 폴더 생성
-        File folder = new File(projectPath);
+        
+        //File folder = new File(projectPath);
+        File folder = new File(savePath);
+        
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
@@ -104,12 +110,14 @@ public class ClassServiceImpl extends EgovAbstractServiceImpl implements egovfra
 
         imgNm = savedFileName;
 
-        File saveFile = new File(projectPath, imgNm);
+        // File saveFile = new File(projectPath, imgNm);
+        File saveFile = new File(savePath, imgNm);
+        
 
         imgFile.transferTo(saveFile);
 
         imgVO.setImgNm(imgNm);
-        imgVO.setImgUrl("/files/" + imgNm); //path // 이걸 불러오면 화면에서 조회됨?????
+        imgVO.setImgUrl(savePath + "/" + imgNm); //path // 이걸 불러오면 화면에서 조회됨?????
 
         return classDAO.saveItem(imgVO);
     }
@@ -122,4 +130,23 @@ public class ClassServiceImpl extends EgovAbstractServiceImpl implements egovfra
         return classDAO.getImagesByClassId(imgId);
     }
     
+    // 관리자 - 클래스 삭제
+    @Transactional
+    @Override
+    public int deleteClass(int classId) throws Exception {
+        // 1. 관련된 클래스 세부 정보 삭제
+        classDAO.deleteClassDetailByClassId(classId);
+
+        // 2. 관련 이미지 삭제 (img_id가 있을 경우)
+        int imgId = classDAO.findImgIdByClassId(classId);
+        if (imgId != 0) {
+            classDAO.deleteImageById(imgId);
+        }
+
+        // 3. 관련 휴일 정보 삭제
+        classDAO.deleteHolidayByClassId(classId);
+
+        // 4. 클래스 삭제
+        return classDAO.deleteClassById(classId);
+    }
 }

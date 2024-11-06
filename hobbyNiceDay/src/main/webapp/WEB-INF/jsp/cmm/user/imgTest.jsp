@@ -203,7 +203,22 @@
 	                                        </div>
                                     	</div>
                                     	</form>
-                                       	
+                                    	
+                                    	
+                                    	
+                                    	
+                                    	
+                                    	병관쌤 수업 다시 듣기
+                                    	<form action="/imgTestinsertPbk.do" id="pbkForm" name="pbkForm" method="post"  enctype="multipart/form-data"><!-- 파일 업로드 위해서 추가 -->
+                                    	
+                                       	<input type="file" id="imgPath" name="imgPath" class="form-control" 
+	                                                            		placeholder="병관쌤 수업 닷디 " title="클래스 이미지를 등록해주세요" data-toggle="tooltip">
+	                                        
+	                                        <button type="submit" class="btn btn-warning">작성</button>
+                                        <form>      
+	                                        
+	                                        
+	                                                      		     
                                        	<!-- 툴팁 끝 -->
 	                                        
                                         <!-- Basic table card start -->

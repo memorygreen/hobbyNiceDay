@@ -23,6 +23,8 @@
 					        , UPDT_DT
 					        , UPDT_IP
 					        , CLASS_POST
+					        , IMG_ID
+					        , CLASS_TIME_TAKEN
 					     )
 	    VALUES (
 			          #{classNm}
@@ -41,20 +43,11 @@
 			        , #{updtDt}
 			        , #{updtIp}
 			        , #{classPost}
+			        , #{imgId}
+			        , #{classTimeTaken}
 			    )
 	</insert>
 
-
-	<!-- (임시) 이미지 등록 -->
-	<insert id="insertImage" parameterType="ImgVO" useGeneratedKeys="true" keyProperty="imgId"> <!-- 생성된 PK를 반환 -->
-	    INSERT INTO TB_IMG (
-					      	   IMG_URL
-					    	 , IMG_NM
-						    )
-				    VALUES (
-				    	    	#{imgUrl}
-			    			  , #{imgNm})
-	</insert>
 
 
 	<!-- (임시 ) 휴무일 등록 -->
@@ -118,13 +111,25 @@
 	
 	<!-- 메인화면 클래스 전체 목록 조회 -->
 	<select id="getMainClassList" resultType="EgovMap">
-	    SELECT *
+	    <!-- SELECT *
 	    FROM TB_CLASS
-	    WHERE CLASS_POST = "Y"
+	    WHERE CLASS_POST = "Y"-->
+	    
+	    select c.*
+			  ,i.IMG_NM 
+			  ,i.IMG_REP 
+			  ,i.IMG_TYPE 
+			  ,i.IMG_URL
+		from  TB_CLASS c
+		LEFT JOIN tb_img i
+		ON c.img_id = i.img_id
+		where c.END_DT >= now()
+		and c.CLASS_POST = 'Y'; 
+
 	</select>
 	
 	<!-- 클래스 상세보기 화면 조회 -->
-	<select id="getClassDetails" parameterType="int" resultType="ClassVO">
+	<select id="getClassDetails" parameterType="ImgVO" resultType="ClassVO">
     	<!-- SELECT * 
     	FROM TB_CLASS 
     	WHERE CLASS_ID = #{classId} -->
@@ -140,6 +145,9 @@
 		    c.CLASS_PRICE,
 		    c.CLASS_MAX_CNT,
 		    c.CLASS_POST,
+		    c.CLASS_TIME_TAKEN,
+   		    i.img_id,
+		    i.img_nm,
 	        DATE_FORMAT(c.START_DT, '%Y-%m-%d') as START_DT,
     		DATE_FORMAT(c.END_DT , '%Y-%m-%d') as END_DT,
 		    c.REG_DT AS CLASS_REG_DT,
@@ -155,6 +163,9 @@
 		LEFT JOIN 
 		    TB_CLASS_DETAIL cd
 		    ON c.CLASS_ID = cd.CLASS_ID
+		LEFT JOIN 
+		    TB_IMG i 
+		    ON c.CLASS_ID = hd.CLASS_ID
 		WHERE
 		    c.CLASS_ID = #{classId} <!-- 클래스아이디 -->
 		GROUP BY c.CLASS_ID;
@@ -164,6 +175,7 @@
 	
 	<!-- 이미지 등록 1개 테스트 -->
 	<insert id="saveItem" parameterType="ImgVO" useGeneratedKeys="true" keyProperty="imgId">
+	
     INSERT INTO TB_IMG (
 					        IMG_NM
 					        ,IMG_URL
@@ -189,5 +201,34 @@
 	    SELECT * FROM TB_IMG 
 	    WHERE IMG_ID = #{imgId}
 	</select>
+	
+	
+	
+	<!-- 클래스 삭제 관련 -->
+	<!-- 클래스 세부 정보 삭제 -->
+    <delete id="deleteClassDetailByClassId" parameterType="int">
+        DELETE FROM tb_class_detail WHERE class_id = #{classId}
+    </delete>
+
+    <!-- 클래스에 연결된 img_id 조회 -->
+    <select id="findImgIdByClassId" parameterType="int" resultType="int">
+        SELECT img_id FROM tb_class WHERE class_id = #{classId}
+    </select>
+
+    <!-- 이미지 삭제 -->
+    <delete id="deleteImageById" parameterType="int">
+        DELETE FROM tb_img WHERE img_id = #{imgId}
+    </delete>
+
+    <!-- 휴일 정보 삭제 -->
+    <delete id="deleteHolidayByClassId" parameterType="int">
+        DELETE FROM tb_holiday WHERE class_id = #{classId}
+    </delete>
+
+    <!-- 클래스 삭제 -->
+    <delete id="deleteClassById" parameterType="int">
+        DELETE FROM tb_class WHERE class_id = #{classId}
+    </delete>
+    <!-- 클래스 삭제 관련 끝 -->
 	
 </mapper>

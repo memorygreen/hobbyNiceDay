@@ -67,7 +67,8 @@
 	<!--<mvc:resources mapping="/files/**" location="/resources/static/files/" />  -->
 	
 	<!-- webapp으로 이동 -->
-	<mvc:resources mapping="/files/**" location="/resources/files/" />
+	<!-- <mvc:resources mapping="/files/**" location="/resources/files/" /> -->
 	
+	<!-- 병관쌤 수업 -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 </beans>

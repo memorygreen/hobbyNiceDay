@@ -38,7 +38,15 @@
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/admin/css/style.css' />">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/admin/css/jquery.mCustomScrollbar.css' />">
-    
+
+
+<style type="text/css">
+/*241103 검색창 css 조절 실패*/
+/*.form-material .form-control .fill input{
+	width=30%;
+}*/
+
+</style>    
 </head>
 
 <body>
@@ -85,12 +93,12 @@
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                            <li>
+                                                <a href="index.html"></a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">관리</a>
+                                            <li><a href="#!">클래스관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">클래스 관리</a>
+                                            <li><a href="#!">클래스 목록</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -116,17 +124,27 @@
                                             <div class="card-header">
                                                 <h5>클래스</h5>
                                                 <span>현재 등록되어있는  클래스 목록입니다. <code>TB_CLASS</code></span>
-                                                <div class="card-header-right">
-                                                    <ul class="list-unstyled card-option">
-                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-                                                        <li><i class="fa fa-trash close-card"></i></li>
-                                                    </ul>
-                                                </div>
+                                                
                                             </div>
                                             <div class="card-block table-border-style">
+                                            
+                                            	<div class="p-15 p-b-0">
+        	 
+										            <form class="form-material">
+										                <div class="form-group form-primary">
+										                    <input type="text" name="footer-email" class="form-control" style="width:30%"> 
+										                    <span class="form-bar"></span>
+										                    <label class="float-label">
+										                    
+										                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+															  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+															</svg>
+										                    검색어를 입력하세요</label>
+										                </div>
+										            </form>
+										            
+										        </div>
+                                            	
                                                 <div class="table-responsive">
                                                     <div style="text-align: right; margin-bottom: 10px;">
 										                <button id="btnRegister" class="btn waves-effect waves-light btn-primary btn-outline-primary">

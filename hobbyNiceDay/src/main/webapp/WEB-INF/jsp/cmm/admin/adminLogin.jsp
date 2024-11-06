@@ -48,6 +48,12 @@
 </head>
 
 <body>
+
+		<!-- JSTL을 사용하여 세션에서 userId 확인 -->
+	    <c:set var="userVO" value="${sessionScope.userVO}" />
+	    <c:set var="isLoggedIn" value="${not empty userVO.userId}" />
+	
+
     <!-- Pre-loader start -->
     <div class="pre_loader_start">
     	<jsp:include page="/WEB-INF/jsp/main/inc/adminPreLoader.jsp" />
@@ -138,8 +144,8 @@
                                     		<div class="col-sm-12">
 	                                    	<div class="card">
 	                                            <div class="card-header">
-	                                                <h5>회원 정보조회</h5>
-	                                                <span>회원 정보조회 페이지입니다. <code>TB_USER</code></span>
+	                                                <h5>관리자 로그인</h5>
+	                                                <span>관리자 로그인 페이지입니다. <code>TB_USER</code></span>
 	                                       		    <div class="card-header-right">
 	                                                    <ul class="list-unstyled card-option">
 	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
@@ -194,8 +200,10 @@
 		                                                        		<button type="button" id="loginBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">로그인</button>
 	                                                        
 				                                                        <!-- 취소 -->
-				                                                        <button type="button" id="ListBtn" class="btn btn-danger waves-effect waves-light">목록</button>
-				                                                        <button type="button" id="joinBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">회원가입</button>
+				                                                        
+				                                                        <a href="/" class="btn btn-danger waves-effect waves-light">사용자 페이지 메인</a>
+				                                                        <!-- <button type="button" id="ListBtn" class="btn btn-danger waves-effect waves-light">목록</button> -->
+				                                                        <a href="/joinForm.do"  class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">회원가입</button>
 	                                                        
 		                                                        	</td>
 	                                                        	</tr>    	
@@ -277,12 +285,12 @@
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
+					success: function(response){
 						//console.log("회원가입 응답 result:", result);
 		                
 		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("로그인 response:", response);
+		                // var response = JSON.parse(result);
+						// console.log("로그인 response:", response);
 
 		                if (response.error == 'N') {
 		                    alert("로그인되었습니다.");

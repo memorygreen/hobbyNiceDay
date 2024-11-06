@@ -2,6 +2,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
+
+	<!-- JSTL을 사용하여 세션에서 userId 확인 -->
+    <c:set var="userVO" value="${sessionScope.userVO}" />
+    <c:set var="isLoggedIn" value="${not empty userVO.userId}" />
+	
+
+
 <nav class="navbar header-navbar pcoded-header">
     <div class="navbar-wrapper">
         <div class="navbar-logo">
@@ -26,6 +33,8 @@
                 <i class="ti-more"></i>
             </a>
         </div>
+        
+        
         <div class="navbar-container container-fluid">
             <ul class="nav-left">
                 <li>
@@ -37,7 +46,9 @@
                     </a>
                 </li>
             </ul>
+            
             <ul class="nav-right">
+            	<!-- 
                 <li class="header-notification">
                     <a href="#!" class="waves-effect waves-light">
                         <i class="ti-bell"></i>
@@ -80,10 +91,14 @@
                         </li>
                     </ul>
                 </li>
+                -->
+                
+           
+                
                 <li class="user-profile header-notification">
                     <a href="#!" class="waves-effect waves-light">
                         <img src="images/img/user_profile_blue2.png" class="img-radius" alt="User-Profile-Image">
-                        <span>관리자</span>
+                        <span><c:out value= "${userVO.userName}"/></span>
                         <i class="ti-angle-down"></i>
                     </a>
                     <ul class="show-notification profile-notification">
@@ -102,15 +117,35 @@
                                 <i class="ti-email"></i> 예약승인요청
                             </a>
                         </li>
+                        <!-- 
                         <li class="waves-effect waves-light">
                             <a href="auth-lock-screen.html">
                                 <i class="ti-lock"></i> Lock Screen
                             </a>
-                        </li>
+                        </li> -->
+                        
+                        
+                        
+                        
                         <li class="waves-effect waves-light">
-                            <a href="auth-normal-sign-in.html">
-                                <i class="ti-layout-sidebar-left"></i> 로그아웃
-                            </a>
+                        
+                       	    <c:choose>
+						    	<c:when test="${isLoggedIn}">
+						    		<!-- 로그인 상태일 때 -->
+						    		<a href="/logout.do">
+		                                <i class="ti-layout-sidebar-left"></i> 로그아웃
+		                            </a>
+					        	</c:when>
+					          	<c:otherwise>
+					                 <!-- 비로그인 상태일 때 -->
+					                 <a href="/adminLogin.do">
+		                                <i class="ti-layout-sidebar-left"></i>로그인
+		                            </a>
+					            </c:otherwise>
+	                        </c:choose>
+                
+                        
+                            
                         </li>
                     </ul>
                 </li>

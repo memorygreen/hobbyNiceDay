@@ -2,16 +2,25 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 	
+	
+	<!-- JSTL을 사용하여 세션에서 userId 확인 -->
+    <c:set var="userVO" value="${sessionScope.userVO}" />
+    <c:set var="isLoggedIn" value="${not empty userVO.userId}" />
+	
+	
+	
 <nav class="pcoded-navbar">
     <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
     <div class="pcoded-inner-navbar main-menu">
         <div class="">
             <div class="main-menu-header">
-                <img class="img-80 img-radius" src="images/admin/images/avatar-4.jpg" alt="User-Profile-Image">
+                <img class="img-80 img-radius" src="images/img/user_profile_blue2.png" alt="User-Profile-Image">
                 <div class="user-details">
-                    <span id="more-details">John Doe<i class="fa fa-caret-down"></i></span>
+                    <span id="more-details"><c:out value= "${userVO.userName}"/>
+                    <!-- <i class="fa fa-caret-down"></i></span> -->
                 </div>
             </div>
+            <!-- 
             <div class="main-menu-content">
                 <ul>
                     <li class="more-details">
@@ -20,9 +29,10 @@
                         <a href="auth-normal-sign-in.html"><i class="ti-layout-sidebar-left"></i>Logout</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
         <div class="p-15 p-b-0">
+        	<!-- 
             <form class="form-material">
                 <div class="form-group form-primary">
                     <input type="text" name="footer-email" class="form-control">
@@ -30,6 +40,7 @@
                     <label class="float-label"><i class="fa fa-search m-r-10"></i>Search Friend</label>
                 </div>
             </form>
+             -->
         </div>
         <div class="pcoded-navigation-label">Navigation</div>
         <ul class="pcoded-item pcoded-left-item">
@@ -192,7 +203,7 @@
 		                    <span class="pcoded-mcaret"></span>
 		                </a>
 		                <ul class="pcoded-submenu">
-		                    <li class="">
+		                	<li class="">
 		                        <a href="/adminReservationList.do" class="waves-effect waves-dark">
 		                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
 		                            <span class="pcoded-mtext">예약현황</span>
@@ -200,12 +211,20 @@
 		                        </a>
 		                    </li>
 		                    <li class="">
+		                        <a href="/adminReservationList.do" class="waves-effect waves-dark">
+		                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+		                            <span class="pcoded-mtext">예약목록</span>
+		                            <span class="pcoded-mcaret"></span>
+		                        </a>
+		                    </li>
+		                    <!-- 
+		                    <li class="">
 		                        <a href="/adminPendingReservationList.do" class="waves-effect waves-dark">
 		                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
 		                            <span class="pcoded-mtext">예약 승인대기 목록</span>
 		                            <span class="pcoded-mcaret"></span>
 		                        </a>
-		                    </li>
+		                    </li> -->
 		                </ul>
 		            </li>
 		        </ul>

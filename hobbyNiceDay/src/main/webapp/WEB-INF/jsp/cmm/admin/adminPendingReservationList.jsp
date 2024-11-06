@@ -91,13 +91,16 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
+                                        
                                         <ul class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                            <li>
+                                                <a href="index.html"></a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Bootstrap Tables</a>
+                                            <li>
+                                            	<a href="/adminReservationList.do">예약관리</a> > 
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">Basic Tables</a>
+                                            <li>
+                                            	<a href="/adminReservationList.do">예약 승인대기 목록</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -123,15 +126,8 @@
                                             <div class="card-header">
                                                 <h5>예약 승인대기 목록</h5>
                                                 <span>승인 대기중인 예약 목록입니다. <code>TB_RESERVATION</code></span>
-                                                <div class="card-header-right">
-                                                    <ul class="list-unstyled card-option">
-                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-                                                        <li><i class="fa fa-trash close-card"></i></li>
-                                                    </ul>
-                                                </div>
+                                                
+                                                
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="table-responsive">

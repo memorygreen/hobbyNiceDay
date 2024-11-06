@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import egovframework.com.cmm.ClassVO;
 import egovframework.com.cmm.UserVO;
+import egovframework.let.utl.sim.service.EgovFileScrty;
 
 
 // 회원 관련 DAO 
@@ -46,7 +47,23 @@ public class UserDAO extends EgovAbstractMapper {
 	
 	// 로그인 
 	public UserVO loginUser(UserVO vo) throws Exception {
-		return (UserVO) selectOne("UserDAO.loginUser", vo);
+		UserVO userVO = (UserVO) selectOne("UserDAO.loginUser", vo);
+		// 복호화해서 세션에 값 넣기
+		if (userVO != null) {
+	        // 이메일 복호화
+	        String decryptedEmail = EgovFileScrty.decode(userVO.getEmail());
+	        userVO.setEmail(decryptedEmail);
+	        
+	        // 연락처 복호화
+	        String decryptedMbtlnum = EgovFileScrty.decode(userVO.getMbtlnum());
+	        userVO.setMbtlnum(decryptedMbtlnum);
+	        
+	        // 생년월일 복호화
+	        String decryptedBrthdy= EgovFileScrty.decode(userVO.getBrthdy());
+	        userVO.setBrthdy(decryptedBrthdy);
+	    }
+		
+		return userVO;
 	}
 	
 	// 로그인 시간 업데이트 241021
@@ -63,19 +80,36 @@ public class UserDAO extends EgovAbstractMapper {
 	    return result;
 	}
 	
-	
-	// 로그인 제한 설정 (5회 이상 실패 시 제한)
-	public void updateLoginRestricted(String userId, String restricted) throws Exception {
+	// 로그인 실패횟수가 5이상이면 로그인 제한을 Y로 바꿈
+	public int updateLoginRestricted(UserVO userVO) throws Exception {
 	    Map<String, Object> paramMap = new HashMap<>();
-	    paramMap.put("userId", userId);
-	    paramMap.put("loginRestricted", restricted); //"Y"
-	    update("UserDAO.updateLoginRestricted", paramMap);
+	    paramMap.put("userId", userVO.getUserId());
+	    paramMap.put("loginRestricted", "Y"); // 오타났었다
+	    
+	    int result = update("UserDAO.updateLoginRestricted", paramMap);
+	    return result;
 	}
+
+	// 관리자 페이지 - 로그인 제한 해제 기능
+	public int clearLoginRestriction(String userId) {
+		
+		Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("userId", userId);
+	    paramMap.put("loginRestricted", "N");
+	    
+		
+	    int result = update("UserDAO.clearLoginRestriction", paramMap);
+	    return result;
+	    
+	}
+	
 	
 	
 	// 로그인 실패횟수 업데이트 241021
 	public int updateLoginErrCnt(Map<String, Object> paramMap) throws Exception {
 		int result = update("UserDAO.updateLoginErrCnt", paramMap);
+		// UserVO userVO = update("UserDAO.updateLoginErrCnt", paramMap);
+		
 		return result;
 	}
 
@@ -83,13 +117,57 @@ public class UserDAO extends EgovAbstractMapper {
 	// 관리자 회원 테이블 전체 조회
 	public List<EgovMap> getAdminUserList() throws Exception {
 		List<EgovMap> resultJoin = selectList("UserDAO.getAdminUserList");
+		
+
+	    // Decrypt email and mobile number for each user
+	    for (EgovMap user : resultJoin) {
+	        String encryptedEmail = (String) user.get("email");
+	        if (encryptedEmail != null) {
+	            String decryptedEmail = EgovFileScrty.decode(encryptedEmail);
+	            user.put("email", decryptedEmail);
+	            System.out.println("user : " + user);
+	        }
+
+	        String encryptedMbtlnum = (String) user.get("mbtlnum");
+	        if (encryptedMbtlnum != null) {
+	            String decryptedMbtlnum = EgovFileScrty.decode(encryptedMbtlnum);
+	            user.put("mbtlnum", decryptedMbtlnum);
+
+	            System.out.println("user : " + user);
+	        }
+	        
+	        String encryptedBrthdy = (String) user.get("brthdy");
+	        if (encryptedBrthdy != null) {
+	            String decryptedBrthdy = EgovFileScrty.decode(encryptedBrthdy);
+	            user.put("brthdy", decryptedBrthdy);
+
+	            System.out.println("user : " + user);
+	        }
+	    }
+		System.out.println("resultJoin : " + resultJoin);
+		
 		return resultJoin;
 	}
 	
 	// 관리자페이지 회원 상세보기 화면 조회 
 	public UserVO getUserInfo(String userId) throws Exception {
-		return (UserVO) selectOne("UserDAO.getUserInfo", userId);
-		
+		UserVO userVO =  selectOne("UserDAO.getUserInfo", userId);
+//		return (UserVO) selectOne("UserDAO.getUserInfo", userId);
+		 if (userVO != null) {
+		        // 이메일 복호화
+		        String decryptedEmail = EgovFileScrty.decode(userVO.getEmail());
+		        userVO.setEmail(decryptedEmail);
+		        
+		        // 연락처 복호화
+		        String decryptedMbtlnum = EgovFileScrty.decode(userVO.getMbtlnum());
+		        userVO.setMbtlnum(decryptedMbtlnum);
+		        
+		        // 생년월일 복호화
+		        String decryptedBrthdy= EgovFileScrty.decode(userVO.getBrthdy());
+		        userVO.setBrthdy(decryptedBrthdy);
+		    }
+		    
+		    return userVO;
 	}
 	
 	
@@ -101,6 +179,16 @@ public class UserDAO extends EgovAbstractMapper {
 	    //return sqlSession.selectOne("UserDAO.getUserBySNSId", params);
 	    return (UserVO) selectOne("UserDAO.getUserBySNSId", params);
     }
+
+	// 관리자 회원 삭제 기능
+	public int deleteUser(String userId) {
+		int result = delete("UserDAO.deleteUser", userId);
+		return result;
+		
+
+	}
+
+	
 	
 	
 }

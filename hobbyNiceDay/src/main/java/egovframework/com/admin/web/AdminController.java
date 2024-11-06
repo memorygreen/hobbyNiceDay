@@ -6,12 +6,16 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.JsonObject;
 
@@ -37,8 +41,42 @@ public class AdminController {
 
 	// 관리자 메인 페이지로 이동
     @RequestMapping(value = "/adminMain.do", method = RequestMethod.GET)
-    public String adminMain() throws Exception {
-        return "/cmm/admin/adminMain";
+    public String adminMain(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) throws Exception {
+    	
+    	// 세션에 있는 id 가져오기
+    	HttpSession session = request.getSession();
+    	UserVO sessionUserVo = (UserVO) session.getAttribute("userVO");
+    	
+    	// 세션 정보가 없거나 로그인이 안 된 경우 관리자 로그인 화면으로 리다이렉트
+    	if(sessionUserVo == null) {
+
+    		System.out.println("관리자 페이지 접근 - 세션정보x 로그인x");
+    		return "redirect:/adminLogin.do";
+    	}
+    	
+    	String userId = sessionUserVo.getUserId();
+    	System.out.println("세션 userId : " + userId);
+    	String userSe = sessionUserVo.getUserSe();
+    	System.out.println("세션 userSe : " + userSe);
+    	
+    	// 관리자인 경우 관리자 메인으로
+    	if("admin".equals(userSe)) {
+
+    		System.out.println("관리자 페이지 접근 - 관리자");
+    		return "/cmm/admin/adminMain";
+    	}
+    	else if("user".equals(userSe)) {
+    		System.out.println("관리자 페이지 접근 - 일반회원");
+    		// 일반 사용자 경우 관리자 메인으로 (권한 없다는 알림 띄워야함)
+    		model.addAttribute("errorMsg", "관리자 권한이 필요합니다.");
+            redirectAttributes.addFlashAttribute("errorMsg", "관리자 권한이 필요합니다.");
+
+    		return "redirect:/";
+    	}
+    	
+    	// 기본적으로 로그인 페이지로 리다이렉트
+        return "redirect:/adminLogin.do";
+    	
     }
     
     

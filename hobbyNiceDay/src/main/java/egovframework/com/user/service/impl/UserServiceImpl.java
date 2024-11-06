@@ -72,57 +72,71 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     // 관리자페이지 회원 1명 정보 상세보기
     public UserVO getUserInfo(String userId) throws Exception {
     	return userDAO.getUserInfo(userId);
+    	
+    	
     }
     
     
     // 로그인 
     @Override
     public UserVO loginUser(UserVO vo) throws Exception {
-
-        // 1. 입력한 비밀번호를 암호화한다.
-        String enpassword = EgovFileScrty.encryptPassword(vo.getPasswd(), vo.getUserId());
-        vo.setPasswd(enpassword);
-
+    	
+    	
+    	// 1. 입력한 비밀번호를 암호화한다.
+    	String encryptedPassword = EgovFileScrty.encryptPassword(vo.getPasswd(), vo.getUserId());
+    	System.out.println("서비스impl 에서 비밀번호 암호화 : " + encryptedPassword);
+    	vo.setPasswd(encryptedPassword);
+    	
         // 2. 아이디와 암호화된 비밀번호가 DB와 일치하는지 확인한다.
         UserVO userVo = userDAO.loginUser(vo);
         System.out.println("로그인 성보 가져오기 "+ userVo);
-
+        
+        
+     // 조회 결과가 없으면 로그인 실패
+        if (userVo == null) {
+            return null;
+        }
+        
+        
         // 3. 로그인 제한 여부 확인
-        if (userVo != null && "Y".equals(userVo.getLoginRestricted())) {
+        if ("Y".equals(userVo.getLoginRestricted())) {
             System.out.println("로그인 제한 Y로 걸려있는 경우 "); 
         	// 로그인 제한된 경우 예외 발생 및 메시지 반환
-            throw new Exception("로그인이 제한되었습니다. 관리자에게 문의하세요.");
-        }
-
-        // 4. 로그인 실패 제한 (5회 이상 실패 시 제한)
-        if (userVo != null && userVo.getLoginErrCnt() >= 5) {
-            // LOGIN_RESTRICTED 컬럼을 Y로 업데이트
-            userDAO.updateLoginRestricted(userVo.getUserId(), "Y");
-            
-            System.out.println("UserServiceImpl 로그인 제한인 경우");
-            throw new Exception("로그인이 제한되었습니다. 관리자에게 문의하세요.");
-        }
-
-        // 5. 로그인 성공 여부 확인
-        if (userVo != null && !userVo.getUserId().equals("") && !userVo.getPasswd().equals("")) {
-            // 로그인 성공 시 로그인 실패 횟수를 0으로 초기화 (로그인 제한 걸리기 전)
+            //throw new Exception("(로그인제한 Y로 걸려있는 경우)로그인이 제한되었습니다. 관리자에게 문의하세요.");
+            userVo.setLoginRestricted("Y");
+            return userVo;
+        }else if("N".equals(userVo.getLoginRestricted())){
+        	
+            // 5. 로그인 성공 시 실패 횟수 초기화 및 반환
             int result = userDAO.resetLoginErrCnt(userVo.getUserId());
             System.out.println("로그인 성공 시 로그인 실패 횟수 0으로 초기화 : "+ result);
             return userVo;
-        } else {
-            // 로그인 실패 시 실패 횟수를 증가시키고 null 반환
-            if (userVo != null) {
-            	Map<String, Object> paramMap = new HashMap<>();
-                paramMap.put("userId", userVo.getUserId());
-                int result = userDAO.updateLoginErrCnt(paramMap);
-                System.out.println("로그인 실패 시 로그인 실패횟수 추가 " + result);
-            }
-            return null;  // 로그인 실패
+            
         }
+        
+        return userVo;
+        
     }
     
     
-    
+    // 로그인 시 제한 기능
+       @Override
+       public int updateLoginRestricted(UserVO userVO) throws Exception {
+    	   
+           int result = userDAO.updateLoginRestricted(userVO);
+           // System.out.println("5회 실패 후 사용자 로그인 제한.");
+           
+       	 return result;
+       }
+       
+       
+
+       // 관리자 - 로그인 제한 해제
+       @Override
+       public int clearLoginRestriction(String userId) throws Exception {
+           return userDAO.clearLoginRestriction(userId);
+       }
+
     
     // 로그인 시간, 로그인성공 횟수 업데이트 
     @Override
@@ -146,6 +160,21 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     	 int result = userDAO.updateLoginErrCnt(paramMap);
     	 return result;
     }
+    
+    
+    // 관리자 - 회원 삭제 기능
+    
+    @Override
+    public int deleteUser(String userId) throws Exception {
+        int result = userDAO.deleteUser(userId);
+        return result;
+    }
+    
+    
+    
+    
+    
+    
     
     
     

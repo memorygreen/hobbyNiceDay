@@ -262,7 +262,7 @@ public class UserController {
     }
     
     // 로그인 기능
-    @RequestMapping(value = "/loginUser.do")
+    @RequestMapping(value = "/loginUser.do", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ResponseBody
 	public ResponseEntity<String> loginUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) throws Exception {
         //public ResponseEntity<String> joinUser(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request) {
@@ -270,113 +270,188 @@ public class UserController {
     	JsonObject jsonObj = new JsonObject();
         try {
 			// 1. 일반 로그인 처리
-			UserVO resultVO = userService.loginUser(userVO); // id,pw 같은 경우 resultVO 반환
-			System.out.println(resultVO);
+        	
+        	System.out.println("로그인 서비스 보내기전 userVO : " + userVO);
+        	
+        	// 로그인 시도 (id,pw같아야함!)
+        	UserVO resultVO = userService.loginUser(userVO); // id,pw 같은 경우 resultVO 반환
+        	System.out.println("로그인 서비스 받은 후 resultVO : " + resultVO);
 			
-			// 로그인 정책을 만족한다고 가정
-	        boolean loginPolicyYn = true;
 		
-		
-			if (resultVO != null && resultVO.getUserId() != null && !resultVO.getUserId().equals("") && loginPolicyYn) {
-				System.out.println("로그인 성공");
-
-	            
-		         // 2. 로그인 성공 시 세션에 사용자 정보 저장
-	            HttpSession session = request.getSession(true); // request 객체로 세션을 생성/가져옴
-	            // session.setAttribute("userId", resultVO.getUserId()); // userId를 세션에 저장
-	            session.setAttribute("userVO", resultVO); // UserVO 객체 저장 // 로그인 결과인 resultVO를 세션에 저장
-	            // Session의 유효 시간 설정 (1800초 = 30분)
-	            session.setMaxInactiveInterval(1800);
-	            
-	            System.out.println("세션에 저장된 userId: " + session.getAttribute("userId"));
-	            System.out.println("세션에 저장된 userVO: " + session.getAttribute("userVO"));
-		        
-	            
-	            
-	            
-	            
-	            
-	            // IP 주소 가져오기
-	            String clientIp = getClientIp(request);
+	        // 로그인 성공한 경우 
+			if (resultVO != null) {
+						System.out.println("로그인 성공");
 				
-	            int resultUpdtLoginDt = userService.updateLastLoginDt(resultVO.getUserId(), clientIp);
-	            System.out.println("마지막 로그인 일시 업데이트 성공확인 (resultUpdtLoginDt): " + resultUpdtLoginDt);
+				// 로그인 제한 Y 인 경우 (id pw 일치하지만)
+				if ("Y".equals(resultVO.getLoginRestricted())) {
+                	System.out.println("로그인 실패(id,pw일치하지만) : 로그인 제한");
+	                jsonObj.addProperty("error", "Y");
+	                jsonObj.addProperty("errorMsg", "로그인이 제한되었습니다. 관리자에게 문의하세요.");
+	                
+	            } else { // 로그인 제한 N인 경우
 	            
-				if(resultUpdtLoginDt > 0) { // 로그인 일시, 로그인 횟수, 로그인 ip 업데이트 성공 
-					jsonObj.addProperty("error", "N");
-					System.out.println("로그인 성공 jsonObj"+ jsonObj);					
-				}else { // 실패
-					jsonObj.addProperty("error", "Y");
-		            jsonObj.addProperty("errorMsg", "마지막 로그인 시간 업데이트 실패");
-		            System.out.println("마지막 로그인 시간 업데이트 실패 jsonObj"+ jsonObj);
-				}
-				
-				
-				
-				
-				// 로그인 성공 시 리턴할 URL 확인 (클래스 상세화면 비회원 예약하기 클릭 시 로그인 화면 이동->로그인 완료 후 예약상세화면으로 리다이렉트)
-	            String returnUrl = (String) session.getAttribute("returnUrl");
-	            if (returnUrl != null && !returnUrl.isEmpty()) {
-	                session.removeAttribute("returnUrl"); // 세션에서 리턴 URL 제거
-	                jsonObj.addProperty("returnUrl", returnUrl); // 리턴할 URL을 JSON에 추가
-	            } else {
-	                jsonObj.addProperty("returnUrl", "/cmm/main/mainPage.do"); // 기본 리턴 URL
+			        // 2. 로그인 성공 시 세션에 사용자 정보 저장
+		            HttpSession session = request.getSession(true); // request 객체로 세션을 생성/가져옴
+		            session.setAttribute("userVO", resultVO); // UserVO 객체 저장 // 로그인 결과인 resultVO를 세션에 저장
+		            session.setMaxInactiveInterval(3600); // Session의 유효 시간 설정 (1800초 = 30분)
+		            System.out.println("세션에 저장된 userId: " + session.getAttribute("userId"));
+		            System.out.println("세션에 저장된 userVO: " + session.getAttribute("userVO"));
+			        
+		            // IP 주소 가져오기
+		            String clientIp = getClientIp(request);
+		            int resultUpdtLoginDt = userService.updateLastLoginDt(resultVO.getUserId(), clientIp); // 등록자 ip, id , 일시 등록(업데이트)
+		            System.out.println("마지막 로그인 일시 업데이트 성공확인 (resultUpdtLoginDt): " + resultUpdtLoginDt);
+		            
+					if(resultUpdtLoginDt > 0) { // 로그인 일시, 로그인 횟수, 로그인 ip 업데이트 성공 
+						jsonObj.addProperty("error", "N");
+						System.out.println("로그인 성공 jsonObj"+ jsonObj);					
+					}else { // 실패
+						jsonObj.addProperty("error", "Y");
+			            jsonObj.addProperty("errorMsg", "마지막 로그인 시간 업데이트 실패");
+			            System.out.println("마지막 로그인 시간 업데이트 실패 jsonObj"+ jsonObj);
+					}
+					
+					// 로그인 성공 시 리턴할 URL 확인 (클래스 상세화면 비회원 예약하기 클릭 시 로그인 화면 이동->로그인 완료 후 예약상세화면으로 리다이렉트)
+		            // String returnUrl = (String) session.getAttribute("returnUrl");
+		            
+		            /*
+		            if (returnUrl != null && !returnUrl.isEmpty()) {
+		                session.removeAttribute("returnUrl"); // 세션에서 리턴 URL 제거
+		                jsonObj.addProperty("returnUrl", returnUrl); // 리턴할 URL을 JSON에 추가
+		            } else {
+		                jsonObj.addProperty("returnUrl", "/cmm/main/mainPage.do"); // 기본 리턴 URL
+		            }*/
+	            
 	            }
-	            
 				
-				
-			} else {
-				System.out.println("로그인 실패");
-	            // userId가 null일 경우 사용자 ID를 수동으로 설정
-				jsonObj.addProperty("error", "Y");
-				jsonObj.addProperty("errorMsg", "아이디 또는 비밀번호가 잘못되었습니다.");
-				System.out.println("로그인 실패 jsonObj"+ jsonObj);
+			} else { // 로그인 실패한 경우 
+				System.out.println("로그인 실패한 경우");
 
-				
-				String failedUserId = userVO.getUserId(); // 로그인 시도한 userId
-
-				
-	            if (failedUserId != null && !failedUserId.isEmpty()) { // userid 가져오기
-	            	// 로그인 실패 시 로그인 실패 횟수 업데이트 (해당 id에 대해서)
-	                int resultUpdtLoginErrCnt = userService.updateLoginErrCnt(failedUserId);
+	            // userVO가 null이면 id 존재 여부 확인
+	            if (!userService.joinIdCheck(userVO.getUserId())) { // id 존재하지 않는 경우 
+	                System.out.println("id 존재하지 않는 경우 ");
+	            	jsonObj.addProperty("error", "Y");
+	                jsonObj.addProperty("errorMsg", "존재하지 않는 아이디입니다.");
+	                
+	            } else { 
+	            	// id는 존재하나 비밀번호가 일치하지 않는 경우   
+	            	// 비밀번호 틀린 경우
+	            	System.out.println("비밀번호 일치하지 않는 경우");
+	                
+	                // DB에서 사용자의 전체 정보를 가져옴
+	                UserVO existingUserVO = userService.getUserInfo(userVO.getUserId());
+	                System.out.println("로그인 틀린 횟수 : " + existingUserVO.getLoginErrCnt());
+	                System.out.println("로그인 실패한 사람 정보(비번 틀림) : " + existingUserVO);
+	                
+	                // 로그인 실패 횟수 증가
+	                int resultUpdtLoginErrCnt = userService.updateLoginErrCnt(existingUserVO.getUserId());
 	                System.out.println("로그인 실패 업데이트 성공 확인 (resultUpdtLoginErrCnt): " + resultUpdtLoginErrCnt);
+	                
+	                // 로그인 오류 횟수를 업데이트한 후 확인하여 제한 설정
+	                Integer loginErrCnt = existingUserVO.getLoginErrCnt();
+	                System.out.println("비번 틀린 사람 틀리기 전 오류 횟수 : " + loginErrCnt);
+	                
+	                
+	                
+	                if ("Y".equals(existingUserVO.getLoginRestricted())) {
+	                	System.out.println("로그인 실패(id만 일치) : 로그인 제한");
+		                jsonObj.addProperty("error", "Y");
+		                jsonObj.addProperty("errorMsg", "로그인 실패:로그인이 제한되었습니다. 관리자에게 문의하세요.");
+	                }else {
+	                	
 
-	                if(resultUpdtLoginErrCnt > 0) { // 로그인실패횟수 업데이트 성공
-	                    jsonObj.addProperty("error", "N");
-	                    System.out.println("로그인 실패 - 로그인 실패 횟수 업데이트 성공");
-	                } else { // 로그인실패횟수 업데이트 실패
-	                    jsonObj.addProperty("error", "Y");
-	                    jsonObj.addProperty("errorMsg", "로그인 실패 횟수 업데이트 실패");
-	                    System.out.println("로그인 실패 - 로그인 실패 횟수 업데이트 실패");
+		                // 로그인 오류 횟수가 5회에 도달했을 때 제한을 설정
+		                if (loginErrCnt >= 4) { // 이번 오류로 인해 5회가 되면 제한
+		                	System.out.println("이번이 5회째인사람");
+		                    userService.updateLoginRestricted(existingUserVO); // 로그인 제한 설정
+		                    jsonObj.addProperty("error", "Y");
+		                    jsonObj.addProperty("errorMsg", "5회 이상의 로그인 오류로 인해 로그인이 제한되었습니다.");
+		                } else {
+		                	System.out.println("이번오류가 5회가 아직 안 된 사람 ");
+		                	
+		                    jsonObj.addProperty("error", "Y");
+		                    jsonObj.addProperty("errorMsg", "비밀번호가 일치하지 않습니다. 틀린횟수 : " + (loginErrCnt+1) + "회");
+		                }
+	                	
 	                }
 	            }
-
-				
-	            
 			}
         } catch (Exception e) {
         	System.out.println("catch or 로그인 제한 걸린 경우)");
         	
         	// 로그인 제한 오류 처리
-            if (e.getMessage().contains("로그인이 제한")) {
+            if (e.getMessage().contains("로그인이 제한되어 있는 경우")) {
                 jsonObj.addProperty("error", "Y");
                 jsonObj.addProperty("errorMsg", e.getMessage());
             } else {
                 // 기타 오류 처리
                 jsonObj.addProperty("error", "Y");
-                jsonObj.addProperty("errorMsg", "로그인 중 오류가 발생했습니다. 관리자에게 문의하세요.");
+                jsonObj.addProperty("errorMsg", "로그인 중 기타 오류가 발생했습니다. 관리자에게 문의하세요.");
             }
             e.printStackTrace();
             
         }
         
         System.out.println("return 직전 jsonObj"+jsonObj);
-        return ResponseEntity.ok(jsonObj.toString());
-
+        //return ResponseEntity.ok(jsonObj.toString());
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonObj.toString()); // json을 문자열로 파싱해서 jsp로 전송
 	}
     
     
     
+    // 관리자 로그인 제한 해제 기능
+    @RequestMapping(value = "/adminUserRestrictedClear.do", method = RequestMethod.GET)
+    public String clearLoginRestriction(@RequestParam("userId") String userId, Model model) throws Exception {
+        // 서비스 호출하여 제한 해제
+        int result = userService.clearLoginRestriction(userId);
+        if (result > 0) {
+            model.addAttribute("message", "로그인 제한이 해제되었습니다.");
+        } else {
+            model.addAttribute("message", "로그인 제한 해제에 실패했습니다.");
+        }
+        return "redirect:/adminUserList.do";
+    }
+    
+    // 관리자 로그인 강제 제한 기능
+    @RequestMapping(value = "/adminUserRestricted.do", method = RequestMethod.GET)
+    public String setLoginRestriction(@RequestParam("userId") String userId, Model model) throws Exception {
+        // 서비스 호출하여 로그인 제한 설정
+    	
+    	UserVO userVO = new UserVO();
+    	userVO.setUserId(userId);
+        int result = userService.updateLoginRestricted(userVO);
+        
+        if (result > 0) {
+            model.addAttribute("message", "로그인이 제한되었습니다.");
+        } else {
+            model.addAttribute("message", "로그인 제한 설정에 실패했습니다.");
+        }
+        return "redirect:/adminUserList.do";
+    }
+    
+    // 관리자 - 회원 삭제 기능
+    @RequestMapping("/adminUserDelete.do")
+    public String adminUserDelete(@RequestParam("userId") String userId,  Model model) {
+        
+        	int result;
+			try {
+				result = userService.deleteUser(userId);
+				
+				if (result > 0) {
+					System.out.println("관리자페이지 : 회원 삭제 성공");
+					model.addAttribute("message", "회원이 성공적으로 삭제되었습니다.");
+				} else {
+					System.out.println("관리자페이지 : 회원 삭제 실패");
+					model.addAttribute("message", "회원 삭제에 실패하였습니다.");
+				}
+			} catch (Exception e) {
+				System.out.println("관리자페이지 : 회원 삭제 중 예외 발생");
+				e.printStackTrace();
+			}
+        return "redirect:/adminUserList.do";
+    }
+    
+    // 사용자 - 회원정보 조회
     @RequestMapping(value = "/mypage.do", method = RequestMethod.GET)
     public String myPage(HttpServletRequest request, Model model) {
         // 세션에서 로그인된 사용자 정보 가져오기

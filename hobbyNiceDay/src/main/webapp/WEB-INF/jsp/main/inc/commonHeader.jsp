@@ -6,6 +6,7 @@
 	<!-- JSTL을 사용하여 세션에서 userId 확인 -->
     <c:set var="userVO" value="${sessionScope.userVO}" />
     <c:set var="isLoggedIn" value="${not empty userVO.userId}" />
+	<c:set var="isUser" value="${not empty userVO and userVO.userSe == 'user'}" />
 	
 
     <div class="header__top">
@@ -13,7 +14,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p>.</p>
+                        </br>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
@@ -34,7 +35,7 @@
                             </c:otherwise>
                         </c:choose>
                         
-                        <a href="/adminLogin.do" target='_blank'>관리자 페이지</a> <!-- userSe가 admin 이거나  -->
+                        <a href="/adminMain.do" target='_blank'  onclick="return checkAdminAccess();">관리자 페이지</a> <!-- userSe가 admin 이거나  -->
                         </div>
                         <!-- 
                         <div class="header__top__hover">
@@ -109,8 +110,8 @@
 	                        </c:otherwise>
                         </c:choose>
                         
-                        
-                        <li><a href="/imgTest.do">test img</a></li>
+                        <!-- 
+                        <li><a href="/imgTest.do">test img</a></li> -->
                         <!-- 
                         <li><a href="./contact.html">Contacts</a></li> -->
                     </ul>
@@ -128,4 +129,16 @@
         </div>
         <div class="canvas__open"><i class="fa fa-bars"></i></div>
     </div>
+    
+    <script type="text/javascript">
+	    function checkAdminAccess() {
+	        var isUser = "${isUser}"; // JSTL 변수를 JavaScript로 전달
+	        if (isUser == "true") {
+	            alert("관리자 권한이 필요합니다.");
+	            return false; // 링크 동작을 막음
+	        }
+	        return true; // 관리자일 경우 링크 정상 동작
+	    }
+	</script>
+
 </header>

@@ -58,6 +58,21 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements e
         
         
         // Step 2: 예약 등록 (DB에 저장) (RESERVATION_ID 자동 생성)
+        
+        // 전화번호 암호화
+        System.out.println("예약등록 - 암호화 하기전 전화번호 : " + reservationVO.getReservationPhone());
+        String encryptedPhone = EgovFileScrty.encode(reservationVO.getReservationPhone());
+        System.out.println("예약등록 - 암호화 된 전화번호 : " + encryptedPhone);
+        reservationVO.setReservationPhone(encryptedPhone);
+        
+        // 이메일 암호화
+        System.out.println("예약등록 - 암호화 하기전 이메일 : " + reservationVO.getReservationEmail());
+        String encryptedEmail = EgovFileScrty.encode(reservationVO.getReservationEmail());
+        System.out.println("예약등록 - 암호화 된 이메일 : " + encryptedEmail);
+        reservationVO.setReservationEmail(encryptedEmail);
+        
+        
+        // 예약 등록
         int reservationId = reservationDAO.insertReservation(reservationVO);
         
         System.out.println("예약 등록 id result : " + reservationId);
@@ -92,11 +107,8 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements e
 	// 월별 예약가능 날짜
 	@Override
 	public List<EgovMap> getMonthlyAvailableTimeSlots(int classId, String startDate, String endDate) throws Exception {
-	    Map<String, Object> params = new HashMap<>();
-	    params.put("classId", classId);
-	    params.put("startDate", startDate);
-	    params.put("endDate", endDate);
-	    return reservationDAO.getMonthlyAvailableTimeSlots(params);
+	    
+	    return reservationDAO.getMonthlyAvailableTimeSlots(classId, startDate, endDate);
 	}
 	
 	
@@ -104,9 +116,33 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements e
 	// 관리자 예약 정보 수정
 	@Override
 	public int updateReservationInfo(ReservationVO reservationVO) throws Exception{
+		
+		// (일단 예약 등록에서 복사해옴)
+		// 전화번호 암호화
+        System.out.println("예약수정 - 암호화 하기전 전화번호 : " + reservationVO.getReservationPhone());
+        String encryptedPhone = EgovFileScrty.encode(reservationVO.getReservationPhone());
+        System.out.println("예약수정 - 암호화 된 전화번호 : " + encryptedPhone);
+        reservationVO.setReservationPhone(encryptedPhone);
+        
+        // 이메일 암호화
+        System.out.println("예약수정 - 암호화 하기전 이메일 : " + reservationVO.getReservationEmail());
+        String encryptedEmail = EgovFileScrty.encode(reservationVO.getReservationEmail());
+        System.out.println("예약수정 - 암호화 된 이메일 : " + encryptedEmail);
+        reservationVO.setReservationEmail(encryptedEmail);
+        
+        
 		return reservationDAO.updateReservationInfo(reservationVO);
 	}
 			
+	// 관리자 페이지 - 예약 승인 기능
+	public int adminReservationApproved(int reservationId)  throws Exception {
+		return reservationDAO.adminReservationApproved(reservationId);
+	}
+	
+// 관리자 페이지 - 접수취소 기능
+	public int adminReservationReject(int reservationId)  throws Exception {
+		return reservationDAO.adminReservationReject(reservationId);
+	}
 	
 	// 마이페이지 1명 회원 예약 전체 테이블 조회
     @Override

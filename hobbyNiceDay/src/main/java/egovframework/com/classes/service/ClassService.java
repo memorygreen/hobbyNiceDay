@@ -38,8 +38,11 @@ public interface ClassService {
 	
 	// 241101
 	// 이미지 1개 업로드 테스트 
-	public int saveItem(int intClassId, ImgVO imgVO, MultipartFile imgFile) throws Exception;
+	public int saveItem(ImgVO imgVO, MultipartFile imgFile, String savePath) throws Exception;
 
 	// 이미지 조회 테스트
 	public List<ImgVO> getImagesByClassId(int imgId) throws Exception;
+	
+	// 관리자 - 클래스 삭제
+	public int deleteClass(int classId) throws Exception;
 }

@@ -136,18 +136,20 @@
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <div class="page-header-title">
-                                            <h5 class="m-b-10">클래스 등록 페이지</h5>
-                                            <p class="m-b-0">새로운 클래스를 등록하는 페이지입니다.</p>
+                                            <h5 class="m-b-10">클래스 정보조회 페이지</h5>
+                                            <p class="m-b-0">등록된 클래스 정보를 조회하는 페이지입니다.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                            <li >
+                                                <a href="index.html"> </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">클래스 관리 > </a>
+                                            <li >
+                                            	<a href="/adminClassList.do">클래스 관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">클래스 등록</a>
+                                            <li >
+                                            	<a href="/adminClassInfo.do">클래스 정보조회</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -168,17 +170,9 @@
                                     		<div class="col-sm-12">
 	                                    	<div class="card">
 	                                            <div class="card-header">
-	                                                <h5>클래스 등록</h5>
-	                                                <span>클래스 등록 페이지입니다. <code>TB_CLASS</code></span>
-	                                       		    <div class="card-header-right">
-	                                                    <ul class="list-unstyled card-option">
-	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-	                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-	                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-	                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-	                                                        <li><i class="fa fa-trash close-card"></i></li>
-	                                                    </ul>
-	                                                </div>
+	                                                <h5>클래스 정보조회</h5>
+	                                                <span>클래스 정보조회 페이지입니다. <code>TB_CLASS</code></span>
+	                                       		    
 	                                            </div>
 	                                            
 	                                            <form id="insertForm" name="insertForm" method="post"  enctype="multipart/form-data"><!-- 파일 업로드 위해서 추가 -->
@@ -202,7 +196,8 @@
 				                                                            	<i class="icofont icofont-user-alt-3"> * 클래스명</i>
 				                                                            </label>
 			                                                            </span>
-			                                                            <input type="text" id=classNm name="classNm" class="form-control" placeholder="클래스명을 입력해주세요" title="클래스명을 입력해주세요"  data-toggle="tooltip"  required>
+			                                                            <input type="text" id=classNm name="classNm" class="form-control" placeholder="클래스명을 입력해주세요" title="클래스명을 입력해주세요"  data-toggle="tooltip"  
+			                                                            	value="${classDetails.classNm}" readonly>
 			                                                            
 	                                                                </th>
 	                                                                
@@ -212,7 +207,8 @@
 			                                                            	<i class="icofont icofont-ui-email">  클래스 설명</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                           	<input type="text" id=classDscrptn name="classDscrptn" class="form-control" placeholder="클래스 설명을 입력해주세요" title="클래스 설명을 입력해주세요"  data-toggle="tooltip" >
+			                                                           	<input type="text" id=classDscrptn name="classDscrptn" class="form-control" placeholder="클래스 설명을 입력해주세요" title="클래스 설명을 입력해주세요"  data-toggle="tooltip" 
+			                                                           		 value="${classDetails.classDscrptn}" readonly>
 	                                                                </th>
 	                                                            </tr>
 	                                                            
@@ -223,7 +219,11 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 장소</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="location" name="location" class="form-control" placeholder="클래스 장소를 입력해주세요" title="클래스 장소를 입력해주세요"  data-toggle="tooltip" required>	                                                        			
+			                                                            <input type="text" id="location" name="location" class="form-control" 
+			                                                            	   placeholder="클래스 장소를 입력해주세요" title="클래스 장소를 입력해주세요"  data-toggle="tooltip" 
+			                                                            	   value="${classDetails.location}" readonly>
+			                                                            	   </br>	                                                        			
+			                                                            	   </br>
 	                                                                </th>
 	                                                                <th colspan="2" width="50%">
 		     															
@@ -232,8 +232,10 @@
 			                                                            	<i class="icofont icofont-ui-email">  클래스 이미지 </i>
 			                                                           	</label>
 			                                                           	</span>
-	                                                            		<input type="file" id="imgFile" name="imgFile" class="form-control" placeholder="클래스 이미지를 등록해주세요" title="클래스 이미지를 등록해주세요" data-toggle="tooltip">
-	                                                            		                                                     
+	                                                            		<input type="file" id="imgFile" name="imgFile" class="form-control" placeholder="클래스 이미지를 등록해주세요" title="클래스 이미지를 등록해주세요" data-toggle="tooltip"
+	                                                            				value = "${classDetails.imgNm}" disabled >
+                                                           				<p>현재 등록된 클래스 대표사진 파일명: ${classDetails.imgNm}</p>
+                                                           				                                                     
 	                                                                </th>
 	                                                            </tr>
 	                                                        
@@ -247,15 +249,14 @@
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
-			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" placeholder="클래스 대분류를 선택해주세요" title="클래스 대분류를 선택해주세요"  data-toggle="tooltip" required>
-			                                                            	<option value="">선택</option> <!-- 클래스 대분류 코드를 가져와야 함 (tb_code) -->
-			                                                            	<option value="crafts">공예</option>
-			                                                            	<option value="cooking_baking">요리&베이킹</option>
-			                                                            	<option value="art">미술</option>
-			                                                            	<option value="music">음악</option>
-			                                                            	<option value="exercise">운동</option>
-			                                                            	<option value="etc">기타</option>
-			                                                            </select>
+			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" placeholder="클래스 대분류를 선택해주세요" title="클래스 대분류를 선택해주세요"  data-toggle="tooltip" required  disabled > 
+			                                                            	    <option value="">선택</option>
+																			    <option value="crafts" ${classDetails.classCateBig == 'crafts' ? 'selected' : ''}>공예</option>
+																			    <option value="art" ${classDetails.classCateBig == 'art' ? 'selected' : ''}>미술</option>
+																			    <option value="music" ${classDetails.classCateBig == 'music' ? 'selected' : ''}>음악</option>
+																			    <option value="exercise" ${classDetails.classCateBig == 'exercise' ? 'selected' : ''}>운동</option>
+																			    <option value="etc" ${classDetails.classCateBig == 'etc' ? 'selected' : ''}>기타</option>
+																			</select>
 			                                                            
 			                                                                                                             
 	                                                                </th>
@@ -265,14 +266,11 @@
 			                                                            <label class="input-group-text" for="classCateSmall">
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 소분류</i>
 			                                                           	</label>
-			                                                           	</span><select id="classCateSmall" name="classCateSmall"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required>
-			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
+			                                                           	</span>
+			                                                           	<select id="classCateSmall" name="classCateSmall"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required disabled>
+			                                                            	<option value=" ${classDetails.classCateBig}">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
 			                                                            	
 			                                                            </select>
-			                                                            
-			                                                            
-			                                                            <!-- 직접 입력용 소분류 입력란 (기타 선택 시 표시) -->
-    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
 			                                                         </th>
 	                                                                
 	                                                            </tr>
@@ -284,7 +282,8 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 최대 참가자수</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="number" min="0" id="classMaxCnt" name="classMaxCnt" class="form-control" placeholder="최대 참가자수를 입력해주세요" title="최대 참가자수를 입력해주세요" data-toggle="tooltip" required>
+			                                                            <input type="number" min="0" id="classMaxCnt" name="classMaxCnt" class="form-control" placeholder="최대 참가자수를 입력해주세요" title="최대 참가자수를 입력해주세요" data-toggle="tooltip" required
+			                                                            		value="${classDetails.classMaxCnt}" readonly >
 			                                                        </th>
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
@@ -292,7 +291,8 @@
 			                                                            	<i class="icofont icofont-ui-email">  최소수강가능연령</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="number" min="0" id="classAgeMin" name="classAgeMin" class="form-control" placeholder="수강가능한 최소연령을 입력해주세요" title="수강가능한 최소연령을 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="number" min="0" id="classAgeMin" name="classAgeMin" class="form-control" placeholder="수강가능한 최소연령을 입력해주세요" title="수강가능한 최소연령을 입력해주세요" data-toggle="tooltip"
+			                                                            		value="${classDetails.classAgeMin}" readonly>
 			                                                        </th>
 	                                                            </tr>
 	                                                            
@@ -303,7 +303,8 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 가격</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="classPrice" name="classPrice" class="form-control" placeholder="클래스 가격을 입력해주세요" title="클래스 가격을 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="text" id="classPrice" name="classPrice" class="form-control" placeholder="클래스 가격을 입력해주세요" title="클래스 가격을 입력해주세요" data-toggle="tooltip"
+			                                                            		value="${classDetails.classPrice}" readonly>
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
@@ -311,12 +312,14 @@
 			                                                            <label class="input-group-text" for="classPost">
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 게시 여부</i>
 			                                                           	</label>
-			                                                           	</span><select id="classPost" name="classPost"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required>
-			                                                            	<option value="">선택</option> 
-			                                                            	<option value="Y">게시</option>
-			                                                            	<option value="N">미게시</option>
+			                                                           	</span><select id="classPost" name="classPost"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required disabled>
+			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
+			                                                            	<option value="Y" ${classDetails.classPost == 'Y' ? 'selected' : ''}>게시</option>
+			                                                            	<option value="N" ${classDetails.classPost == 'N' ? 'selected' : ''}>미게시</option>
 			                                                            </select>
 			                                                            
+			                                                            <!-- 직접 입력용 소분류 입력란 (기타 선택 시 표시) -->
+    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
 			                                                         </th>
                                                                 	
 	                                                            </tr>
@@ -328,7 +331,8 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 소요시간</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="int" id="classTimeTaken" name="classTimeTaken" class="form-control" placeholder="클래스 소요시간을 입력해주세요" title="클래스 소요시간을 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="int" id="classTimeTaken" name="classTimeTaken" class="form-control" placeholder="클래스 소요시간을 입력해주세요" title="클래스 소요시간을 입력해주세요" data-toggle="tooltip"
+			                                                            		value="${classDetails.classTimeTaken}" readonly>
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
@@ -343,7 +347,8 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 시작일자</i>
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="date" id="startDt" name="startDt" class="form-control" placeholder="클래스 시작일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="date" id="startDt" name="startDt" class="form-control" placeholder="클래스 시작일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip"
+			                                                          		   value="${classDetails.startDt}" readonly>
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
@@ -352,11 +357,12 @@
 			                                                            	<i class="icofont icofont-ui-email"> * 클래스 종료일자</i>
 			                                                           	</label>
 			                                                           	</span>
-    																    <input type="date" id="endDt" name="endDt" class="form-control" placeholder="클래스 종료일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip">
+    																    <input type="date" id="endDt" name="endDt" class="form-control" placeholder="클래스 종료일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip"
+    																     		value="${classDetails.endDt}" readonly>
 		                                                        	</th>
                                                                 	
 	                                                            </tr>
-	                                                            
+                                                            <div>
 	                                                            <tr id = "classTimeRow">
 	                                                                <th colspan="2"  width="5%">
 	                                                                	<span class="input-group-prepend" id="name">
@@ -392,7 +398,7 @@
 	                                                                </th>
 	                                                                
 	                                                            </tr>
-	                                                            
+                                                            </div>
 	                                                            <tr id = "holidayRow">
 	                                                                
 	                                                                <th colspan="2" width="5%">
@@ -424,10 +430,14 @@
 	                                                        	
 	                                                        	<tr>
 		                                                        	<td colspan="2">
-		                                                        		<button type="button" id="insertBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">등록</button>
+		                                                        		<a href="/adminClassUpdateForm.do" id="updateBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</button>
 	                                                        
 				                                                        <!-- 취소 -->
-				                                                        <button class="btn btn-danger waves-effect waves-light">취소</button>
+				                                                        <a href="/adminClassList.do?classId=${classDetails.classId}" class="btn btn-warning waves-effect waves-light">목록</a>
+				                                                        
+				                                                        <!-- 삭제 -->
+				                                                        <button type="button" id="deleteBtn" class="btn btn-danger waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">삭제</button>
+	                                                        
 		                                                        	</td>
 		                                                        	<td colspan="2"></td>
 	                                                        	</tr>    	
@@ -540,97 +550,24 @@
 	else
 			window.onload = userData;
 	var userIdCk = false;
+	
+	var timeSets = "${classDetails.timeSets}";
+    console.log("timeSets", timeSets)
+
 	function userData() {
-		
-		    // 휴무일 추가 버튼 클릭 시 휴무일 필드를 추가
-		    $('#addHoliday').click(function(e) {
-		    	e.preventDefault(); // 기본 폼 제출 방지
-		    	
-		        var newHolidayRow = `
-		            <tr>
-		                <th colspan="2" width="50%">
-		                    <span class="input-group-prepend" id="name">
-		                        <label class="input-group-text" for="holidayDt">
-		                            <i class="icofont icofont-ui-email"> 휴무일</i>
-		                        </label>
-		                    </span>
-		                    <input type="date" name="holidayDt[]" class="form-control" placeholder="휴무일을 입력해주세요">
-		                </th>
-		                <th colspan="2" width="40%">
-		                    <span class="input-group-prepend" id="name">
-		                        <label class="input-group-text" for="holidayDesc">
-		                            <i class="icofont icofont-ui-email"> 휴무일 설명</i>
-		                        </label>
-		                    </span>
-		                    <input type="text" name="holidayDesc[]" class="form-control" placeholder="휴무일 설명을 입력해주세요">
-		                </th>
-		                <th width="5%">
-		                    <button type="button" class="removeHoliday btn btn-danger waves-effect waves-light">-</button>
-		                </th>
-		            </tr>
-		        `;
-		        
-		        // 새 휴무일 입력란 추가
-		        $('#holidayRow').after(newHolidayRow);
-		    });
-
-		    // 동적으로 추가된 휴무일 삭제 버튼 클릭 시 해당 행을 삭제
-		    $(document).on('click', '.removeHoliday', function() {
-		        $(this).closest('tr').remove();
-		    });
+		// 시간 넣기
+		  parseAndAddTimeInputs(timeSets);
+		console.log("함수 이후 확인")
 		
 		
-		 // 클래스 시간대 추가 버튼 클릭 시 클래스 시작시간 필드를 추가
-		    $('#addTime').click(function(e) {
-		    	e.preventDefault(); // 기본 폼 제출 방지
-		    	
-		        var newTimeRow = `
-		            <tr>
-				        	<td colspan="2"  widtd="5%">
-			                	<span class="input-group-prepend" id="name">
-			                    <label class="input-group-text" for="timeStart">
-			                    	<i class="icofont icofont-ui-email">  클래스 시작시간</i>
-			                   	</label>
-			                   	</span>
-									<input type="time" id="timeStart" name="timeStart[]" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip">
-			                </td>   
-			                    
-			                <td colspan="2" widtd="5%">
-			                	<span class="input-group-prepend" id="name">
-			                    <label class="input-group-text" for="timeEnd">
-			                    	<i class="icofont icofont-ui-email">  클래스 종료시간 </i>
-			                   	</label>
-			                   	</span>
-									<input type="time" id="timeEnd" name="timeEnd[]" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip">
-			                </td>  
-			               
-			            	<td widtd="5%">
-			            		</br><button type="button" class="removeClassTime btn btn-danger waves-effect waves-light">-</button>
-			                </td>
-		            </tr>
-		        `;
-		        
-		        // 새 휴무일 입력란 추가
-		        $('#classTimeRow').after(newTimeRow);
-		    });
-
-		    // 동적으로 추가된 휴무일 삭제 버튼 클릭 시 해당 행을 삭제
-		    $(document).on('click', '.removeClassTime', function() {
-		        $(this).closest('tr').remove();
-		    });
+		/***************************************************************************/
 		
-		    /*
-            <td  widtd="5%">
-            	<span class="input-group-prepend" id="name">
-                <label class="input-group-text" for="maxParticipants">
-                	<i class="icofont icofont-ui-email"> 최대 수강가능 인원</i>
-               	</label>
-               	</span>
-					<input type="number" id="maxParticipants" name="maxParticipants[]" class="form-control" placeholder="수강가능 인원을 입력해주세요" title="수강가능 인원을 입력해주세요" data-toggle="tooltip">
-            </td> 
-            */
-		
+		// DB에서 가져온 값
+	    var selectedClassCateBig = "${classDetails.classCateBig}"; // 대분류 값
+	    var selectedClassCateSmall = "${classDetails.classCateSmall}"; // 소분류 값
+	    
 		// 대분류와 소분류 데이터를 객체로 정의
+		// 대분류에 따른 소분류 목록 정의
 	    var categories = {
 	        crafts: [
 	            { value: 'soap_making', text: '비누 만들기' },
@@ -663,194 +600,109 @@
 	            { value: 'taekwondo', text: '태권도' },
 	            { value: 'fitness', text: '피트니스' },
 	            { value: 'climbing', text: '클라이밍' }
-	        ],
-	        cooking_baking: [ // 요리 & 베이킹 대분류 추가
-	            { value: 'korean_cuisine', text: '한식' }, // 한식 소분류
-	            { value: 'western_cuisine', text: '양식' }, // 양식 소분류
-	            { value: 'bakery', text: '제과제빵' }, // 제과제빵 소분류
-	            { value: 'dessert', text: '디저트' } // 디저트 소분류
 	        ]
 	    };
 
-	    // 대분류 선택 시 소분류를 업데이트하는 jQuery 코드
-	    $('#classCateBig').on('change', function() {
-	        var selectedCategory = $(this).val(); // 선택된 대분류 값
-	        var $classCateSmall = $('#classCateSmall'); // 소분류 선택 요소
-	        var $classCateSmallText = $('#classCateSmallText'); // 소분류 입력 요소
-
-	        // '기타'가 선택되면 select 숨기고 input 보이게 설정
-	        if (selectedCategory === 'etc') {
-	            $classCateSmall.hide();
-	            $classCateSmallText.show();
-	        } else {
-	            $classCateSmallText.hide();
-	            $classCateSmall.show();
-
-	            // 소분류 초기화
-	            $classCateSmall.empty();
-	            $classCateSmall.append('<option value="">선택</option>');
-
-	            // 대분류에 맞는 소분류 항목 추가
-	            if (categories[selectedCategory]) {
-	                $.each(categories[selectedCategory], function(index, subcategory) {
-	                    $classCateSmall.append('<option value="' + subcategory.value + '">' + subcategory.text + '</option>');
-	                });
-	            }
-	        }
-	    }); // 대분류 소분류 끝 
-		
-		
-		
-		
-		// 회원가입 버튼 클릭 시 
-		$('#insertBtn').click(function(e) {
-			console.log("등록버튼 클릭 들어왔는지 확인 ")
-			e.preventDefault();
-			
-			
-			if ($.trim($('#classNm').val()) == ''){
-				alert('클래스명을 입력해주세요');
-				$('#classNm').focus();
-				return false;
-			}
-			
-			if ($.trim($('#location').val()) == ''){
-				alert('클래스 장소를 입력해주세요');
-				$('#location').focus();
-				return false;
-			}
-			
-			
-			
-			
-			if ($.trim($('#classCateBig').val()) == ''){
-				alert('클래스 대분류를 선택해주세요');
-				$('#classCateBig').focus();
-				return false;
-			}
-			
-			if ($('#classCateBig').val() === 'etc' && $.trim($('#classCateSmallText').val()) == '') {
-			    alert('기타 항목을 선택하셨습니다. 소분류를 입력해주세요.');
-			    $('#classCateSmallText').focus();
-			    return false;
-			}
-			
-			if ($.trim($('#classCateSmall').val()) == ''){
-				alert('클래스 소분류를 선택해주세요');
-				$('#classCateSmall').focus();
-				return false;
-			}
-			
-			
-			if ($.trim($('#classMaxCnt').val()) == '' ){
-				alert('최대 참가자수를 입력해주세요.');
-				$('#classMaxCnt').focus();
-				return false;
-			}
-			
-			
-			
-			if ($.trim($('#classAgeMin').val()) == '' ){
-				alert('최소수강가능연령 입력해주세요.');
-				$('#classAgeMin').focus();
-				return false;
-			}
-			
-			
-			if ($.trim($('#classPrice').val()) == '' ){
-				alert('클래스 가격을 입력해주세요.');
-				$('#classPrice').focus();
-				return false;
-			}
-			
-			if($('select[name=classPost]').val()===''){
-				alert("클래스 게시여부를 선택해주세요.");
-				$('select[name="classPost"]').focus();
-				return false;
-			}
-			
-			if ($.trim($('#classTimeTaken').val()) == '' ){
-				alert('클래스 소요시간을을 입력해주세요.');
-				$('#classTimeTaken').focus();
-				return false;
-			}
-			
-			if ($.trim($('#startDt').val()) == '' ){
-				alert('클래스 시작일자를 입력해주세요.');
-				$('#startDt').focus();
-				return false;
-			}
-			
-			
-			
-			if ($.trim($('#endDt').val()) == '' ){
-				alert('클래스 종료일자를 입력해주세요.');
-				$('#endDt').focus();
-				return false;
-			}
-			
-			if ($.trim($('#timeStart').val()) == '' ){
-				alert('클래스 시작 시간을 입력해주세요.');
-				$('#timeStart').focus();
-				return false;
-			}
-			
-			if ($.trim($('#timeEnd').val()) == '' ){
-				alert('클래스 종료시간을 입력해주세요.');
-				$('#timeEnd').focus();
-				return false;
-			}
-			
-			
-			
-			
-			
-			// 유효성 검사 - 미입력
-			if (requiredEmpty()) {
-				return;
-			}
-			
-			
-			// 클래스 최대 인원 -> tb_class_ detail 테이블의 컬럼에 넣기
-			//$('#maxParticipants').val($('#classMaxCnt').val());
-			
-			
-			if (confirm("클래스를 등록 하시겠습니까?")) {
-				var form = $('#insertForm')[0];
-				var formData = new FormData(form);
+	    
+            
+         // 대분류에 맞는 소분류 채우기
+            function populateClassCateSmall() {
+                var $classCateSmall = $('#classCateSmall');
+                $classCateSmall.empty(); // 기존 옵션 삭제
+                $classCateSmall.append('<option value="">선택</option>');
 				
-				$.ajax({
-					url: 'insertClass.do',
-					processData: false,
-					contentType: false,
-					data: formData,
-					type: 'POST',
-					success: function(result){
-						console.log("클래스 등록 응답 result:", result);
-		                
-		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("클래스 등록 response:", response);
-
-		                if (response.error == 'N') {
-		                    alert("클래스가 등록되었습니다.");
-		                    location.href = '/adminClassList.do';
-		                } else if (response.error == 'Y') {
-		                    alert('클래스 등록실패: ' + response.errorMsg);
-		                    location.href = '/adminClassInsertForm.do';
-		                }
-					},
-					error: function() {
-		                alert("클래스 등록  중 오류가 발생했습니다.");
-		            }
-				});
-			}
-			
-			
-			
-		})// 회원가입 버튼 클릭 끝
-	};// 전체 불러오기 끝
+                
+                // 선택된 대분류에 해당하는 소분류 목록이 있는지 확인
+                if (categories[selectedClassCateBig]) {
+                    $.each(categories[selectedClassCateBig], function (index, subcategory) {
+                        var option = $('<option>', {
+                            value: subcategory.value,
+                            text: subcategory.text
+                        });
+                        // 소분류 값이 일치하면 선택
+                        if (subcategory.value === selectedClassCateSmall) {
+                            option.prop('selected', true);
+                        }
+                        $classCateSmall.append(option);
+                    });
+                }
+                
+	    }; // 대분류 소분류 끝 
 		
+	 // 초기 실행 - 소분류 가져오기  (페이지 로드 시 호출)
+	    populateClassCateSmall();
+		
+		
+		/************************************************************************/
+		
+	};// 전체 불러오기 끝
+
+	
+	
+	
+// db에서 불러온 시작시간 - 종료시간 불러오는 함수
+        
+        function parseAndAddTimeInputs(timeSets) {
+            var timeArray = timeSets.split(','); // Split by comma to get each time set
+			console.log("timeArray", timeArray)
+			
+            $.each(timeArray, function(index, timeSet) {
+                var parts = timeSet.split(';'); // Split by semicolon to get ID and time range
+                var classDetailId = parts[0].trim(); // Class Detail ID
+                var timeRange = parts[1].trim(); // Time range
+                var times = timeRange.split('-'); // Split by dash to get start and end times
+                var timeStart = times[0].trim();
+                var timeEnd = times[1].trim();
+                console.log("timeStart", timeStart, "timeEnd", timeEnd)
+				
+                
+                // 시간 형식으로 변환
+                
+                //timeStart = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                //timeEnd = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                //console.log("시간형식으로 변환 이후 - timeStart", timeStart, "timeEnd", timeEnd)
+				
+                
+                
+                // Create a new row for each time set
+                var newRow = `
+					            <tr class="classTimeRow">
+					                <th colspan="2" width="5%">
+					                    <span class="input-group-prepend" id="name">
+					                        <label class="input-group-text" for="timeStart_${index}">
+					                            <i class="icofont icofont-ui-email"> * 클래스 시작시간</i>
+					                        </label>
+					                    </span>
+					                    <input type="time" name="timeStart[]" id="timeStart_${index}" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip" value="${timeStart}" readonly>
+					                </th>
+					                <th colspan="2" width="5%">
+					                    <span class="input-group-prepend" id="name">
+					                        <label class="input-group-text" for="timeEnd_${index}">
+					                            <i class="icofont icofont-ui-email"> * 클래스 종료시간 </i>
+					                        </label>
+					                    </span>
+					                    <input type="time" name="timeEnd[]" id="timeEnd_${index}" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip" value="${timeEnd}" readonly>
+					                </th>
+					                <th width="5%">
+					                    <button type="button" class="btn btn-danger removeTimeRow">-</button>
+					                </th>
+					            </tr>
+					        `;
+        
+                // Append the new row to the time-container
+                $('.classTimeRow').append(newRow);
+                
+                $('#classTimeRow').parent().append(newRow);
+                
+                $('#timeStart' + ${index}).val(timeStart);
+                $('#timeEnd' + ${index}).val(timeEnd);
+                console.log("추가 이후")
+                // $('.classTimeContainer').append(newRow);
+            });
+        }
+
+
+
 // 유효성 검사 함수
 function requiredEmpty() {
 	var empty = false;
