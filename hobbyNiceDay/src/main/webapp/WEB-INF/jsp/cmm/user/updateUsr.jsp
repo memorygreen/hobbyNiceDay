@@ -135,7 +135,7 @@
     width: 100%;
     border: 1px solid #e1e1e1;
     font-size: 14px;
-    color: #b7b7b7;
+    color: #606060;
     padding-left: 20px;
     margin-bottom: 20px;
 }
@@ -144,6 +144,11 @@
 .checkout__input input:focus {
     border-color: #000; /* 테두리를 검정색으로 변경 */
     outline: none; /* 기본 파란색 외곽선 제거 */
+
+/*241030 약관 동의 포커스*/
+input[type="checkbox"]:focus {
+    outline: 2px solid #e53637; /* 체크박스에 포커스가 있을 때 테두리 색상 */
+}
 
 }
 </style>
@@ -195,76 +200,161 @@
 		<div class="checkout__form">
 
 			<form id="joinForm" name="joinForm" method="post" >
-				<input type="hidden" id="userSe" name="userSe" value="user"><!-- 사용자 구분(일반사용자) -->
+				<!-- 사용자 구분(일반사용자) --> 
+				<input type="hidden" id="userSe" name="userSe" value="${userInfo.userSe}" >
 				
 				
 				<div class="jy_margin_1" style="height:50px"></div>
 				
 				<!-- 회원가입 폼 시작 -->
 				<h6 class="checkout__title">회원정보 입력</h6>
+				
+				
+				
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>ID<span>*</span></p>
-							<input type="text" id="userId" name="userId" autocomplete="new-password" required readonly value="${userInfo.userId}"/> 
+							<input type="text" id="userId" name="userId" autocomplete="new-password" required value="${userInfo.userId}" readonly /> 
 							
 						</div>
 					</div>
-					<div class="col-lg-6">
+					
+					
+				</div>
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>이름<span>*</span></p>
-							<input type="text" id="userName" name="userName" value="${userInfo.userName}" readonly required />
+							<input type="text" id="userName" name="userName" autocomplete="new-password" value="${userInfo.userName}" readonly required />
+							
 						</div>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-lg-5">
+						<div class="checkout__input">
+							<br/>
+							<br/>
+							<span id="userNameMsg"></span>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>비밀번호<span>*</span></p>
 							<input type="password" id="passwd" name="passwd" autocomplete="new-password" required />
-							<p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<p>
+							
 						</div>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-lg-5">
+						<div class="checkout__input">
+							<br/>
+							<br/>
+							<p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<p>
+							
+							<span id="userPasswdMsg"></span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>비밀번호 확인<span>*</span></p>
 							<input type="password" id="passwdCk" name="passwdCk" required />
 						</div>
 					</div>
-				</div>
-
-
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="input_radio">
-							<p>성별<span style="color: #e53637;">*</span></p>
-							<input type="radio" id="male" name="sex" value="M" / required
-								<c:if test="${userInfo.sex == 'M'}">checked="checked"</c:if> >남성 
-								
-							<input type="radio" id="female" name="sex" value="F" 
-								<c:if test="${userInfo.sex == 'F'}">checked="checked"</c:if> > 여성
-								
+					<div class="col-lg-5">
+						<div class="checkout__input">
+							<br/>
+							<br/>
+							<!-- 
+							<p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<p>
+							 -->
+							
+							<span id="userPasswdCkMsg"></span>
 						</div>
 					</div>
-					<div class="col-lg-6">
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-lg-7">
+						
+							<p>성별<span style="color: #e53637;">*</span></p>
+							
+							<label for="male">
+								<input type="radio" id="male" name="sex" value="M"  required
+								<c:if test="${userInfo.sex == 'M'}">checked="checked"</c:if> >
+							남성</label>
+							
+							<label for="female">
+								<input type="radio" id="female" name="sex" value="F" 
+								<c:if test="${userInfo.sex == 'F'}">checked="checked"</c:if> > 
+							여성</label>
+							
+						<div class="input_radio">
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
+						</br>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>생년월일<span>*</span></p>
-							<input type="date" id="brthdy" name="brthdy" value="${fn:substring(userInfo.brthdy, 0, 10)}" required>
+							<input type="date" id="brthdy" name="brthdy" required value="${fn:substring(userInfo.brthdy, 0, 10)}">
 						</div>
 					</div>
 				</div>
 
 
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>휴대전화<span>*</span></p>
-							<input type="text" id="mbtlnum" name="mbtlnum" value="${userInfo.mbtlnum}" required>
-							<p>휴대전화 번호를 '-'까지 입력해주세요. </p>
+							<input type="text" id="mbtlnum" name="mbtlnum" placeholder="ex. 010-0000-0000"  value="${userInfo.mbtlnum}" required>
 						</div>
 					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
+						<div class="checkout__input" >
 							<p>이메일<span>*</span></p>
-							<input type="text" id="email" name="email" value="${userInfo.email}" required>
+							<input type="text" id="email" name="email"  placeholder="ex. example@example.com"  sytle="width:70%" required  value="${userInfo.email}">
+							<!-- 
+							<span>@</span>
+				            <select id="emailDomainSelect" required>
+				                <option value="">도메인 선택</option>
+				                <option value="gmail.com">gmail.com</option>
+				                <option value="naver.com">naver.com</option>
+				                <option value="daum.net">daum.net</option>
+				                <option value="custom">직접 입력</option>
+				            </select>
+				            <input type="text" id="emailCustomDomain" name="emailCustomDomain" placeholder="직접 입력" style="display: none;">
+							 -->
+							
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="checkout__input" style="text-align: center;">
+							<a href="#" class="primary-btn joinBtn">수정</a>
+							<a href="/" id="listBtn" class="primary-btn listBtn" style="background:#7c7c7c;">메인화면</a>
+							
+							<a href="/" id="deleteBtn" class="primary-btn listBtn" style="background-color:#D85D5D;color:white;border-color:#D85D5D;margin-right:20px;">회원탈퇴</a>
 						</div>
 					</div>
 				</div>
@@ -275,10 +365,8 @@
 		</form>
 
 		<!-- <input type="submit" value="회원가입" class="primary-btn" /> -->
-		<button type="reset" class="primary-btn">취소</button>
 		
-		<a href="#" class="primary-btn joinBtn">수정</a>
-		<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
+		
 	
 
 		<!-- 회원가입 폼 끝-->
@@ -345,43 +433,170 @@
 	var userIdCk = false;
 	function userData() {
 		
-		// 사용자ID 중복체크
-		$('#userIdCk').click(
-				function(e) {
-					e.preventDefault(); // 링크 기본 동작 막기
-					
-					var userId = $('#userId').val(); // 입력된 ID 값 가져오기
-
-					if (userId === "") {
-						alert("ID를 입력하세요."); // 자영 : 이미 필수체크인데?
-						return;
-					}
-
-					// AJAX를 이용해 서버로 ID 중복 확인 요청 보내기
-					
-					$.ajax({
-			            url: '<c:url value="/joinIdCheck.do"/>', // 서버에서 처리할 URL
-			            type: 'POST',
-			            data: { userId: userId }, // 입력된 ID 전달
-			            success: function(response) {
-			            	console.log("성공 시 response",response)
-			            	console.log("성공 시 response",response.exist)
-			                if (response.exist == true) {
-			                    $('#userIdMsg').text("이미 사용 중인 ID입니다.").css("color", "red");
-			                } else {
-			                	userIdCk = true;
-			                    $('#userIdMsg').text("사용 가능한 ID입니다.").css("color", "green");
-			                }
-			            },
-			            error: function() {
-			                alert("ID 중복 확인 중 오류가 발생했습니다.");
-			            }
-			        });
-				});
+		// 회원구분 선택 이벤트 리스너
+		$('.nice-select .list').on('click', '.option', function() {
+		    // 선택된 옵션의 data-value 값을 가져옴
+		    const selectedValue = $(this).attr('data-value');
+		    // 가져온 값을 숨겨진 select 요소에 반영
+		    $('#userSe').val(selectedValue);
+		    // 화면에 선택된 옵션 텍스트 표시
+		    $('.nice-select .current').text($(this).text());
+		    // 선택된 옵션 스타일 변경
+		    $('.nice-select .option').removeClass('selected');
+		    $(this).addClass('selected');
+		    // 콘솔에 선택된 회원 구분 값 출력
+		    console.log("회원구분: ", $('#userSe').val());
+		});
 		
-		// 회원가입 버튼 클릭 시 
+		
+		//id 입력제한
+		  $('#userId').on('input', function() {
+        // id 정규표현식 : 영어 대소문자, 숫자만 허용
+        let validChars = /^[A-Za-z0-9]*$/;
+        
+        // 현재입력된 id
+        let userId = $(this).val();
+        
+        // 제한된 문자 입력 or 15글자 초과 -> 수정
+        if (!validChars.test(userId) || userId.length > 15) {
+            // 불필요한 문자 제거, 15글자 초과시 15글자로 제한
+            $(this).val(userId.replace(/[^A-Za-z0-9]/g, '').substring(0, 15));
+            
+            // 15글자 이상 -> 메시지 
+            $('#userIdMsg').text("ID는 영어 대소문자와 숫자만 허용하며 최대 15글자까지 입력 가능합니다.").css("color", "red");
+        } else {
+            $('#userIdMsg').text(""); // 조건만족 시 메시지 제거
+        }
+    });
+		
+		// 이름 입력 제한 및 길이 제한
+		  $('#userName').on('input', function() {
+		      // 이름 정규식 (한글 or 영어 대소문자만 허용 // 공백x 특수문자x 숫자x)
+		      let validChars = /^[ㄱ-ㅎ|가-힣a-zA-Z]*$/;
+
+		      let userName = $(this).val(); // 현재 입력된 이름
+
+		      // 입력불가 문자 입력 시 삭제
+		      if (!validChars.test(userName)) {
+		          $(this).val(userName.replace(/[^가-힣a-zA-Z]/g, ''));
+		          $('#userNameMsg').text("이름은 한글 또는 영어 대소문자만 허용됩니다. 공백,특수문자,숫자는 입력할 수 없습니다.").css("color", "#D85D5D");
+		      } 
+		      // 글자수 10글자 제한
+		      else if (userName.length > 10) { 
+		          $(this).val(userName.substring(0, 10));
+		          $('#userNameMsg').text("이름은 최대 10자까지 입력 가능합니다.").css("color", "#D85D5D");
+		      } else {
+		          $('#userNameMsg').text(""); // 정규표현식 o -> 메시지 삭제
+		      }
+		  });
+		
+		
+		
+		// 비밀번호 유효성 검증 정규식: 공백 제외, 영문자, 숫자, 특수문자 포함 8~15자
+		  // const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-])\S{8,15}$/;
+		  const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9])[A-Za-z0-9!@#$%^*+=-]{8,15}$/;
+
+		  $('#passwd').on('input', function() {
+			    let password = $(this).val();
+			    
+			    // 공백 or 15글자 초과 시 삭제
+			    password = password.replace(/\s/g, '').substring(0, 15);
+			    $(this).val(password);
+			    
+			    // 정규표현식 확인
+			    if (!passwordRegEx.test(password)) {
+			        $('#userPasswdMsg').text("비밀번호는 공백 없이 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.").css("color", "#D85D5D");
+			    } else {
+			        $('#userPasswdMsg').text(""); // 메시지 삭제
+			    }
+			});
+
+			$('#passwdCk').on('input', function() {
+			    let confirmPassword = $(this).val();
+			    
+			    // 공백 or 15글자 초과 시 제거
+			    confirmPassword = confirmPassword.replace(/\s/g, '').substring(0, 15);
+			    $(this).val(confirmPassword);
+			    
+			    // 비밀번호 일치 확인
+			    if (confirmPassword !== $('#passwd').val()) {
+			        $('#userPasswdCkMsg').text("비밀번호가 일치하지 않습니다. 다시 확인해주세요.").css("color", "#D85D5D");
+			    } else {
+			        $('#userPasswdCkMsg').text(""); // 메시지 삭제
+			    }
+			});
+			
+			
+			//휴대전화 
+			 $('#mbtlnum').on('input', function() {
+		        let phoneNumber = $(this).val().replace(/[^0-9]/g, ''); // 숫자만 허용
+		        
+		        // 글자수 11 제한
+		        if (phoneNumber.length > 11) {
+		            phoneNumber = phoneNumber.substring(0, 11);
+		        }
+		        
+		        let formattedNumber;
+		
+		        if (phoneNumber.length <= 3) {
+		            formattedNumber = phoneNumber; // 3자리 이하일 경우 그대로 표시
+		        } else if (phoneNumber.length <= 7) {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3); // 4~7자리일 경우 3-4 형식
+		        } else if (phoneNumber.length <= 10) {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 6) + '-' + phoneNumber.slice(6); // 10자리 형식 3-3-4
+		        } else {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7); // 11자리 형식 3-4-4
+		        }
+		
+		        $(this).val(formattedNumber); // 포맷팅된 번호를 필드에 표시
+		    });
+			
+			
+			// 이메일 입력 제한: 최대 30글자, 공백 허용하지 않음
+			 $('#email').on('input', function() {
+			     let email = $(this).val().replace(/\s/g, ''); // 공백 제거
+			     if (email.length > 30) {
+			         email = email.substring(0, 30); // 최대 30글자로 제한
+			     }
+			     $(this).val(email); // 수정된 값 설정
+			 });
+			
+			// 이메일 도메인 선택 
+			// 도메인 선택 시 발생하는 이벤트
+			$('#emailDomainSelect').change(function() {
+			    var selectedDomain = $(this).val();
+			    
+			    // 사용자가 '직접 입력'을 선택한 경우
+			    if (selectedDomain === "custom") {
+			        // 직접 입력 필드 보이기
+			        $('#emailCustomDomain').show().val("").focus();
+			    } else {
+			        // 직접 입력 필드 숨기고 이메일 값 설정
+			        $('#emailCustomDomain').hide().val("");
+			        $('#email').val($('#emailLocalPart').val() + "@" + selectedDomain);
+			    }
+			});
+			
+			// 이메일의 로컬 부분 입력 시 전체 이메일 값 갱신
+			$('#emailLocalPart').on('input', function() {
+			    var selectedDomain = $('#emailDomainSelect').val();
+			    if (selectedDomain && selectedDomain !== "custom") {
+			        $('#email').val($(this).val() + "@" + selectedDomain);
+			    }
+			});
+			
+			// 사용자가 직접 입력한 도메인 값으로 이메일 값 갱신
+			$('#emailCustomDomain').on('input', function() {
+			    $('#email').val($('#emailLocalPart').val() + "@" + $(this).val());
+			});
+			
+			
+		/****************************************************/
+		
+		// 수정 버튼 클릭 시 
 		$('.joinBtn').click(function(e) {
 			e.preventDefault();
+			
 			
 			
 			if ($.trim($('#userName').val()) == ''){
@@ -395,7 +610,7 @@
 				$('#passwd').focus();
 				return false;
 			}else if($('#passwd').val() != $('#passwdCk').val()){
-				alert('비밀번호를 다시 확인해주세요!');
+				alert('비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요');
 				$('#passwdCk').focus();
 				return false;
 			}
@@ -408,11 +623,23 @@
 			    return false;
 			}
 			
-			if(!$('input:radio[name=sex]').is(":checked")){
+			
+			// userSe 필수 체크
+		    if ($.trim($('#userSe').val()) === '') {
+		        alert('회원 구분을 선택해주세요.');
+		        $('#userSe').focus();
+		        return false;
+		    }
+			
+			if(!$('input:radio[name="sex"]').is(":checked")){
 				alert("성별을 선택해주세요.");
-				$('#sex').focus();
+				$('#male').focus();
+			    $('#male').css("outline", "2px solid #e53637");  // 포커스가 된 라디오 버튼을 시각적으로 표시
+
 				return false;
 			}
+			
+			
 			
 			if ($.trim($('#brthdy').val()) == ''){
 				alert('생년월일을 입력해주세요');
@@ -440,6 +667,7 @@
 			if ($.trim($('#email').val()) == '' ){
 				alert('이메일을 입력해주세요.');
 				$('#email').focus();
+				return false;
 			}
 			// 이메일 형식 체크 (ex. exaple@naver.com)
 				/* 
@@ -448,7 +676,7 @@
 				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
 			*/
 			let emailReg = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-			if (!emailReg.test($('#email').val())) {
+			if ( $.trim($('#email').val()) != '' && !emailReg.test($('#email').val())) {
 			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
 			    $('#email').focus();
 			    return false;
@@ -461,29 +689,30 @@
 			}
 			
 			
-			if (confirm("회원가입을 하시겠습니까?")) {
+			if (confirm("회원정보를 수정하시겠습니까?")) {
 				var form = $('#joinForm')[0];
 				var formData = new FormData(form);
 				
 				$.ajax({
-					url: 'joinUser.do',
+					url: 'adminUserUpdate.do',
 					processData: false,
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
-						console.log("회원가입 응답 result:", result);
+					success: function(response){
+						//console.log("회원정보 수정 응답 result:", result);
 		                
 		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("회원가입 response:", response);
+		                //var response = JSON.parse(result);
+						// console.log("회원정보 수정 response:", response);
 
 		                if (response.error == 'N') {
-		                    alert("회원가입되었습니다.");
-		                    location.href = '/loginForm.do';
+		                    alert("회원정보 수정 성공 : ", response.message);
+		                    location.reload();
 		                } else if (response.error == 'Y') {
-		                    alert('회원가입 실패: ' + response.errorMsg);
-		                    location.href = '/joinForm.do';
+		                    alert('회원정보 수정 실패: ' + response.errorMsg);
+		                    // location.href = '/joinForm.do';
+		                    location.reload();
 		                }
 					},
 					error: function() {
@@ -495,6 +724,57 @@
 			
 			
 		})// 회원가입 버튼 클릭 끝
+		
+		
+		
+		/******************************************************************/
+		// 삭제 버튼 클릭
+	    $('#deleteBtn').click(function (e) {
+	    	console.log("회원탈퇴 버튼 클릭")
+	    	e.preventDefault(); // 기본 링크 동작 방지
+	    	
+	    	const userId = "${userInfo.userId}" // 클래스 ID 가져오기
+	    	console.log("회원탈퇴 버튼 클릭 userId : ", userId)
+	    	
+	        if (confirm('회원탈퇴를 진행하시겠습니까?')) {
+	        	
+	            $.ajax({
+	                type: 'POST',
+	                url: '/adminUserDelete.do',
+	                data: { userId: userId },
+	                success: function (response) {
+	                    console.log("삭제 응답 데이터: ", response); // 응답 데이터를 로그에 출력
+	                    
+	                    
+	                        if (response.error === "N") {
+	                            alert(response.message);
+	                            location.href = '/'; // 목록 페이지로 이동
+	                        } else if (response.error === "Y") {
+	                            alert('회원 탈퇴 실패: ' + response.errorMsg); // 실패 시 오류 메시지 표시
+	                        }
+                    },
+	                error: function (xhr) {
+	                    console.error("AJAX 요청 실패: ", xhr);
+	                    alert('회원탈퇴 중 오류가 발생했습니다: ' + xhr.responseText);
+	                }
+	            });
+	        }
+	    });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	};// 전체 불러오기 끝
 		
 	// 유효성 검사 함수

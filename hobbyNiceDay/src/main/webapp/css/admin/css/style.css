@@ -5638,12 +5638,19 @@ table tbody .border-bottom-info td {
 	content: "\e663";
 }
 
+
+/*자영 수정 관리자 페이지 사이드바 after 여기가 아닌듯*/
 .pcoded[theme-layout="vertical"] .pcoded-navbar .pcoded-item li.pcoded-hasmenu[dropdown-icon="style3"]>a:after {
 	content: '\e61a';
+	/**/ 
+	
 }
 
+
+/*자영 수정 관리자 페이지 사이드바 after 여기?*/
 .pcoded[theme-layout="vertical"] .pcoded-navbar .pcoded-item li.pcoded-hasmenu.pcoded-trigger[dropdown-icon="style3"]>a:after {
-	content: '\e622';
+	content:'\e622';
+	/* ;*/
 }
 
 .pcoded[theme-layout="vertical"] .pcoded-navbar[pcoded-navbar-position="relative"] {

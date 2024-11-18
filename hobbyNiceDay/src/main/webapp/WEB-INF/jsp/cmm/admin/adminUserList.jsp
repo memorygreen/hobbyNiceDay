@@ -74,7 +74,7 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
@@ -115,7 +115,7 @@
                                         <!-- Hover table card start -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>회원</h5>
+                                                <h5>회원 목록</h5>
                                                 <span>현재 가입중인 회원 목록입니다. <code>TB_USER</code></span>
                                                 
                                             </div> 
@@ -135,18 +135,24 @@
                                                                 <th>순번</th>
                                                                 <th>ID</th>
                                                                 <th>이름</th>
-                                                                <th>성별</th>
+                                                                <th>구분</th>
+                                                                <!-- 
+                                                                 <th>성별</th>
+                                                                 -->
                                                                 <th>생년월일</th>
-                                                                <th>나이(만)</th>
+                                                                <!-- <th>나이(만)</th> -->
                                                                 <th>이메일</th>
                                                                 <th>연락처</th>
-                                                                <th>사용자구분</th>
                                                                 <th>로그인 횟수</th>
-                                                                <th>마지막 로그인일시</th>
+                                                                <!-- 
+                                                                 <th>마지막 로그인일시</th>
+                                                                 -->
                                                                 <th>로그인 실패 횟수</th>
                                                                 <th>로그인 제한 여부</th>
                                                                 <th>로그인제한</th>
+                                                                <!-- 
                                                                 <th>마지막 수정일시</th>
+                                                                 -->
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -162,7 +168,7 @@
                                             </div>
                                         </div>
                                         <!-- Hover table card end -->
-                                        
+                                        <!-- 
                                         <button id="btnUpdate" class="btn waves-effect waves-light btn-success btn-outline-success">
 	                                    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
 											  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -175,12 +181,7 @@
 												<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
 											</svg> 삭제
 										</button>
-                                       
-                                        <!-- Contextual classes table starts -->
-                                        <!-- Contextual classes table ends -->
-                                        
-                                        <!-- Background Utilities table start -->
-                                        <!-- Background Utilities table end -->
+                                         -->
                                     </div>
                                     <!-- Page-body end -->
                                 </div>
@@ -271,30 +272,49 @@
 	            html+= '    <td>' + (key + 1) + '</td>';
 	            html += '    <td><a href="adminUserInfo.do?userId=' + encodeURIComponent($.trim(values.userId)) + '"style="text-decoration: underline;">' + $.trim(values.userId) + '</a></td>';
 	            html+= '    <td>' + $.trim(values.userName) + '</td>';
-	            html+= '    <td>' + $.trim(values.sex) + '</td>';
+	            // html+= '    <td>' + $.trim(values.userSe) + '</td>'; // 사용자 구분
+	         	// 사용자 /관리자 구분 
+	            if (values.userSe === 'user') {
+	            	html+= '    <td>사용자</td>'; // 사용자/관리자 
+                } else if (values.userSe === 'admin') {
+                    html+= '    <td>관리자</td>'; // 사용자 /관리자 
+                }
+	            
+	            
+	            // html+= '    <td>' + $.trim(values.sex) + '</td>';
+	            // 성별
+	            // if (values.sex === 'F') {
+	            // 	html+= '    <td>여자</td>';  
+                // } else if (values.sex === 'M') {
+                //    html+= '    <td>남자</td>';  
+                // }
+	            
 	            //html+= '    <td>' + formatDate($.trim(values.brthdy)) + '</td>';
 
 	            html+= '    <td>' + $.trim(values.brthdy) + '</td>';
 	            //html+= '    <td>' + $.trim(values.ageSe) + '</td>'; 
-	            html+= '    <td>'+ calculateAge(formatDate($.trim(values.brthdy))) +'</td>';// 나이
+	            // html+= '    <td>'+ calculateAge(formatDate($.trim(values.brthdy))) +'</td>';// 나이
 	            html+= '    <td>' + $.trim(values.email) + '</td>';
 	            html+= '    <td>' + $.trim(values.mbtlnum) + '</td>';
-	            html+= '    <td>' + $.trim(values.userSe) + '</td>';
+	            
+	            
+	            
+	            
 	            html+= '    <td>' + $.trim(values.loginCnt) + '</td>';
-	            html+= '    <td>' + (values.lastLoginDt ? formatDateString($.trim(values.lastLoginDt)) : '') + '</td>';
+	            // html+= '    <td>' + (values.lastLoginDt ? formatDateString($.trim(values.lastLoginDt)) : '') + '</td>';
 	            html+= '    <td>' + $.trim(values.loginErrCnt) + '</td>';
 	            html+= '    <td>' + $.trim(values.loginRestricted) + '</td>';
 	            //html += '   <td><a href="adminUserRestrictedClear.do?userId=' + encodeURIComponent($.trim(values.userId)) + '"style="text-decoration: underline;" class="btn waves-effect waves-light btn-success btn-outline-success">해제</a></td>';
 	            // 로그인 제한 상태에 따라 버튼 표시
                 if (values.loginRestricted === 'Y') {
                     // 제한 해제 버튼
-                    html += '    <td><a href="adminUserRestrictedClear.do?userId=' + encodeURIComponent($.trim(values.userId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-success btn-outline-success">해제</a></td>';
+                    html += '    <td><a href="adminUserRestrictedClear.do?userId=' + encodeURIComponent($.trim(values.userId)) + '" style="text-decoration:;" class="btn waves-effect waves-light btn-success btn-outline-success">해제</a></td>';
                 } else {
                     // 로그인 제한 버튼
-                    html += '    <td><a href="adminUserRestricted.do?userId=' + encodeURIComponent($.trim(values.userId)) + '" style="text-decoration: underline;" class="btn waves-effect waves-light btn-danger btn-outline-danger">제한</a></td>';
+                    html += '    <td><a href="adminUserRestricted.do?userId=' + encodeURIComponent($.trim(values.userId)) + '" style="text-decoration:;" class="btn waves-effect waves-light btn-danger btn-outline-danger">제한</a></td>';
                 }
 	            
-	            html+= '    <td>' + (values.updtDt ? formatDateString($.trim(values.updtDt)) : '') + '</td>';
+	            // html+= '    <td>' + (values.updtDt ? formatDateString($.trim(values.updtDt)) : '') + '</td>'; // 마지막 수정일
 
 	        });
 	        
@@ -303,23 +323,13 @@
 	        //}
 	        
 	        $('.userList tbody').append(html);
-	        $('.totalCnt').text(numberWithCommas(data.totalCnt));
 	        
-	        // 페이징을 만든다
-	        //paging('.paging', data.page, data.pageCnt, data.totalCnt);
 	    }
 	    
-	    // $('.userList tbody').children('tr.loading').remove('');
+	    
 	});
   }
-    			/*
-    			$('.totalCnt').html(numberWithCommas($.trim(data.totalCnt)));
-    			$('.page').html(numberWithCommas($.trim(data.page)));
-    			$('.pageCnt').html(numberWithCommas($.trim(data.pageCnt)));
-    			*/
-    			// 페이징을 만든다
-    			//paging('.paging', data.page, data.pageCnt, data.totalCnt);
-    		// $('.userList tbody').children('tr.loading').remove('');
+    			
    
  // 생년월일을 날짜 형식으로 변환하는 함수
    function formatDate(dateStr) {

@@ -16,4 +16,7 @@
 <%--
 <jsp:forward page="/cmm/main/mainPage.do"/>
 --%>
+<%-- 자영 241113 메인 바꿈 출처 : https://hi-today-yun12.tistory.com/15
 <script type="text/javaScript">document.location.href="<c:url value='/cmm/main/mainPage.do'/>"</script> 
+--%>
+<script type="text/javaScript">document.location.href="<c:url value='/main.do'/>"</script> 

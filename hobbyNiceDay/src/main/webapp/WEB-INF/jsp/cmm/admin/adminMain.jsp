@@ -75,21 +75,21 @@
                     
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <div class="page-header-title">
-                                            <h5 class="m-b-10">Dashboard</h5>
-                                            <p class="m-b-0">Welcome to Material Able</p>
+                                            <h5 class="m-b-10">관리자페이지 메인화면</h5>
+                                            <p class="m-b-0">관리자페이지 메인화면입니다</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item">
-                                                <a href="/adminMain.do"> <i class="fa fa-home"></i> </a>
+                                                <a href="/adminMain.do"></a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">홈</a>
+                                            <li><a href="/adminMain.do">홈</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -251,7 +251,7 @@
                                             <div class="col-xl-6 col-md-12">
                                                 <div class="card table-card">
                                                     <div class="card-header">
-                                                        <h5>Member’s performance</h5>
+                                                        <h5>오늘의 예약 현황</h5>
                                                         <div class="card-header-right">
                                                             <ul class="list-unstyled card-option">
                                                                 <li><i class="fa fa fa-wrench open-card-option"></i></li>
@@ -271,8 +271,10 @@
                                                                             <div class="d-inline-block align-middle">
                                                                                 <img src="images/admin/images/avatar-4.jpg" alt="user image" class="img-radius img-40 align-top m-r-15">
                                                                                 <div class="d-inline-block">
-                                                                                    <h6>Shirley Hoe</h6>
-                                                                                    <p class="text-muted m-b-0">Sales executive , NY</p>
+                                                                                    <h6>예약자명</h6>
+                                                                                    <p class="text-muted m-b-0">예약인원수</p>
+                                                                                    
+                                                                                    <p class="text-muted m-b-0">클래스명</p>
                                                                                 </div>
                                                                             </div>
                                                                         </td>

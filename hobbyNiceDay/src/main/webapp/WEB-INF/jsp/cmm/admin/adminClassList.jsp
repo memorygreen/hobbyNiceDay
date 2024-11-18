@@ -82,7 +82,7 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
@@ -94,11 +94,11 @@
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
                                             <li>
-                                                <a href="index.html"></a>
+                                                <a href="/adminMain.do"></a>
                                             </li>
-                                            <li><a href="#!">클래스관리 > </a>
+                                            <li><a href="/adminClassList.do">클래스관리 > </a>
                                             </li>
-                                            <li><a href="#!">클래스 목록</a>
+                                            <li><a href="/adminClassList.do">클래스 목록</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -122,14 +122,16 @@
                                         <!-- Hover table card start -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5>클래스</h5>
+                                                <h5>클래스 목록</h5>
                                                 <span>현재 등록되어있는  클래스 목록입니다. <code>TB_CLASS</code></span>
                                                 
                                             </div>
                                             <div class="card-block table-border-style">
                                             
+                                            	<!-- 검색창 -->
+                                            	<!-- 
                                             	<div class="p-15 p-b-0">
-        	 
+        	 									
 										            <form class="form-material">
 										                <div class="form-group form-primary">
 										                    <input type="text" name="footer-email" class="form-control" style="width:30%"> 
@@ -142,8 +144,9 @@
 										                    검색어를 입력하세요</label>
 										                </div>
 										            </form>
-										            
+										       
 										        </div>
+                                            	 -->
                                             	
                                                 <div class="table-responsive">
                                                     <div style="text-align: right; margin-bottom: 10px;">
@@ -157,21 +160,21 @@
                                                     <table class="userList table table-hover">
                                                         <thead>
                                                             <tr>
-                                                                <th>순번</th>
-                                                                <th>클래스명</th>
-                                                                <th>클래스 설명</th>
-                                                                <th>클래스 장소</th>
-                                                                <th>대분류</th>
-                                                                <th>소분류</th>
-                                                                <th>최대 참가자수</th>
-                                                                <th>최소                                                               	수강가능연령</th>
-                                                                <th>클래스 가격</th>
+                                                                <th style="width: 5%;">순번</th>
+                                                                <th style="width: 15%;word-wrap: break-word;">클래스명</th>
+                                                                <th style="width: 10%;">대분류</th>
+                                                                <th style="width: 10%;">소분류</th>
+                                                                <th style="width: 15%;word-wrap: break-word;">장소</th>
+                                                                <th style="width: 10%;">가격</th>
+                                                                <th style="width: 10%;">수강인원</th>
+                                                                <th style="width: 25%; word-wrap: break-word; white-space: normal;">클래스 설명</th>
+                                                                <!-- 
                                                                 <th>휴무일</th>
                                                                 <th>휴무일 설명</th>
-                                                                <th>등록 일시</th>
-                                                                <th>마지막 수정일시</th>
-                                                                <th></th>
-                                                                <th></th>
+                                                                 <th "style="white-space: nowrap;">등록 일시</th>
+                                                                 -->
+                                                                <!-- 
+                                                                 -->
                                                             </tr>
                                                         </thead>
                                                         
@@ -273,6 +276,13 @@
 			var listData = data.dataMap.dataMap;  // 이 부분이 핵심
 			console.log("listData: ", listData);
 			
+			var bigCategoryMap = data.dataMap.bigCateMap;
+            var smallCategoryMap = data.dataMap.smallCateMap;
+
+            console.log("bigCateMap:", bigCategoryMap);
+            console.log("smallCateMap:", smallCategoryMap);
+
+            
 	    	var html = '';
 	        var positionNm = '';
 	        
@@ -282,69 +292,89 @@
 	            html+= '    <td>' + (key + 1) + '</td>';
 	            //html += '    <td><a href="#" style="text-decoration: underline;">' + $.trim(values.classId) + '</a></td>';
 	            html+= '    <td><a href="adminClassInfo.do?classId=' + encodeURIComponent($.trim(values.classId)) + '"style="text-decoration: underline;">' + $.trim(values.classNm) + '</a></td>';
+	         // 대분류와 소분류 코드 값을 한글로 변환
+                var bigCategoryName = bigCategoryMap[values.classCateBig] || values.classCateBig;
+                var smallCategoryName = smallCategoryMap[values.classCateSmall] || values.classCateSmall;
 
-	            html+= '    <td>' + $.trim(values.classDscrptn) + '</td>';
-	            html+= '    <td>' + $.trim(values.location) + '</td>';
-	            html+= '    <td>' + $.trim(values.classCateBig) + '</td>';
-	            html+= '    <td>' + $.trim(values.classCateSmall) + '</td>';
+	            
+	            // html+= '    <td>' + $.trim(values.classCateBig) + '</td>'; // 대분류
+	            html+= '    <td>' + bigCategoryName + '</td>'; // 대분류
+	            // html+= '    <td>' + $.trim(values.classCateSmall) + '</td>';// 소분류
+                html += '    <td>' + smallCategoryName + '</td>'; // 소분류 한글 이름
+		
+	            html+= '    <td>' + $.trim(values.location) + '</td>'; // 장소
+	            
+	            
+
+	            
+	            
+	            html+= '    <td>' + parseInt($.trim(values.classPrice)).toLocaleString('ko-KR'); + '</td>'; // 가격 
+	            
 	            html+= '    <td>' + $.trim(values.classMaxCnt) + '</td>';
-	            html+= '    <td>' + $.trim(values.classAgeMin) + '</td>';
-	            html+= '    <td>' + $.trim(values.classPrice) + '</td>';
-	            html+= '    <td>' + $.trim(values.holidayDt) + '</td>'; // join해서 가져와야함
-	            html+= '    <td>' + $.trim(values.holidayDesc) + '</td>'; // join 해서 가져와야함
-	            html+= '    <td>' + $.trim(values.regDt) + '</td>'; // 등록일시 
-	            html+= '    <td>' + $.trim(values.loginRestricted) + '</td>';
+	            html+= '    <td>' + $.trim(values.classDscrptn) + '</td>'; // 설명
+	            //html+= '    <td>' + $.trim(values.classAgeMin) + '</td>';
+	            // html+= '    <td>' + $.trim(values.holidayDt) + '</td>'; // join해서 가져와야함
+	            // html+= '    <td>' + $.trim(values.holidayDesc) + '</td>'; // join 해서 가져와야함
+	            //html+= '    <td>' + $.trim(values.regDt) + '</td>'; // 등록일시 
+	            //html+= '    <td>' + (values.regDt ? formatDateString($.trim(values.regDt)) : '') + '</td>';
+
 	        });
 	        
-	        //if (data.list.length == 0){ 
-	        //    html+= '<tr><td colspan="9" class="nodata">데이터가 존재하지 않습니다.</td></tr>';
-	        //}
 	        
 	        $('.userList tbody').append(html);
-	        $('.totalCnt').text(numberWithCommas(data.totalCnt));
 	        
-	        // 페이징을 만든다
-	        //paging('.paging', data.page, data.pageCnt, data.totalCnt);
 	    }
 	    
-	    // $('.userList tbody').children('tr.loading').remove('');
 	});
   }
-    			/*
-    			$('.totalCnt').html(numberWithCommas($.trim(data.totalCnt)));
-    			$('.page').html(numberWithCommas($.trim(data.page)));
-    			$('.pageCnt').html(numberWithCommas($.trim(data.pageCnt)));
-    			*/
-    			// 페이징을 만든다
-    			//paging('.paging', data.page, data.pageCnt, data.totalCnt);
-    		// $('.userList tbody').children('tr.loading').remove('');
+  
+  
    
-// 생년월일을 날짜 형식으로 변환하는 함수
-function formatDate(dateStr) {
- 	var date = new Date(dateStr);
-  	var year = date.getFullYear();
-  	var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
-  	var day = ('0' + date.getDate()).slice(-2); // 일도 2자리로 맞춤
-  	
-  	return year + '-' + month + '-' + day;
-} 
-// 생년월일을 통해 나이를 구하는 함수
-function calculateAge(birthdate) {
-    // 생년월일을 Date 객체로 변환
-    var birthDate = new Date(birthdate);
-    var today = new Date(); // 현재 날짜
+	// 생년월일을 날짜 형식으로 변환하는 함수
+	function formatDate(dateStr) {
+	 	var date = new Date(dateStr);
+	  	var year = date.getFullYear();
+	  	var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+	  	var day = ('0' + date.getDate()).slice(-2); // 일도 2자리로 맞춤
+	  	
+	  	return year + '-' + month + '-' + day;
+	} 
+	
+	// 생년월일을 통해 나이를 구하는 함수
+	function calculateAge(birthdate) {
+	    // 생년월일을 Date 객체로 변환
+	    var birthDate = new Date(birthdate);
+	    var today = new Date(); // 현재 날짜
+	
+	    var age = today.getFullYear() - birthDate.getFullYear(); // 연도 차이 계산
+	    var monthDiff = today.getMonth() - birthDate.getMonth(); // 월 차이 계산
+	    var dayDiff = today.getDate() - birthDate.getDate(); // 일 차이 계산
+	
+	    // 생일이 지나지 않았다면 나이를 1살 줄임
+	    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+	        age--;
+	    }
+	
+	    return age;
+	}
 
-    var age = today.getFullYear() - birthDate.getFullYear(); // 연도 차이 계산
-    var monthDiff = today.getMonth() - birthDate.getMonth(); // 월 차이 계산
-    var dayDiff = today.getDate() - birthDate.getDate(); // 일 차이 계산
 
-    // 생일이 지나지 않았다면 나이를 1살 줄임
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-        age--;
-    }
-
-    return age;
-}
+	//날짜 데이터 yyyy-MM-dd HH:mm:ss 형식으로 변환하는 함수
+	function formatDateString(dateString) {
+	 // 1. 원본 문자열을 Date 객체로 변환
+	 var date = new Date(dateString);
+	
+	 // 2. 연도, 월, 일, 시간, 분, 초를 가져오기
+	 var year = date.getFullYear();
+	 var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+	 var day = ('0' + date.getDate()).slice(-2);
+	 var hours = ('0' + date.getHours()).slice(-2);
+	 var minutes = ('0' + date.getMinutes()).slice(-2);
+	 var seconds = ('0' + date.getSeconds()).slice(-2);
+	
+	 // 3. 포맷팅된 문자열 만들기
+	 return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+	}
 
 	</script>
     

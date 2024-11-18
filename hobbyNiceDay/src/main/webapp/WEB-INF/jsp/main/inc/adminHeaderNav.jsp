@@ -9,9 +9,9 @@
 	
 
 
-<nav class="navbar header-navbar pcoded-header">
+<nav class="navbar header-navbar pcoded-header" style="background-color:#f4f4f5;">
     <div class="navbar-wrapper">
-        <div class="navbar-logo">
+        <div class="navbar-logo" >
             <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="#!">
                 <i class="ti-menu"></i>
             </a>
@@ -26,8 +26,13 @@
                     </div>
                 </div>
             </div>
-            <a href="/adminMain.do">
-                <img class="img-fluid" src="images/img/logo_hobby_nice_day.png" alt="Theme-Logo" />
+            
+            
+            
+            <!--  조건 타야함 -->
+            <a href="/adminReservationStat.do">
+              <img class="img-fluid" src="images/img/logo_hobby_nice_day.png" alt="Theme-Logo" />
+                
             </a>
             <a class="mobile-options waves-effect waves-light">
                 <i class="ti-more"></i>
@@ -96,50 +101,36 @@
            
                 
                 <li class="user-profile header-notification">
-                    <a href="#!" class="waves-effect waves-light">
+                    <a href="#!" class="waves-effect waves-light"  style="color:#365180;">
                         <img src="images/img/user_profile_blue2.png" class="img-radius" alt="User-Profile-Image">
                         <span><c:out value= "${userVO.userName}"/></span>
-                        <i class="ti-angle-down"></i>
+                        
                     </a>
                     <ul class="show-notification profile-notification">
                         <li class="waves-effect waves-light">
-                            <a href="/cmm/main/mainPage.do">
-                                <i class="ti-settings"></i>사용자 페이지 이동
+                            <!-- 
+                             <a href="/cmm/main/mainPage.do">
+                             -->
+                             <a href="/">
+                             
+                                사용자 페이지 이동
                             </a>
                         </li>
-                        <li class="waves-effect waves-light">
-                            <a href="user-profile.html">
-                                <i class="ti-user"></i> 회원정보수정
-                            </a>
-                        </li>
-                        <li class="waves-effect waves-light">
-                            <a href="email-inbox.html">
-                                <i class="ti-email"></i> 예약승인요청
-                            </a>
-                        </li>
-                        <!-- 
-                        <li class="waves-effect waves-light">
-                            <a href="auth-lock-screen.html">
-                                <i class="ti-lock"></i> Lock Screen
-                            </a>
-                        </li> -->
-                        
-                        
-                        
-                        
+                       
+                     
                         <li class="waves-effect waves-light">
                         
                        	    <c:choose>
 						    	<c:when test="${isLoggedIn}">
 						    		<!-- 로그인 상태일 때 -->
 						    		<a href="/logout.do">
-		                                <i class="ti-layout-sidebar-left"></i> 로그아웃
+		                                </i> 로그아웃
 		                            </a>
 					        	</c:when>
 					          	<c:otherwise>
 					                 <!-- 비로그인 상태일 때 -->
 					                 <a href="/adminLogin.do">
-		                                <i class="ti-layout-sidebar-left"></i>로그인
+		                                로그인
 		                            </a>
 					            </c:otherwise>
 	                        </c:choose>

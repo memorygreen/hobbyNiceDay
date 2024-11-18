@@ -24,7 +24,7 @@
                         <c:choose>
 	                        <c:when test="${isLoggedIn}">
 	                            <!-- 로그인 상태일 때 -->
-	                            <a style="color:white"><c:out value= "${userVO.userName}"/>님 환영합니다.</span>
+	                            <a style="color:white; font-family:'Nunito Sans', sans-serif;"><c:out value= "${userVO.userName}"/>님 환영합니다.</span>
 	                            <a href="/logout.do">로그아웃</a> <!-- 로그아웃 링크 추가 -->
 	                        </c:when>
                          	<c:otherwise>
@@ -32,10 +32,14 @@
 	                            <a href="<c:url value='/joinForm.do'/>">회원가입</a>
 	                            
 	                            <a href="<c:url value='/loginForm.do'/>">로그인</a>
+	                            <!-- &returnUrl=${pageContext.request.requestURL}" -->
                             </c:otherwise>
                         </c:choose>
                         
-                        <a href="/adminMain.do" target='_blank'  onclick="return checkAdminAccess();">관리자 페이지</a> <!-- userSe가 admin 이거나  -->
+                        
+                        
+                        
+                        <a href="/adminReservationStat.do" target='_blank'  onclick="return checkAdminAccess();">관리자 페이지</a> <!-- userSe가 admin 이거나  -->
                         </div>
                         <!-- 
                         <div class="header__top__hover">
@@ -57,7 +61,13 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href="<c:url value='/cmm/main/mainPage.do'/>"><img src="<c:url value='/images/img/logo_hobby_nice_day.png' />" alt=""></a>
+                    <!-- 
+                     <a href="<c:url value='/cmm/main/mainPage.do'/>">
+                     -->
+                    
+                    <a href="<c:url value='/'/>">
+                    	<img src="<c:url value='/images/img/logo_hobby_nice_day.png' />" alt="">
+                    </a>
                     
                     
                 </div>
@@ -69,15 +79,23 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li><a href="<c:url value='/cmm/main/mainPage.do'/>">Home</a></li>
+                        <li>
+                        <!-- 
+                         <a href="<c:url value='/cmm/main/mainPage.do'/>">
+                         -->
+                         <a href="<c:url value='/'/>">
+                         
+                        Main</a>
+                        </li>
                         <!-- <li class="active"><a href="./shop.html">Shop</a></li> -->
                         
                         
                         <li><a href="#">Class</a>
                         	<ul class="dropdown">
-		                                <li><a href="#">클래스 전체보기</a></li>
+		                                <li><a href="/classAllList/all">클래스 목록</a></li>
+		                                <!-- 
 		                                <li><a href="/">클래스 신청하기</a></li>
-		                                <!-- <li><a href="./shopping-cart.html">리뷰관리</a></li>
+		                                <li><a href="./shopping-cart.html">리뷰관리</a></li>
 		                                <li><a href="./checkout.html">클래스수강이력</a></li> -->
 		                                <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
 		                            </ul>
@@ -101,7 +119,7 @@
 	                        <c:otherwise>
 	                        	<li><a href="#">Reservation</a>
 		                            <ul class="dropdown">
-		                                <li><a href="/">예약 확인</a></li>
+		                                <li><a href="/nonUsrReservationSearchForm.do">예약 확인</a></li>
 		                                <!-- <li><a href="./shopping-cart.html">리뷰관리</a></li>
 		                                <li><a href="./checkout.html">클래스수강이력</a></li> -->
 		                                <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
@@ -127,17 +145,36 @@
                 </div>
             </div> -->
         </div>
-        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        <div class="canvas__open">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+		  <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+		</svg>
+        
+        </div>
     </div>
     
     <script type="text/javascript">
 	    function checkAdminAccess() {
-	        var isUser = "${isUser}"; // JSTL 변수를 JavaScript로 전달
-	        if (isUser == "true") {
-	            alert("관리자 권한이 필요합니다.");
-	            return false; // 링크 동작을 막음
+	        
+	        var isLoggedIn = "${isLoggedIn}"; // 로그인 여부 확인
+	        var userSe = "${userVO.userSe}"; // 사용자 유형 (admin 또는 user)
+	        
+	     	// 로그인하지 않은 경우
+	        if (isLoggedIn == "false") {
+	            alert("로그인이 필요합니다.");
+	            window.location.href = "/adminLogin.do";
+	            return false;
 	        }
-	        return true; // 관리자일 경우 링크 정상 동작
+
+	        // 로그인은 했으나 관리자가 아닌 경우
+	        if (userSe !== "admin") {
+	            alert("관리자 권한이 필요합니다.");
+	            return false;
+	        }
+
+	        // 관리자일 경우 접근 허용
+	        return true;
+	        
 	    }
 	</script>
 

@@ -97,7 +97,12 @@
     margin-right: 0px;
 	}
 
-
+	/* 라벨 색상 변경 */
+	.input-group-append .input-group-text, .input-group-prepend .input-group-text {
+	    background-color: #32589d;
+	    border-color: rgba(0, 0, 0, 0.15);
+	    color: #fff;
+	}
     </style>
 </head>
 
@@ -131,7 +136,7 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
@@ -193,10 +198,10 @@
 	                                                                <th colspan="2" width="50%">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="classNm">
-				                                                            	<i class="icofont icofont-user-alt-3"> * 클래스명</i>
+				                                                            	클래스명
 				                                                            </label>
 			                                                            </span>
-			                                                            <input type="text" id=classNm name="classNm" class="form-control" placeholder="클래스명을 입력해주세요" title="클래스명을 입력해주세요"  data-toggle="tooltip"  
+			                                                            <input type="text" id=classNm name="classNm" class="form-control"  data-toggle="tooltip"  
 			                                                            	value="${classDetails.classNm}" readonly>
 			                                                            
 	                                                                </th>
@@ -204,10 +209,10 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classDscrptn">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 설명</i>
+			                                                            	클래스 설명
 			                                                           	</label>
 			                                                           	</span>
-			                                                           	<input type="text" id=classDscrptn name="classDscrptn" class="form-control" placeholder="클래스 설명을 입력해주세요" title="클래스 설명을 입력해주세요"  data-toggle="tooltip" 
+			                                                           	<input type="text" id=classDscrptn name="classDscrptn" class="form-control"  data-toggle="tooltip" 
 			                                                           		 value="${classDetails.classDscrptn}" readonly>
 	                                                                </th>
 	                                                            </tr>
@@ -216,11 +221,11 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                    <span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="location">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 장소</i>
+			                                                            	클래스 장소
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="text" id="location" name="location" class="form-control" 
-			                                                            	   placeholder="클래스 장소를 입력해주세요" title="클래스 장소를 입력해주세요"  data-toggle="tooltip" 
+			                                                            	    data-toggle="tooltip" 
 			                                                            	   value="${classDetails.location}" readonly>
 			                                                            	   </br>	                                                        			
 			                                                            	   </br>
@@ -229,12 +234,13 @@
 		     															
 		     															<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="imgFile">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 이미지 </i>
+			                                                            	클래스 이미지
 			                                                           	</label>
 			                                                           	</span>
-	                                                            		<input type="file" id="imgFile" name="imgFile" class="form-control" placeholder="클래스 이미지를 등록해주세요" title="클래스 이미지를 등록해주세요" data-toggle="tooltip"
+	                                                            		<input type="file" id="imgFile" name="imgFile" class="form-control" data-toggle="tooltip"
 	                                                            				value = "${classDetails.imgNm}" disabled >
                                                            				<p>현재 등록된 클래스 대표사진 파일명: ${classDetails.imgNm}</p>
+            															
                                                            				                                                     
 	                                                                </th>
 	                                                            </tr>
@@ -245,16 +251,15 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classCateBig">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 대분류</i>
+			                                                            	클래스 대분류
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
-			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" placeholder="클래스 대분류를 선택해주세요" title="클래스 대분류를 선택해주세요"  data-toggle="tooltip" required  disabled > 
+			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" data-toggle="tooltip" required  disabled > 
 			                                                            	    <option value="">선택</option>
 																			    <option value="crafts" ${classDetails.classCateBig == 'crafts' ? 'selected' : ''}>공예</option>
 																			    <option value="art" ${classDetails.classCateBig == 'art' ? 'selected' : ''}>미술</option>
-																			    <option value="music" ${classDetails.classCateBig == 'music' ? 'selected' : ''}>음악</option>
-																			    <option value="exercise" ${classDetails.classCateBig == 'exercise' ? 'selected' : ''}>운동</option>
+																			    
 																			    <option value="etc" ${classDetails.classCateBig == 'etc' ? 'selected' : ''}>기타</option>
 																			</select>
 			                                                            
@@ -264,10 +269,10 @@
 	                                                                <th colspan="2" width="50%" >
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classCateSmall">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 소분류</i>
+			                                                            	클래스 소분류
 			                                                           	</label>
 			                                                           	</span>
-			                                                           	<select id="classCateSmall" name="classCateSmall"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required disabled>
+			                                                           	<select id="classCateSmall" name="classCateSmall"  class="form-control"vdata-toggle="tooltip" required disabled>
 			                                                            	<option value=" ${classDetails.classCateBig}">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
 			                                                            	
 			                                                            </select>
@@ -279,19 +284,19 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classMaxCnt">
-			                                                            	<i class="icofont icofont-ui-email"> * 최대 참가자수</i>
+			                                                            	최대 참가자수
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="number" min="0" id="classMaxCnt" name="classMaxCnt" class="form-control" placeholder="최대 참가자수를 입력해주세요" title="최대 참가자수를 입력해주세요" data-toggle="tooltip" required
+			                                                            <input type="number" min="0" id="classMaxCnt" name="classMaxCnt" class="form-control" data-toggle="tooltip" required
 			                                                            		value="${classDetails.classMaxCnt}" readonly >
 			                                                        </th>
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classAgeMin">
-			                                                            	<i class="icofont icofont-ui-email">  최소수강가능연령</i>
+			                                                            	최소수강가능연령
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="number" min="0" id="classAgeMin" name="classAgeMin" class="form-control" placeholder="수강가능한 최소연령을 입력해주세요" title="수강가능한 최소연령을 입력해주세요" data-toggle="tooltip"
+			                                                            <input type="number" min="0" id="classAgeMin" name="classAgeMin" class="form-control" data-toggle="tooltip"
 			                                                            		value="${classDetails.classAgeMin}" readonly>
 			                                                        </th>
 	                                                            </tr>
@@ -300,26 +305,26 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classPrice">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 가격</i>
+			                                                            	클래스 가격
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="classPrice" name="classPrice" class="form-control" placeholder="클래스 가격을 입력해주세요" title="클래스 가격을 입력해주세요" data-toggle="tooltip"
+			                                                            <input type="text" id="classPrice" name="classPrice" class="form-control"  data-toggle="tooltip"
 			                                                            		value="${classDetails.classPrice}" readonly>
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classPost">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 게시 여부</i>
+			                                                            	클래스 게시 여부
 			                                                           	</label>
-			                                                           	</span><select id="classPost" name="classPost"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required disabled>
+			                                                           	</span><select id="classPost" name="classPost"  class="form-control" data-toggle="tooltip" required disabled>
 			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
 			                                                            	<option value="Y" ${classDetails.classPost == 'Y' ? 'selected' : ''}>게시</option>
 			                                                            	<option value="N" ${classDetails.classPost == 'N' ? 'selected' : ''}>미게시</option>
 			                                                            </select>
 			                                                            
 			                                                            <!-- 직접 입력용 소분류 입력란 (기타 선택 시 표시) -->
-    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
+    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" data-toggle="tooltip" style="display:none;" />
 			                                                         </th>
                                                                 	
 	                                                            </tr>
@@ -328,10 +333,10 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classPrice">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 소요시간</i>
+			                                                            	클래스 소요시간
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="int" id="classTimeTaken" name="classTimeTaken" class="form-control" placeholder="클래스 소요시간을 입력해주세요" title="클래스 소요시간을 입력해주세요" data-toggle="tooltip"
+			                                                            <input type="int" id="classTimeTaken" name="classTimeTaken" class="form-control" data-toggle="tooltip"
 			                                                            		value="${classDetails.classTimeTaken}" readonly>
 		                                                        	</th>
 		                                                        	
@@ -344,102 +349,125 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="startDt">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 시작일자</i>
+			                                                            	클래스 시작일자
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="date" id="startDt" name="startDt" class="form-control" placeholder="클래스 시작일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip"
+			                                                            <input type="date" id="startDt" name="startDt" class="form-control" data-toggle="tooltip"
 			                                                          		   value="${classDetails.startDt}" readonly>
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="endDt">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 종료일자</i>
+			                                                            	클래스 종료일자
 			                                                           	</label>
 			                                                           	</span>
-    																    <input type="date" id="endDt" name="endDt" class="form-control" placeholder="클래스 종료일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip"
+    																    <input type="date" id="endDt" name="endDt" class="form-control" data-toggle="tooltip"
     																     		value="${classDetails.endDt}" readonly>
 		                                                        	</th>
                                                                 	
 	                                                            </tr>
+                                                            
+                                                            
+                                                            
                                                             <div>
-	                                                            <tr id = "classTimeRow">
-	                                                                <th colspan="2"  width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="timeStart">
-			                                                            	<i class="icofont icofont-ui-email"> *  클래스 시작시간</i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="time" id="timeStart" name="timeStart[]" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip">
-	                                                                </th>   
-	                                                                    
-	                                                                <th colspan="2" width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="timeEnd">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 종료시간 </i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="time" id="timeEnd" name="timeEnd[]" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip">
-	                                                                </th>  
-	                                                                <!-- 
-	                                                                <th  width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="maxParticipants">
-			                                                            	<i class="icofont icofont-ui-email"> 최대 수강가능 인원</i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="number" id="maxParticipants" name="maxParticipants[]" class="form-control" placeholder="수강가능 인원을 입력해주세요" title="수강가능 인원을 입력해주세요" data-toggle="tooltip">
-   																		
-	                                                                </th> 
-	                                                                 -->
-                                                                	<th width="5%">
-	                                                                	<button id="addTime"  class="btn btn-inverse waves-effect waves-light">+</button>
-	                                                                    </br>
-	                                                                </th>
-	                                                                
-	                                                            </tr>
-                                                            </div>
-	                                                            <tr id = "holidayRow">
-	                                                                
-	                                                                <th colspan="2" width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="holidayDt">
-			                                                            	<i class="icofont icofont-ui-email">  휴무일</i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="date" id="holidayDt" name="holidayDt[]" class="form-control" placeholder="휴무일을 입력해주세요" title="휴무일을 입력해주세요" data-toggle="tooltip">
-	                                                                </th>   
-	                                                                    
-	                                                                <th colspan="2" width="25%">
-		                                                                <span class="input-group-prepend" id="name">
-				                                                            <label class="input-group-text" for="holidayDesc">
-				                                                            	<i class="icofont icofont-ui-email">  휴무일 설명</i>
+                                                            	<tr>
+                                                            		<th>
+                                                            			<h5>클래스 수강 시간대</h5>
+                                                            		</th>
+                                                           		</tr>
+                                                            	<c:forEach var="timeSet" items="${timeSetsList}"> 
+                                                            		
+		                                                            <tr id = "classTimeRow">
+		                                                                <th colspan="2"  width="5%">
+		                                                                	<span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="timeStart">
+				                                                            	클래스 시작시간
 				                                                           	</label>
 				                                                           	</span>
-	                                                                	<input type="text" id="holidayDesc" name="holidayDesc[]" class="form-control" placeholder="휴무일 설명을 입력해주세요" title="휴무일 설명을 입력해주세요" data-toggle="tooltip">                                              
-	                                                                </th>
-                                                                	<th width="5%">
-	                                                                	<button id="addHoliday"  class="btn btn-inverse waves-effect waves-light">+</button>
-	                                                                    </br>
-	                                                                </th>
-	                                                                
-	                                                               
-	                                                                <th ></th>
-	                                                                <th></th>
-	                                                            </tr>
+	   																		<input type="time" id="timeStart" name="timeStart[]" class="form-control" readonly  value="${timeSet.timeStart}" data-toggle="tooltip">
+		                                                                </th>   
+		                                                                    
+		                                                                <th colspan="2" width="5%">
+		                                                                	<span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="timeEnd">
+				                                                            	클래스 종료시간
+				                                                           	</label>
+				                                                           	</span>
+	   																		<input type="time" id="timeEnd" name="timeEnd[]" class="form-control"  data-toggle="tooltip" readonly value="${timeSet.timeEnd}">
+		                                                                </th>  
+		                                                                
+		                                                                
+		                                                            </tr>
+	                                                            </c:forEach>
+                                                            </div>
+                                                            	
+                                                            	<tr>
+                                                            		<th>
+                                                            			<h5>클래스 휴무일</h5>
+                                                            		</th>
+                                                           		</tr>
+                                                            	<c:forEach var="holiday" items="${holidayList}">
+		                                                            <tr id = "holidayRow">
+		                                                                 <!-- 기존 휴무일 날짜 입력 -->
+		                                                                <th colspan="2" width="5%">
+		                                                                	<span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="holidayDt">
+				                                                            	휴무일
+				                                                           	</label>
+				                                                           	</span>
+	   																		<input type="date" id="holidayDt" name="holidayDt[]" class="form-control" data-toggle="tooltip"
+	   																		value="${holiday.holidayDt}" readonly>
+		                                                                </th>   
+		                                                                    
+	                                                                    <!-- 기존 휴무일 설명 입력 -->
+		                                                                <th colspan="2" width="25%">
+			                                                                <span class="input-group-prepend" id="name">
+					                                                            <label class="input-group-text" for="holidayDesc">
+					                                                            	휴무일 설명
+					                                                           	</label>
+					                                                           	</span>
+		                                                                	<input type="text" id="holidayDesc" name="holidayDesc[]" class="form-control"  data-toggle="tooltip"
+		                                                                			value="${holiday.holidayDesc}" readonly>                                              
+		                                                                </th>
+		                                                                
+																        <!-- 
+	                                                                	<th width="5%">
+		                                                                	<button id="addHoliday"  class="btn btn-inverse waves-effect waves-light">+</button>
+		                                                                    </br>
+		                                                                </th>
+		                                                                 -->
+		                                                               
+		                                                                <th ></th>
+		                                                                <th></th>
+		                                                            </tr>
+	                                                        	</c:forEach>
 	                                                        	
+	                                                        	
+	                                                        	
+																
+																
 	                                                        	<tr>
-		                                                        	<td colspan="2">
-		                                                        		<a href="/adminClassUpdateForm.do" id="updateBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</button>
-	                                                        
-				                                                        <!-- 취소 -->
-				                                                        <a href="/adminClassList.do?classId=${classDetails.classId}" class="btn btn-warning waves-effect waves-light">목록</a>
-				                                                        
-				                                                        <!-- 삭제 -->
-				                                                        <button type="button" id="deleteBtn" class="btn btn-danger waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">삭제</button>
-	                                                        
+		                                                        	<td colspan="5">
+		                                                        		
+		                                                        		<div style="text-align: center; margin-top: 10px;">
+			                                                        		<!-- 수정 -->
+		                                                        			<a href="/adminClassUpdateForm.do?classId=${classDetails.classId}" id="updateBtn" 
+		                                                        			class="btn waves-effect  waves-light m-r-20" style=background-color:#32589d;color:white;margin-right:20px;" 
+			                                                        				data-toggle="tooltip" data-placement="right">수정</a>
+		                                                        			
+					                                                        <!-- 목록 -->
+					                                                        <a href="/adminClassList.do" id="ListBtn" class="btn waves-effect waves-light"
+					                                                        style="background-color:#d8b95d;color:white;border-color:#d8b95d;margin-right:20px;" >클래스 목록</a>
+					                                                        
+					                                                        <!-- 삭제 
+					                                                        <a href="/adminClassDelete.do" id="deleteBtn" class="btn waves-effect waves-light m-r-20" 
+					                                                        style="background-color:#D85D5D;color:white;border-color:#D85D5D;margin-right:20px;" data-toggle="tooltip" data-placement="right">삭제</a>
+					                                                        -->
+		                                                        		</div>
+	                                                        			 
+	                                                        			 
 		                                                        	</td>
-		                                                        	<td colspan="2"></td>
 	                                                        	</tr>    	
 	                                                            	                                                           
 	                                                        </thead>
@@ -568,39 +596,47 @@
 	    
 		// 대분류와 소분류 데이터를 객체로 정의
 		// 대분류에 따른 소분류 목록 정의
+	    
 	    var categories = {
-	        crafts: [
-	            { value: 'soap_making', text: '비누 만들기' },
-	            { value: 'candle_making', text: '캔들 만들기' },
-	            { value: 'pottery', text: '도자기 공예' },
-	            { value: 'leather_crafting', text: '가죽 공예' },
-	            { value: 'knitting', text: '뜨개질' },
-	            { value: 'embroidery', text: '자수' }
-	        ],
-	        art: [
-	            { value: 'watercolor', text: '수채화' },
-	            { value: 'oil_painting', text: '유화' },
-	            { value: 'drawing', text: '드로잉' },
-	            { value: 'calligraphy', text: '캘리그래피' },
-	            { value: 'sculpture', text: '조각' },
-	            { value: 'craft_art', text: '공예 미술' }
-	        ],
-	        music: [
-	            { value: 'guitar', text: '기타 연주' },
-	            { value: 'piano', text: '피아노' },
-	            { value: 'ukulele', text: '우쿨렐레' },
-	            { value: 'vocal', text: '보컬 트레이닝' },
-	            { value: 'drumming', text: '드럼 연주' },
-	            { value: 'violin', text: '바이올린 연주' }
-	        ],
-	        exercise: [
-	            { value: 'yoga', text: '요가' },
-	            { value: 'pilates', text: '필라테스' },
-	            { value: 'dance', text: '댄스' },
-	            { value: 'taekwondo', text: '태권도' },
-	            { value: 'fitness', text: '피트니스' },
-	            { value: 'climbing', text: '클라이밍' }
-	        ]
+		        crafts: [
+		            { value: 'soap_making', text: '비누 만들기' },
+		            { value: 'candle_making', text: '캔들 만들기' },
+		            { value: 'pottery', text: '도자기 공예' },
+		            { value: 'leather_crafting', text: '가죽 공예' },
+		            { value: 'knitting', text: '뜨개질' },
+		            { value: 'embroidery', text: '자수' }
+		        ],
+		        art: [
+		            { value: 'watercolor', text: '수채화' },
+		            { value: 'oil_painting', text: '유화' },
+		            { value: 'drawing', text: '드로잉' },
+		            { value: 'calligraphy', text: '캘리그래피' },
+		            { value: 'sculpture', text: '조각' },
+		            { value: 'craft_art', text: '공예 미술' }
+		        ],
+		        music: [
+		            { value: 'guitar', text: '기타 연주' },
+		            { value: 'piano', text: '피아노' },
+		            { value: 'ukulele', text: '우쿨렐레' },
+		            { value: 'vocal', text: '보컬 트레이닝' },
+		            { value: 'drumming', text: '드럼 연주' },
+		            { value: 'violin', text: '바이올린 연주' }
+		        ],
+		        exercise: [
+		            { value: 'yoga', text: '요가' },
+		            { value: 'pilates', text: '필라테스' },
+		            { value: 'dance', text: '댄스' },
+		            { value: 'taekwondo', text: '태권도' },
+		            { value: 'fitness', text: '피트니스' },
+		            { value: 'climbing', text: '클라이밍' }
+		        ],
+		        cooking_baking: [ // 요리 & 베이킹 대분류 추가
+		            { value: 'korean_cuisine', text: '한식' }, // 한식 소분류
+		            { value: 'western_cuisine', text: '양식' }, // 양식 소분류
+		            { value: 'bakery', text: '제과제빵' }, // 제과제빵 소분류
+		            { value: 'dessert', text: '디저트' } // 디저트 소분류
+		        ]
+		    
 	    };
 
 	    
@@ -673,7 +709,7 @@
 					                            <i class="icofont icofont-ui-email"> * 클래스 시작시간</i>
 					                        </label>
 					                    </span>
-					                    <input type="time" name="timeStart[]" id="timeStart_${index}" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip" value="${timeStart}" readonly>
+					                    <input type="time" name="timeStart[]" id="timeStart_${index}" class="form-control" data-toggle="tooltip" value="${timeStart}" readonly>
 					                </th>
 					                <th colspan="2" width="5%">
 					                    <span class="input-group-prepend" id="name">
@@ -681,7 +717,7 @@
 					                            <i class="icofont icofont-ui-email"> * 클래스 종료시간 </i>
 					                        </label>
 					                    </span>
-					                    <input type="time" name="timeEnd[]" id="timeEnd_${index}" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip" value="${timeEnd}" readonly>
+					                    <input type="time" name="timeEnd[]" id="timeEnd_${index}" class="form-control" data-toggle="tooltip" value="${timeEnd}" readonly>
 					                </th>
 					                <th width="5%">
 					                    <button type="button" class="btn btn-danger removeTimeRow">-</button>
@@ -692,10 +728,10 @@
                 // Append the new row to the time-container
                 $('.classTimeRow').append(newRow);
                 
-                $('#classTimeRow').parent().append(newRow);
+                //$('#classTimeRow').parent().append(newRow);
                 
-                $('#timeStart' + ${index}).val(timeStart);
-                $('#timeEnd' + ${index}).val(timeEnd);
+                $('#timeStart' + index).val(timeStart);
+                $('#timeEnd' + index).val(timeEnd);
                 console.log("추가 이후")
                 // $('.classTimeContainer').append(newRow);
             });

@@ -99,7 +99,12 @@
     margin-right: 0px;
 	}
 
-
+	/* 라벨 색상 변경 */
+	.input-group-append .input-group-text, .input-group-prepend .input-group-text {
+	    background-color: #32589d;
+	    border-color: rgba(0, 0, 0, 0.15);
+	    color: #fff;
+	}
     </style>
 </head>
 
@@ -133,23 +138,23 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <div class="page-header-title">
-                                            <h5 class="m-b-10">예약 정보 조회 페이지</h5>
-                                            <p class="m-b-0">등록된 예약정보를 조회하는 페이지입니다.</p>
+                                            <h5 class="m-b-10">예약 정보 수정 페이지</h5>
+                                            <p class="m-b-0">등록된 예약정보를 수정하는 페이지입니다.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                                <a href="/adminReservationList.do"></a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">예약 관리 > </a>
+                                            <li ><a href="/adminReservationList.do">예약 관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">예약 조회</a>
+                                            <li ><a href="/adminReservationUpdateForm.do?reservationId=${reservationInfo.reservationId}">예약 수정</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -170,17 +175,9 @@
                                     		<div class="col-sm-12">
 	                                    	<div class="card">
 	                                            <div class="card-header">
-	                                                <h5>예약 정보조회</h5>
-	                                                <span>예약 정보조회 페이지입니다. <code>TB_RESERVATION</code></span>
-	                                       		    <div class="card-header-right">
-	                                                    <ul class="list-unstyled card-option">
-	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-	                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-	                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-	                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-	                                                        <li><i class="fa fa-trash close-card"></i></li>
-	                                                    </ul>
-	                                                </div>
+	                                                <h5>예약 정보 수정</h5>
+	                                                <span>예약 정보 수정 페이지입니다. <code>TB_RESERVATION</code></span>
+	                                       		    
 	                                            </div>
 	                                            
 	                                            <form id="joinForm" name="joinForm" method="post">
@@ -194,16 +191,16 @@
 	                                                            	<th colspan="2">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="reservationId">
-				                                                            	<i class="icofont icofont-user-alt-3">  예약고유ID</i>
+				                                                            	 * 예약고유ID
 				                                                            </label>
 			                                                            </span>
-			                                                            <input type="text" id="reservationId" name="reservationId" class="form-control"  data-toggle="tooltip" readonly value="${reservationInfo.reservationId}">
+			                                                            <input type="text" id="reservationId" name="reservationId" class="form-control"  data-toggle="tooltip"  readonly value="${reservationInfo.reservationId}">
 			                                                            <!-- <span id="userIdMsg">ID 중복확인이 되지 않았습니다.</span> -->
 	                                                                </th>
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationNm">
-			                                                            	<i class="icofont icofont-ui-email">  예약자명*</i>
+			                                                            	* 예약자명
 			                                                           	</label>
 			                                                           	</span>
 			                                                           	<input type="text" id="reservationNm" name="reservationNm" class="form-control" data-toggle="tooltip"  value="${reservationInfo.reservationNm}">
@@ -215,7 +212,7 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationType">
-			                                                            	<i class="icofont icofont-ui-email">  회원/비회원구분</i>
+			                                                            	 * 회원/비회원구분
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
@@ -230,7 +227,7 @@
 	                                                                <th colspan="2">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="userId">
-				                                                            	<i class="icofont icofont-user-alt-3">  예약자ID(회원)</i>
+				                                                            	예약자ID(회원)
 				                                                            </label>
 			                                                            </span>
 			                                                            <input type="text" id="userId" name="userId" class="form-control"  data-toggle="tooltip" readonly value="${reservationInfo.userId}">
@@ -243,7 +240,7 @@
 	                                                            	<th colspan="2">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="classNm">
-				                                                            	<i class="icofont icofont-user-alt-3">  클래스명</i>
+				                                                            	* 클래스명
 				                                                            </label>
 			                                                            </span>
 			                                                            <input type="text" id="classNm" name="classNm" class="form-control"  data-toggle="tooltip" readonly value="${reservationInfo.classNm}">
@@ -252,10 +249,10 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationCnt">
-			                                                            	<i class="icofont icofont-ui-email">  예약인원수*</i>
+			                                                            	예약인원수
 			                                                           	</label>
 			                                                           	</span>
-			                                                           	<input type="text" id="reservationCnt" name="reservationCnt" class="form-control" data-toggle="tooltip"  value="${reservationInfo.reservationCnt}">
+			                                                           	<input type="text" id="reservationCnt" name="reservationCnt" class="form-control" data-toggle="tooltip" readonly  value="${reservationInfo.reservationCnt}">
 	                                                                </th>
 	                                                                
 	                                                            </tr>
@@ -264,31 +261,22 @@
 	                                                            	<th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationDt">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 날짜*</i>
+			                                                            	* 클래스 날짜
 			                                                           	</label>
 			                                                           	</span>
 			                                                           	<input type="text" id="reservationDt" name="reservationDt" class="form-control" data-toggle="tooltip"   
-			                                                           			value="<fmt:formatDate value="${reservationInfo.reservationDt}" pattern="yyyy-MM-dd"/>"> 
+			                                                           			readonly value="<fmt:formatDate value="${reservationInfo.reservationDt}" pattern="yyyy-MM-dd"/>"> 
 			                                                           	
 	                                                                </th>
 	                                                                
 	                                                            	<th colspan="2">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="timeStart">
-				                                                            	<i class="icofont icofont-user-alt-3">  클래스 시간*</i>
+				                                                            	* 예약 시간
 				                                                            </label>
 			                                                            </span>
-			                                                            <input type="text" id="timeStart" name="timeStart" class="form-control"  data-toggle="tooltip"  value="${reservationInfo.timeStart}">
-			                                                            <!-- <span id="userIdMsg">ID 중복확인이 되지 않았습니다.</span> -->
-			                                                            <!-- 
-			                                                            <select id="classDetailId" name="classDetailId"  class="form-control" data-toggle="tooltip"  value="${reservationInfo.timeStart}"> 
-			                                                            <!--  classDetailId 모두 불러오는 함수 필요(예약기능 만든 후) 
-			                                                            	<option value="${reservationInfo.classDetailId}">${reservationInfo.timeStart}</option>
-			                                                            	<option value="confirm">2</option>
-			                                                            	<option value="cancel">3</option>
-			                                                            	<option value="reject">4</option>
-			                                                            </select>
-			                                                             -->
+			                                                            <input type="text" id="timeStart" name="timeStart" class="form-control"  data-toggle="tooltip" readonly value="${reservationInfo.timeStart}">
+			                                                            
 			                                                            
 	                                                                </th>
 	                                                               
@@ -300,18 +288,18 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationPhone">
-			                                                            	<i class="icofont icofont-ui-email">  연락처*</i>
+			                                                            	 * 연락처
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="reservationPhone" name="reservationPhone" class="form-control" data-toggle="tooltip"  value="${reservationInfo.reservationPhone}">
+			                                                            <input type="text" id="reservationPhone" name="reservationPhone" class="form-control" data-toggle="tooltip" required  value="${reservationInfo.reservationPhone}">
 			                                                        </th>
 	                                                                <th colspan="2">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationEmail">
-			                                                            	<i class="icofont icofont-ui-email">  이메일*</i>
+			                                                            	* 이메일
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="reservationEmail" name="reservationEmail" class="form-control" data-toggle="tooltip"  value="${reservationInfo.reservationEmail}">
+			                                                            <input type="text" id="reservationEmail" name="reservationEmail" class="form-control" data-toggle="tooltip"  required value="${reservationInfo.reservationEmail}">
 			                                                        </th>
 	                                                            </tr>
 	                                                            
@@ -319,27 +307,56 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="reservationStatus">
-			                                                            	<i class="icofont icofont-ui-email">  예약상태*</i>
+			                                                            	* 예약상태
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <select id="reservationStatus" name="reservationStatus"  class="form-control" data-toggle="tooltip" >
+			                                                            <select id="reservationStatus" name="reservationStatus"  class="form-control" data-toggle="tooltip"  required>
 		                                                            	    <option value="stay" ${reservationInfo.reservationStatus == 'stay' ? 'selected' : ''}>예약대기</option>
-																		    <option value="approved" ${reservationInfo.reservationStatus == 'approved' ? 'selected' : ''}>예약확정</option>
+																		    <option value="approved" ${reservationInfo.reservationStatus == 'approved' ? 'selected' : ''}>접수완료</option>
 																		    <option value="cancel" ${reservationInfo.reservationStatus == 'cancel' ? 'selected' : ''}>예약취소</option>
-																		    <option value="reject" ${reservationInfo.reservationStatus == 'reject' ? 'selected' : ''}>예약거부</option>
+																		    <option value="reject" ${reservationInfo.reservationStatus == 'reject' ? 'selected' : ''}>접수취소</option>
+	    																	<option value="done" ${reservationInfo.reservationStatus == 'done' ? 'selected' : ''}>수강완료</option>
+																		    
 			                                                            </select>
 		                                                        	</th>
 	                                                                
+	                                                                
+	                                                                <th colspan="2">
+	                                                                	<span class="input-group-prepend" id="name">
+			                                                            <label class="input-group-text" for="reservationEtc">
+			                                                            	예약 비고
+			                                                           	</label>
+			                                                           	</span>
+			                                                            <input type="text" id="reservationEtc" name="reservationEtc" class="form-control" data-toggle="tooltip" value="${reservationInfo.reservationEtc}">
+			                                                        </th>
 	                                                            </tr>
+	                                                        	
 	                                                        	
 	                                                        	<tr>
 		                                                        	<td colspan="3">
-		                                                        		<button type="button" id="updateBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</button>
-	                                                        
-				                                                        <!-- 취소 -->
-				                                                        <button type="button" id="ListBtn" class="btn btn-danger waves-effect waves-light">목록</button>
+		                                                        		<div style="text-align: center; margin-top: 10px;">
+			                                                        		<!-- 수정 -->
+		                                                        			<a href="/adminReservationUpdate.do?reservationId=${reservationInfo.reservationId}" id="updateBtn" 
+		                                                        			class="btn waves-effect  waves-light m-r-20" style=background-color:#32589d;color:white;margin-right:20px;" 
+			                                                        				data-toggle="tooltip" data-placement="right">수정</a>
+		                                                        			
+					                                                        <!-- 목록 -->
+					                                                        <a href="/adminReservationList.do" id="ListBtn" class="btn waves-effect waves-light"
+					                                                        style="background-color:#d8b95d;color:white;border-color:#d8b95d;margin-right:20px;" >예약 목록</a>
+					                                                        
+					                                                        <!-- 삭제 
+					                                                        <a href="/adminReservationDelete.do?reservationId=${reservationInfo.reservationId}" id="" class="btn waves-effect waves-light m-r-20" 
+					                                                        style="background-color:#D85D5D;color:white;border-color:#D85D5D;margin-right:20px;" data-toggle="tooltip" data-placement="right">삭제</a>
+					                                                        -->
+					                                                        
+					                                                        <a href="#" id="deleteBtn" class="btn waves-effect waves-light m-r-20" 
+					                                                        	style="background-color:#D85D5D;color:white;border-color:#D85D5D;margin-right:20px;" data-toggle="tooltip" data-placement="right">
+					                                                        	삭제
+					                                                        </a>
+		                                                        		</div>
+	                                                        			 
 		                                                        	</td>
-	                                                        	</tr>    	
+	                                                        	</tr>       	
 	                                                            	                                                           
 	                                                        </thead>
 	                                                        
@@ -352,25 +369,9 @@
                                        	
                                        	<!-- 툴팁 끝 -->
 	                                        
-                                        <!-- Basic table card start -->
-                                        <!-- Basic table card end -->
-                                        
-                                        <!-- Inverse table card start -->
-                                        <!-- Inverse table card end -->
-                                        
-                                        
-                                        <!-- Hover table card start -->
-                                        
-                                        <!-- Hover table card end -->
-                                        
+                                       
                                        
                                         
-                                       
-                                        <!-- Contextual classes table starts -->
-                                        <!-- Contextual classes table ends -->
-                                        
-                                        <!-- Background Utilities table start -->
-                                        <!-- Background Utilities table end -->
                                     </div>
                                     <!-- Page-body end -->
                                 </div>
@@ -392,28 +393,6 @@
 	
 
 
-
-
-
-
-
-
-
-
-
-
-    <!-- Warning Section Starts -->
-    
-    <!-- Warning Section Ends -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -450,10 +429,67 @@
 			window.onload = userData;
 	var userIdCk = false;
 	function userData() {
+		
+		
+		// 이름 입력 제한 및 길이 제한
+		  $('#reservationNm').on('input', function() {
+		      // 이름 정규식 (한글 or 영어 대소문자만 허용 // 공백x 특수문자x 숫자x)
+		      let validChars = /^[ㄱ-ㅎ|가-힣a-zA-Z]*$/;
+
+		      let userName = $(this).val(); // 현재 입력된 이름
+
+		      // 입력불가 문자 입력 시 삭제
+		      if (!validChars.test(userName)) {
+		          $(this).val(userName.replace(/[^가-힣a-zA-Z]/g, ''));
+		          $('#reservationNmMsg').text("이름은 한글 또는 영어 대소문자만 허용됩니다. 공백,특수문자,숫자는 입력할 수 없습니다.").css("color", "#D85D5D");
+		      } 
+		      // 글자수 10글자 제한
+		      else if (userName.length > 10) { 
+		          $(this).val(userName.substring(0, 10));
+		          $('#reservationNmMsg').text("이름은 최대 10자까지 입력 가능합니다.").css("color", "#D85D5D");
+		      } else {
+		          $('#reservationNmMsg').text(""); // 정규표현식 o -> 메시지 삭제
+		      }
+		  });
+		
+
+		//휴대전화 
+		 $('#reservationPhone').on('input', function() {
+	        let phoneNumber = $(this).val().replace(/[^0-9]/g, ''); // 숫자만 허용
+	        
+	        // 글자수 11 제한
+	        if (phoneNumber.length > 11) {
+	            phoneNumber = phoneNumber.substring(0, 11);
+	        }
+	        
+	        let formattedNumber;
 	
+	        if (phoneNumber.length <= 3) {
+	            formattedNumber = phoneNumber; // 3자리 이하일 경우 그대로 표시
+	        } else if (phoneNumber.length <= 7) {
+	            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3); // 4~7자리일 경우 3-4 형식
+	        } else if (phoneNumber.length <= 10) {
+	            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 6) + '-' + phoneNumber.slice(6); // 10자리 형식 3-3-4
+	        } else {
+	            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7); // 11자리 형식 3-4-4
+	        }
+	
+	        $(this).val(formattedNumber); // 포맷팅된 번호를 필드에 표시
+	    });
 		
 		
-		// 회원가입 버튼 클릭 시 
+		// 이메일 입력 제한: 최대 30글자, 공백 허용하지 않음
+		 $('#reservationEmail').on('input', function() {
+		     let email = $(this).val().replace(/\s/g, ''); // 공백 제거
+		     if (email.length > 30) {
+		         email = email.substring(0, 30); // 최대 30글자로 제한
+		     }
+		     $(this).val(email); // 수정된 값 설정
+		 });
+		
+		/**************************************************/
+		
+		// 수정 버튼 클릭 시 
 		$('#updateBtn').click(function(e) {
 			console.log("수정 클릭 버튼 들어왔는지 확인 ")
 			e.preventDefault();
@@ -542,7 +578,47 @@
 			
 			
 			
-		})// 회원가입 버튼 클릭 끝
+		})// 수정 버튼 클릭 끝
+		
+		
+		
+		
+		
+		
+		/******************************************************************/
+		// 삭제 버튼 클릭
+	    $('#deleteBtn').click(function (e) {
+	    	console.log("삭제 버튼 클릭")
+	    	e.preventDefault(); // 기본 링크 동작 방지
+	    	
+	    	const reservationId= '${reservationInfo.reservationId}'
+	    	// const classId = '${classDetails.classId}'; // 클래스 ID 가져오기
+	    	console.log("삭제 버튼 클릭 reservationId : ", reservationId)
+	    	
+	        if (confirm('해당 예약을 삭제하시겠습니까?')) {
+	        	
+	            $.ajax({
+	                type: 'POST',
+	                url: '/adminDeleterReservation.do',
+	                data: { reservationId: reservationId },
+	                success: function (response) {
+	                    console.log("삭제 응답 데이터: ", response); // 응답 데이터를 로그에 출력
+	                    
+	                        if (response.error === "N") {
+	                            alert(response.message);
+	                            location.href = '/adminReservationList.do'; // 목록 페이지로 이동
+	                        } else if (response.error === "Y") {
+	                            alert('예약 삭제 실패: ' + response.errorMsg); // 실패 시 오류 메시지 표시
+	                        }
+                    },
+	                error: function (xhr) {
+	                    console.error("AJAX 요청 실패: ", xhr);
+	                    alert('예약 삭제 중 오류가 발생했습니다: ' + xhr.responseText);
+	                }
+	            });
+	        }
+	    });
+		
 	};// 전체 불러오기 끝
 		
 	// 유효성 검사 함수

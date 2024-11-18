@@ -58,6 +58,7 @@
 	<select id="getAdminUserList" resultType="EgovMap">
 	    SELECT *
 	    FROM TB_USER
+	    ORDER BY REG_DT DESC
 	</select>
 	
 	<!-- 관리자 페이지 회원 상세보기 화면 조회 -->
@@ -155,5 +156,22 @@
 	    WHERE user_id = #{userId}
 	</delete>
 	
+	
+	<!-- 관리자 회원정보 수정 기능 -->
+	<update id="adminUserUpdate" parameterType="UserVO">
+	    UPDATE TB_USER
+	    SET 
+	        USER_NAME = #{userName},
+	        BRTHDY = #{brthdy},
+	        EMAIL = #{email},
+	        MBTLNUM = #{mbtlnum},
+	        SEX = #{sex},
+	        SNS_PROVIDER = #{snsProvider},
+	        USER_SE = #{userSe},
+	        UPDT_ID = #{updtId},
+	        UPDT_IP = #{updtIp},
+	        UPDT_DT = NOW()
+	    WHERE USER_ID = #{userId}
+	</update>
 	
 </mapper>

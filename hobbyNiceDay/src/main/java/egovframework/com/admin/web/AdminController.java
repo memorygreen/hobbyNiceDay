@@ -1,7 +1,10 @@
 package egovframework.com.admin.web;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -9,18 +12,27 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import egovframework.com.classes.service.ClassService;
 import egovframework.com.cmm.ClassVO;
+import egovframework.com.cmm.HolidayVO;
+import egovframework.com.cmm.ImgVO;
 import egovframework.com.cmm.ReservationVO;
 import egovframework.com.cmm.UserVO;
 import egovframework.com.reservation.service.ReservationService;
@@ -111,6 +123,17 @@ public class AdminController {
     	return "/cmm/admin/adminUserInfo";
     }
     
+    
+ // 관리자 회원정보 수정 페이지로 이동
+    @RequestMapping(value = "/adminUserUpdateForm.do", method = RequestMethod.GET)
+    public String adminUserUpdateForm(@RequestParam("userId") String userId, Model model) throws Exception {
+    	
+        UserVO userInfo = userService.getUserInfo(userId);
+        System.out.println("관리자 페이지 회원 상세보기 데이터 조회 : "+ userInfo);
+        model.addAttribute("userInfo", userInfo);
+    	return "/cmm/admin/adminUserUpdateForm";
+    }
+    
     // 관리자 자기자신
     
     // (아래 4개는 사용자 회원 crud에서 분기해도 될 듯 사용자구분 일반 vs 관리자)
@@ -145,6 +168,14 @@ public class AdminController {
         return "/cmm/admin/adminPendingReservationList";
     }
     
+    
+    
+
+    // 관리자 예약 관리 페이지로 이동
+    @RequestMapping(value = "/adminReservationStat.do", method = RequestMethod.GET)
+    public String adminReservationStatus() throws Exception {
+        return "/cmm/admin/adminReservationStat";
+    }
     
     // 관리자 예약 등록 페이지로 이동
     @RequestMapping(value = "/adminReservationInsertForm.do", method = RequestMethod.GET)
@@ -200,6 +231,97 @@ public class AdminController {
     public String adminClassInsertForm() throws Exception {
         return "/cmm/admin/adminClassInsertForm";
     }
+    
+    
+    
+    // 관리자 클래스 상세보기 페이지 이동
+    @RequestMapping(value = "/adminClassInfo.do", method = RequestMethod.GET)
+    public String adminClassInfo(@RequestParam("classId") String classId, Model model)  throws Exception{
+    	
+    	 try {
+    	        System.out.println("관리자 페이지 클래스 상세보기 페이지 이동 들어왔는 지 확인 ");
+    	        
+    	        int intClassId = Integer.parseInt(classId); // classId를 정수로 변환
+    	        ClassVO classDetails = classService.getClassDetails(intClassId);
+    	        System.out.println("관리자 페이지 클래스 상세보기 데이터 조회 : " + classDetails);
+    	        
+    	        model.addAttribute("classDetails", classDetails);
+    	        
+    	        
+    	        // 휴무일 조회
+    	        List<EgovMap> holidayList = classService.getHolidaysByClassId(intClassId);
+    	        System.out.println("클래스 상세보기- 휴무일 데이터 조회 : "+ holidayList);
+    	        
+    	        // 클래스 시간 정보 가져오기 (예: timeStart와 timeEnd를 포함한 문자열)
+    	        List<EgovMap> timeSetsList = classService.getTimeSetsByClassId(intClassId);
+    	        System.out.println("클래스 상세보기- 수강시간대 데이터 조회 : "+ timeSetsList);
+    	        
+    	        model.addAttribute("holidayList", holidayList);
+    	        model.addAttribute("timeSetsList", timeSetsList);
+
+    	        
+    	    } catch (NumberFormatException e) {
+    	        System.out.println("classId 변환 오류: " + e.getMessage());
+    	        model.addAttribute("error", "잘못된 클래스 ID입니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    } catch (Exception e) {
+    	        System.out.println("클래스 상세보기 조회 오류: " + e.getMessage());
+    	        e.printStackTrace();
+    	        model.addAttribute("error", "클래스 상세보기 중 오류가 발생했습니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    }
+    	
+        return "/cmm/admin/adminClassInfo";  // JSP 페이지로 이동
+    }
+    
+    
+    // 관리자 클래스 1건 수정하기 페이지 이동
+    @RequestMapping(value = "/adminClassUpdateForm.do", method = {RequestMethod.GET, RequestMethod.POST}) // RequestMethod.GET)
+    public String adminClassUpdateForm(@RequestParam("classId") String classId, Model model)  throws Exception{
+    	
+    	 try {
+    	        System.out.println("관리자 페이지 클래스 수정 페이지 이동 들어왔는 지 확인 ");
+    	        int intClassId = Integer.parseInt(classId); // classId를 정수로 변환
+    	        ClassVO classDetails = classService.getClassDetails(intClassId);
+    	        System.out.println("관리자 페이지 클래스 수정 데이터 조회 : " + classDetails);
+    	        
+    	        model.addAttribute("classDetails", classDetails);
+    	        
+    	        
+    	        
+    	        
+    	        // 휴무일 조회
+    	        List<EgovMap> holidayList = classService.getHolidaysByClassId(intClassId);
+    	        System.out.println("클래스 상세보기- 휴무일 데이터 조회 : "+ holidayList);
+    	        
+    	        // 클래스 시간 정보 가져오기 (예: timeStart와 timeEnd를 포함한 문자열)
+    	        List<EgovMap> timeSetsList = classService.getTimeSetsByClassId(intClassId);
+    	        System.out.println("클래스 상세보기- 수강시간대 데이터 조회 : "+ timeSetsList);
+    	        
+    	        model.addAttribute("holidayList", holidayList);
+    	        model.addAttribute("timeSetsList", timeSetsList);
+
+    	        
+    	        
+    	    } catch (NumberFormatException e) {
+    	        System.out.println("classId 변환 오류: " + e.getMessage());
+    	        model.addAttribute("error", "잘못된 클래스 ID입니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    } catch (Exception e) {
+    	        System.out.println("클래스 수정 조회 오류: " + e.getMessage());
+    	        e.printStackTrace();
+    	        model.addAttribute("error", "클래스 수정 중 오류가 발생했습니다.");
+    	        return "errorPage"; // errorPage로 변경하거나 오류 페이지로 이동하도록 설정
+    	    }
+    	
+        return "/cmm/admin/adminClassUpdateForm";  // JSP 페이지로 이동
+    }
+    
+    
+
+    
+    
+    
     
 }
     

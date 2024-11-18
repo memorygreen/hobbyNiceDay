@@ -1,6 +1,5 @@
 package egovframework.com.user.service.impl;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +12,7 @@ import org.egovframe.rte.fdl.cryptography.EgovCryptoService;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
 
-import egovframework.com.cmm.ClassVO;
 import egovframework.com.cmm.UserVO;
-import egovframework.let.utl.fcc.service.EgovNumberUtil;
-import egovframework.let.utl.fcc.service.EgovStringUtil;
 import egovframework.let.utl.sim.service.EgovFileScrty;
 
 // 회원 관련 서비스를 구현한 구현체
@@ -26,10 +22,6 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     private UserDAO userDAO;
     
     
-    /** 암호화서비스 - 복호화 하려고 가져옴 */
-	@Resource(name = "egovARIACryptoService")
-	EgovCryptoService cryptoService;
-
     
     // 회원가입
     @Override
@@ -163,14 +155,46 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     
     
     // 관리자 - 회원 삭제 기능
-    
     @Override
     public int deleteUser(String userId) throws Exception {
+    	
+    	// 예약 삭제 (제약조건에 casecade 걸려있어서 넘어간듯)
+    	
+    	// 회원 삭제
         int result = userDAO.deleteUser(userId);
         return result;
     }
     
     
+    // 관리자 - 회원 수정 기능
+    public int adminUserUpdate(UserVO userVO) throws Exception{
+    	
+    	
+    	// 비밀번호 암호화
+        if(userVO.getPasswd() != null) {
+        	// 비밀번호가 있을 경우 암호화(사용자 회원정보 수정)
+        	String encryptedPassword = EgovFileScrty.encryptPassword(userVO.getPasswd(), userVO.getUserId());
+        	userVO.setPasswd(encryptedPassword);
+        }
+        // 관리자 페이지 회원정보 수정 시에는 비밀번호 x
+        
+
+        // 휴대폰 번호 암호화
+        String encryptedMbtlnum = EgovFileScrty.encode(userVO.getMbtlnum());
+        userVO.setMbtlnum(encryptedMbtlnum);
+        
+        // 생년월일 암호화
+        String encryptedBrthdy = EgovFileScrty.encode(userVO.getBrthdy());
+        userVO.setBrthdy(encryptedBrthdy);
+        
+        // 이메일 암호화
+        String encryptedEmail = EgovFileScrty.encode(userVO.getEmail());
+        userVO.setEmail(encryptedEmail);
+    	
+    	
+    	int result = userDAO.adminUserUpdate(userVO);
+    	return result;
+    }
     
     
     
@@ -180,76 +204,44 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements egovfram
     
     // 카카오 로그인 기존 회원인지 확인
  	public UserVO getUserBySNSId(String kakaoUserId,  String snsProvider) throws Exception {
- 		 return userDAO.getUserBySNSId(kakaoUserId, snsProvider);  // DAO 메서드 호출
+ 		UserVO userVo =  userDAO.getUserBySNSId(kakaoUserId, snsProvider);  // DAO 메서드 호출
+ 		System.out.println("userServiceImpl - 복호화 하기 전 사용자 정보: " + userVo);
+ 		// 카카오 로그인 성공 시 세션에 담을 개인정보를 복호화 241114 추가
+
+ 	    if (userVo != null) {
+ 	        // 2. 연락처 복호화
+ 	        if (userVo.getMbtlnum() != null) {
+ 	            String decryptedMbtlnum = EgovFileScrty.decode(userVo.getMbtlnum());
+ 	            userVo.setMbtlnum(decryptedMbtlnum);
+ 	        }
+ 	        
+ 	        // 3. 생년월일 복호화
+ 	        if (userVo.getBrthdy() != null) {
+ 	            String decryptedBrthdy = EgovFileScrty.decode(userVo.getBrthdy());
+ 	            userVo.setBrthdy(decryptedBrthdy);
+ 	        }
+ 	        
+ 	        // 4. 이메일 복호화
+ 	        if (userVo.getEmail() != null) {
+ 	            String decryptedEmail = EgovFileScrty.decode(userVo.getEmail());
+ 	            userVo.setEmail(decryptedEmail);
+ 	        }
+ 	    }
+ 	    
+ 	   System.out.println("userServiceImpl - 복호화된 사용자 정보: " + userVo);
+ 	   
+ 	   return userVo;
+ 		 
+ 		 
+ 		 
+ 		 
+ 		 
+ 		 
+ 		 
  	}
 
     
-    
-
-	/**
-	 * 아이디를 찾는다.
-	 * @param vo LoginVO
-	 * @return LoginVO
-	 * @exception Exception
-	 */
-    /*
-	@Override
-	public UserVO searchId(UserVO vo) throws Exception {
-
-		// 1. 이름, 이메일주소가 DB와 일치하는 사용자 ID를 조회한다.
-		UserVO userVO = loginDAO.searchId(vo);
-
-		// 2. 결과를 리턴한다.
-		if (userVO != null && !userVO.getId().equals("")) {
-			return userVO;
-		} else {
-			userVO = new UserVO();
-		}
-
-		return userVO;
-	}*/
-
-	/**
-	 * 비밀번호를 찾는다.
-	 * @param vo LoginVO
-	 * @return boolean
-	 * @exception Exception
-	 */
-    /*
-	@Override
-	public boolean searchPassword(UserVO vo) throws Exception {
-
-		boolean result = true;
-
-		// 1. 아이디, 이름, 이메일주소, 비밀번호 힌트, 비밀번호 정답이 DB와 일치하는 사용자 Password를 조회한다.
-		UserVO userVO = loginDAO.searchPassword(vo);
-		if (userVO == null || userVO.getPassword() == null || userVO.getPassword().equals("")) {
-			return false;
-		}
-
-		// 2. 임시 비밀번호를 생성한다.(영+영+숫+영+영+숫=6자리)
-		String newpassword = "";
-		for (int i = 1; i <= 6; i++) {
-			// 영자
-			if (i % 3 != 0) {
-				newpassword += EgovStringUtil.getRandomStr('a', 'z');
-				// 숫자
-			} else {
-				newpassword += EgovNumberUtil.getRandomNum(0, 9);
-			}
-		}
-
-		// 3. 임시 비밀번호를 암호화하여 DB에 저장한다.
-		UserVO pwVO = new userVO();
-		String enpassword = EgovFileScrty.encryptPassword(newpassword, vo.getId());
-		pwVO.setId(vo.getId());
-		pwVO.setPassword(enpassword);
-		pwVO.setUserSe(vo.getUserSe());
-		loginDAO.updatePassword(pwVO);
-
-		return result;
-	}*/
-    
+   
     
     
 }

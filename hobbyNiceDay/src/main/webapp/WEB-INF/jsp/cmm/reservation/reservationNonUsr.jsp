@@ -56,7 +56,10 @@
 <!-- https://www.jsdelivr.com/package/npm/fullcalendar?version=6.1.15  -->
 <script
 	src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-
+<!-- google calendar api 추가  -->
+<script
+	src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.15/index.global.min.js"></script>
+	
 <script type="text/javascript">
 	
 </script>
@@ -113,28 +116,19 @@
 	outline: none; /* 기본 파란색 외곽선 제거 */
 }
 
-/*241025 추가 예약 시간대 활성화 시 css*/
-.product__details__option__size label.active {
-	background: #111111;
-	color: #ffffff;
-	border-color: #111111;
+.checkout__input input{
+   color : #606060;/*input 태그 긆자 색*/
 }
 
-
-
-/*241030 추가 달력 주말 배경 연한 빨간색*/
-/*
-.fc-weekend { 
-        background-color: rgba(255, 0, 0, 0.1); /* 주말을 연한 빨간색으로 
-    }
-  */  
 .fc-sunday .fc-daygrid-day-top { 
-    color: red; /* 일요일 글자 빨간색 */
+    color: #D85D5D; /* 일요일 글자 빨간색 */
 }
 
 .fc-saturday .fc-daygrid-day-top { 
-    color: blue; /* 토요일 글자 파란색 */
+    color: #267CC7; /* 토요일 글자 파란색 */
 }
+
+
 </style>
 
 </head>
@@ -218,6 +212,7 @@
 								
 								<li><span>장소 : </span>${classDetails.location}</li>
 								<!-- <li><span>소요시간 : </span>약 2시간</li> -->
+								<li><span>소요시간 : </span>약 ${classDetails.classTimeTaken}시간</li>
 								<li><span>최대 예약가능 인원 수 : </span>${classDetails.classMaxCnt}명</li>
 								<li><span>최소 수강가능 연령 : </span>만
 									${classDetails.classAgeMin}세</li>
@@ -283,7 +278,7 @@
 
 
 	<!-- Checkout Section Begin -->
-	<section class="checkout spad">
+	<section class="checkout spad" style="padding-top:0px;">
 	<div class="container">
 
 		<div class="row">
@@ -292,8 +287,8 @@
 					<div class="jy_page_title">
 						<!--section-title  -->
 						<span>RESERVATION</span>
-						<h2>예약 등록(비회원)</h2>
-						<p>예약 정보를 입력해주세요</p>
+						<h2>비회원 예약 신청</h2>
+						<p>달력에서 예약하고자하는 날짜를 선택한 후, 예약정보를 입력해주세요</p>
 					</div>
 				</div>
 			</div>
@@ -301,16 +296,23 @@
 			<!-- 달력추가 -->
 
 		</div>
-
+		
+		
+		 <div class="jy_margin_1" style="height:50px"></div>
+		
+		<form id="registerForm" name="registerForm" method="post">
 		<div class="row">
-			<div class="col-lg-8 ">
+			<div class="col-lg-7 ">
 			<!-- 달력추가 -->
 				<div id='calendar'></div>
 			</div>
-
-			<div class="col-lg-4 ">
-				<div class="product__details__pic">
-					<h6 class="checkout__title"><span  id="reservationScheduleselectedDateText"></span> 예약 일정 헌황</h6>
+			
+			
+			
+			<div class="col-lg-5 ">
+				<!--  <div class="product__details__pic">-->
+					<h6 class="checkout__title">
+					선택날짜 : <span  id="reservationScheduleselectedDateText">달력에서 예약날짜를 선택해주세요</span></h6>
 						<!-- 예약 일정 리스트 -->
 						<div class="checkout__form">
 								<!-- 시간대 리스트가 여기 들어갑니다 -->
@@ -318,173 +320,111 @@
 								<div class="row">
 									
 									<div class="col-lg-12">
+										
 										<div class="checkout__input">
-											<p>
-												예약 시간대 (현재예약인원수 / 예약가능인원수)
-											</p>
-											<!-- <input type="time" id="reservationTime" name="reservationTime" required /> -->
-											<!--<div id="timeOptions">  -->
-											<div class="product__details__option__size" id="reservationScheduletimeOptions">
-												<!-- <label for="time1">${classDetails.timeSets}
-					                                <input type="radio" name="reservationTime" id="time1" required>
-					                            </label>
-					                             -->
-					                             
-					                             <ul> 
-					                             	<li> 
-					                             		<span>달력에서 날짜를 선택해주세요</span>
-					                             		<span class="reservationSchedule timeRange"></span>
-														<span class="reservationSchedule sumAllreservation"></span>
-														<span class="reservationSchedule classMaxCnt"></span>
-													</li>
-					                             	
-					                             </ul>
+											<!-- <p>예약 시간대<span>*</span></p> -->
+											<h6 class="checkout__title">예약시간대 *</h6>
+											<!-- <p>(현재예약인원수 / 예약가능인원수)</p> -->
+											
+											<div class="product__details__option__size" id="timeOptions">
+												<p>예약 날짜를 선택해주세요</p>
 											</div>
-	
 										</div>
+										
+										</br>
+										</br>
+										<div class="checkout__input">
+										
+											<h6 class="checkout__title">예약인원수 *</h6>
+											<!-- <p>예약인원수<span>*</span></p> -->
+											<div class="product__details__option__size" id="reservationCountOptions">
+												<p>예약 시간대를 선택해주세요</p>
+											</div>
+										</div>
+										
+										</br>
+										</br>
+										<h6 class="checkout__title">예약자 정보</h6>
+									</div>
+										
+									<div class="col-lg-6">
+										<div class="checkout__input">
+											<h6>예약자명<span>*</span></h6>
+											</br>
+											<input type="text" id="reservationNm" name="reservationNm" width="80%"
+											placeholder="예약자명을 입력해주세요" required>
+										</div>
+									</div>	
+									
+									<div class="col-lg-6">
+										<div class="checkout__input">
+											<h6>예약자 연락처<span>*</span></h6>
+											</br>
+											<input type="text" id="reservationPhone" name="reservationPhone" width="80%"
+											placeholder="예약자 연락처를 입력해주세요" required>
+										</div>
+										
+									</div>	
+									
+									<div class="col-lg-12">
+										<div class="checkout__input">
+											<h6>예약자 이메일<span>*</span></h6>
+											</br>
+											<input type="text" id="reservationEmail" name="reservationEmail" width="80%"
+											placeholder="예약자 이메일을 입력해주세요" required>
+										</div>
+										
+										<div class="checkout__input">
+											<h6>예약 비밀번호<span>*</span></h6>
+											</br>
+											<input type="password" id="reservationPw" name="reservationPw" width="80%"
+											autocomplete="new-password"	placeholder="예약조회 시 사용할 비밀번호를 입력해주세요" required>
+										</div>
+										
+										<div class="checkout__input">
+											<h6>예약 비고</h6>
+											</br>
+											<input type="text" id="reservationEtc" name="reservationEtc" width="80%"
+											placeholder="예약 신청 시 비고사항을 입력해주세요">
+										</div>
+										
+										
+									
 									</div>
 														
 								</div>
-								<div class="jy_margin_1" style="height: 200px"></div> 
 						</div>
-				</div>
+				<!-- </div>-->
 			</div>
-		</div>
-		
-
-		<!-- <div class="jy_margin_1" style="height:50px"></div> -->
-		<!--  예약정보 입력 -->
-		<div class="checkout__form">
-
-			<form id="registerForm" name="registerForm" method="post">
-				<input type="hidden" id="userId" name="userId"
-					value="<c:out value='${userVO.userId}'/>">
+			
+				<!--<input type="hidden" id="userId" name="userId" value="<c:out value='${userVO.userId}'/>">  회워 -->
 				<!-- 사용자 구분(일반사용자) -->
 				<!-- <input type="hidden" id="classDetailId" name="classDetailId" ><!-- 클래스 시간 고유 id -->
-				<input type="hidden" id="classId" name="classId"
-					value="<c:out value='${classDetails.classId}'/>">
-
-				<div class="jy_margin_1" style="height: 50px"></div>
-
-				<!-- 회원가입 폼 시작 -->
-				<h6 class="checkout__title">예약정보 입력</h6>
-				<div class="row">
-
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>
-								예약자명<span>*</span>
-							</p>
-							<input type="text" id="reservationNm" name="reservationNm"
-								value="<c:out value='${userVO.userName}'/>" required />
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>
-								예약날짜 <span>*</span>
-							</p>
-							<input type="date" id="reservationDt" name="reservationDt"
-								readonly required /> <span>위의 달력에서 원하는 예약 날짜를 선택해주세요.</span>
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						
-						
-						<div class="checkout__input">
-							<p>
-								예약인원수<span>*</span>
-							</p>
-							<div class="product__details__option__size">
-								<c:forEach var="i" begin="1" end="${classDetails.classMaxCnt}">
-									<label for="person${i}"> ${i}명 <input type="radio"
-										name="reservationCnt" id="person${i}" value="${i}"
-										${i == 1 ? 'required' : ''}>
-									</label>
-								</c:forEach>
-							</div>
-							<!-- <input type="number" id="reservationCnt" name="reservationCnt" required /> -->
-							<!-- 
-							<div class="product__details__option__size" >
-	                            <label for="xxl">1
-	                                <input type="radio" name="reservationCnt" id="xxl" required>
-	                            </label>
-	                            <label class="active" for="xl">2
-	                                <input type="radio" name="reservationCnt" id="xl">
-	                            </label>
-	                            <label for="l">3
-	                                <input type="radio" name="reservationCnt" id="l">
-	                            </label>
-	                            <label for="sm">4
-	                                <input type="radio" name="reservationCnt" id="sm">
-	                            </label>
-	                        </div> -->
-
-
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>
-								예약 시간대<span>*</span>
-							</p>
-							<!-- <input type="time" id="reservationTime" name="reservationTime" required /> -->
-							<!--<div id="timeOptions">  -->
-							<div class="product__details__option__size" id="timeOptions">
-								<!-- <label for="time1">${classDetails.timeSets}
-	                                <input type="radio" name="reservationTime" id="time1" required>
-	                            </label>
-	                             -->
-							</div>
-
-
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>
-								휴대전화<span>*</span>
-							</p>
-							<input type="text" id="reservationPhone" name="reservationPhone"
-								value="<c:out value='${userVO.mbtlnum}'/>" required>
-							<p>휴대전화 번호를 '-'까지 입력해주세요.</p>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>
-								이메일<span>*</span>
-							</p>
-							<input type="text" id="reservationEmail" name="reservationEmail"
-								value="<c:out value='${userVO.email}'/>" required>
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>비고</p>
-							<input type="text" id="reservationEtc" name="reservationEtc">
-						</div>
-					</div>
-				</div>
-		</div>
-		<!-- checkout Form 끝 -->
-
+				<input type="hidden" id="classId" name="classId" value="<c:out value='${classDetails.classId}'/>">
+				<input type="hidden" id="classMaxCnt" name="classMaxCnt" value="<c:out value='${classDetails.classMaxCnt}'/>">
+				<input type="hidden" id="reservationDt" name="reservationDt" readonly required /> 
+				<input type="hidden" id="reservationType" name="reservationType" value="nonUser" required> <!-- 회원구분 -->
+				
 		</form>
+			<div class="col-lg-12 " >
+				</br>
+				</br>
+				</br>
+				
+			</div>
+			<div class="col-lg-12 " 
+				 style="display: flex; justify-content: center; gap: 10px;" >
+				<button type="reset" class="primary-btn">취소</button>
 
-		<!-- <input type="submit" value="회원가입" class="primary-btn" /> -->
-		<button type="reset" class="primary-btn">취소</button>
+				<a href="#" class="primary-btn registerBtn">예약 신청</a> 
+				<a href="/" id="listBtn" class="primary-btn listBtn">클래스 목록</a>
 
-		<a href="#" class="primary-btn registerBtn">예약</a> <a href="/"
-			id="listBtn" class="primary-btn listBtn">목록</a>
-
-
-		<!-- 회원가입 폼 끝-->
+				
+			</div>
+			
+			
+		</div>
+				
 
 
 	</div>
@@ -528,122 +468,321 @@
 		</div>
 	</div>
 	<!-- Search End -->
-
-
+	<!-- 구글 캘린더 대한민국의 공휴일 -->
+	<!-- <iframe src="https://calendar.google.com/calendar/embed?src=ko.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul" 
+				style="border: 0" width="800" height="600" frameborder="0" scrolling="no">
+		</iframe>
+	 -->
 	<!-- 자영 달력 추가 -->
 	<!-- 참고용 : 공식문서 https://fullcalendar.io/docs/initialize-globals -->
-	<script>
 	
+	
+	
+	
+	
+	<script>
+	// frullCalendaer 달력 api
 	  document.addEventListener('DOMContentLoaded', function() {
 		  
 		  
           var calendarEl = document.getElementById('calendar');
+          var selectedDate = null; // 선택된 날짜를 저장할 변수
+
+          var holidayDates = []; // 공휴일 날짜를 저장할 배열
+          var holidayLabels = {}; // 구글 캘린더에서 불러온 공휴일 날짜와 이름을 저장할 객체 (여기서 선언)
+
           
-          // Retrieve start and end dates from JSP variables
+          // 클래스 수강 시작일자, 종료일자
           var startDt = "${classDetails.startDt}"; // Format: YYYY-MM-DD
           var endDt = "${classDetails.endDt}";     // Format: YYYY-MM-DD
           console.log("startDt : ", startDt, "endDt : ", endDt)
           
+          
+          
           var calendar = new FullCalendar.Calendar(calendarEl, {
-              initialView: 'dayGridMonth',
-              //events: '/getEvents.do',  // 스프링 컨트롤러에서 이벤트를 불러오는 URL 매핑
+        	  
+        	  googleCalendarApiKey : "AIzaSyBIIqXESeaREeCJB3QABFClVC8FGok3yhs", // google api key
+              initialView: 'dayGridMonth', // 월별 보기
               locale: 'ko', // 한국어 설정
               headerToolbar: {
 			                  left: 'prev,next today',
 			                  center: 'title',
 			                  right: 'dayGridMonth'
               				},
-              validRange: function(nowDate){ // 보여줄 날짜 범위
-		                    return {start: nowDate, //startDt,//
-		                    		end: endDt + "T23:00" // 종료 전날짜까지만 선택돼서 시간 추가
+              validRange: function(nowDate){ // 보여줄 날짜 범위 // 예약 가능한 범위 설정
+		                    return {start: nowDate, //오늘부터 보여주기
+		                    		end: endDt + "T23:00" // 클래스 수강 종료 날짜까지 선택되도록 시간 추가 
 		              			   }
              				},
       		  firstDay: 0, // 일요일(0)을 월요일(1)을 일주일의 첫째날로 설정
-              // weekends: false, // 주말 비활성화
-              events: [], // 이곳에 추후 이벤트(휴일)를 추가할 것입니다.
-           	  // 날짜 클릭 이벤트 추가
-              dateClick: function(info) { // 날짜 선택 관련 로직
+              
+              events: function(fetchInfo, successCallback, failureCallback) { // 월 변경 시 이벤트
+		            	  	
+            	  var events = []; // full calendar 공휴일 + db 휴무일 데이터 이벤트 객체를 담을 배열
+            		
+	            	  /**************************************************************/
+	            	  
+	               	  // 휴일 날짜와 설명
+	                  // db에서 가져온 휴무일 데이터 classDetails.holidayInfo 값을 가져와서 파싱
+	                  var holidayInfo = "${classDetails.holidayInfo}"; // 예: "2024-09-05(휴무일), 2024-09-18(휴무일)"
+	                  
+	                 
+	                  if (holidayInfo) {
+	                      var holidays = holidayInfo.split(','); // 쉼표(,)로 분리하여 배열로 만듭니다.
+	
+	                      // 각 휴일 정보를 파싱하여 이벤트로 변환
+	                      holidays.forEach(function(holiday) {
+	                    	// 공백 제거 후 괄호 기준으로 날짜와 설명을 분리
+	                          var date = holiday.trim().split('(')[0]; // 날짜 부분 추출
+	                          var description = holiday.trim().split('(')[1].replace(')', ''); // 설명 부분 추출
+	        				  
+	                       	  // 휴일 날짜를 배열에 저장
+	                          holidayDates.push(date);
+	                          
+	                           events.push({
+	                          // var holidayEvent = {
+	                              title: description,  // 휴일 설명을 제목으로 설정
+	                              start: date,         // 이벤트 시작일은 휴일 날짜
+	                              allDay: true,         // 하루종일 이벤트로 설정
+	                              color: '#D85D5D'  // 휴무일을 빨간색으로 표시
+	                          //};
+	                           });
+	                          
+	                          // 이벤트를 달력에 추가
+	                          //calendar.addEvent(holidayEvent);
+	                      });
+	                  }
+                  	
+	                  
+	                  
+	                  /**************************************************/
+	            	  // 구글 캘린더 api 에서 공휴일 데이터 가져오기
+	                  fetch(`https://www.googleapis.com/calendar/v3/calendars/l9ijikc83v1ne5s61er6tava4iplm8id@import.calendar.google.com/events?key=AIzaSyBIIqXESeaREeCJB3QABFClVC8FGok3yhs`)
+	                      .then(response => response.json())
+	                      .then(data => {
+	                          // var events = []; // full calendar 공휴일 + db 휴무일 데이터 이벤트 객체를 담을 배열
+	
+	                          // 구글 캘린더에서 가져온 공휴일 추가
+	                          data.items.forEach(event => {
+	                              var eventDate = new Date(event.start.date || event.start.dateTime).toISOString().split('T')[0];
+	                              var eventTitle = event.summary || "공휴일"; // 공휴일 이벤트 제목
+	                              
+	                              holidayDates.push(eventDate); // 공휴일 날짜
+	                              holidayLabels[eventDate] = eventTitle; // 공휴일 이름 넣는 곳
+	                              
+	                              // 공휴일 이벤트 넣기
+                          		  events.push({
+	                                  title: eventTitle,
+	                                  start: eventDate,
+	                                  color: '#D85D5D',
+	                                  allDay: true
+	                              });
+                          	  });
+                      	
                   
-              	  
-					
+            	  		/*******************************************************************************/
+		            	// 특정 월의 예약 가능 시간대 데이터 가져오기
+		            
+            	  		
+            	  		console.log("시작일 startDate : ", fetchInfo.startStr.slice(0, 7) + '-01')
+            	  		console.log("종료일 endDate : ", fetchInfo.startStr.slice(0, 7) + '-30')
+            	  		
+            	  		
+            	  		/**************************************************************************************/
+            	  		
+            	  		// 월별로 예약 가능일자 가져오는 함수
+            	  		$.ajax({
+			                url: 'getMonthlyAvailableTimeSlots.do',
+			                method: 'POST',
+			                data: { 
+			                    classId: $('#classId').val(),
+			                    startDate: fetchInfo.startStr.slice(0, 7) + '-01',  // 달의 첫째날
+			                    endDate: fetchInfo.startStr.slice(0, 7) + '-30'     // 달의 마지막날 (adjust for actual month length)
+			                },
+			                success: function(response) { // response : 월별 예약가능 일자 정보 (해당 월 1~말)
+			                	
+			                	//console.log("event - ajax getMonthlyAvailableTimeSlots.do 가져왔는지 확인 :  ", response);
+			                
+			                	
+			                    //var events = []; // 이벤트 목록
+			                    var reservationDates = new Set(); // 예약 완료된 날짜 
+			                    var holidayDatesSet = new Set(holidayDates); // 휴무일과 공휴일 날짜를 Set에 저장
+			                    var dateAvailability = {}; // 각 날짜의 예약 가능 여부를 추적하는 객체
+			                    var reservationDoneDates = new Set();
+			                    
+			                    
+			                    // 서버에서 받은 예약 가능 정보를 바탕으로 이벤트 생성
+			                    // 반복문 시작 
+			                    response.forEach(function(slot) {
+			                    	
+			                    	//console.log("slot : ", slot) // 시작일자~종료일자 각각 정보(예약가능인원, 전체인원, 날짜,...)
+			                        
+			                        
+			                        // 예약 가능한 인원이 0인 경우 예약 불가로 표시
+			                        if (slot.availableSeatsWithAllReservations <= 0) {
+			                        	reservationDates.add(slot.reservationDt); // 예약된 날짜 추가
+				                        
+			                            events.push({
+			                                title: '예약마감',
+			                                start: slot.reservationDt,
+			                                color: '#D85D5D' // 예약마감 날짜 배경색 
+			                            });
+			                        } 
+				                     	
+			                    }); // 반복문 종료
+								
+			                    
+			                    // 선택된 월의 모든 날짜를 처리
+			                    // 예약없는 날(모든 날짜 가능한날) 보여줌
+			                    var currentDate = new Date(fetchInfo.start); // fetchInfo == 이벤트 전체 start == 오늘날짜인듯
+			                    console.log("오늘날짜 fetchInfo.start : ", fetchInfo.start)
+			                    while (currentDate <= fetchInfo.end) {
+			                        var formattedDate = currentDate.toISOString().split('T')[0]; // 오늘부터 월말까지 날짜 하루하루
+									// console.log("월별 하루하루 formattedDate : " , formattedDate)
+									
+									
+					                // 주말(토, 일) 여부와 공휴일 여부 확인
+					                var dayOfWeek = currentDate.getUTCDay();
+					                var isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+					                var isHoliday = holidayDatesSet.has(formattedDate);
+					                
+					               
+					                // 예약 가능한 날짜가 아니고(예약마감), 휴무일, 공휴일 또는 주말이 아닌 경우에만 "예약 가능" 표시
+					                if (!reservationDates.has(formattedDate) && !holidayDatesSet.has(formattedDate) && !isWeekend) {
+					                    events.push({
+					                        title: '예약가능',
+					                        start: formattedDate,
+					                        color: '#267CC7'// '#97C84F' 
+					                    });
+					                }
+					                
+					                
+					                //(추가) 휴무일, 공휴일 
+					                
+					                if (holidayDatesSet.has(formattedDate)) {
+					                    events.push({
+					                        title: '예약불가',
+					                        start: formattedDate,
+					                        color: 'grey'// '#97C84F' 
+					                    });
+					                }
+					                
+					                
+			                        // 다른 날로 이동
+			                        currentDate.setDate(currentDate.getDate() + 1);
+			                    }
+			
+			                    successCallback(events);  // 캘린더에 이벤트 데이터 전달
+			                    
+			                }, // success 종료
+			                error: function() {
+			                    alert('예약 가능 정보를 불러오는 중 문제가 발생했습니다.');
+			                    
+			                }
+			            }); // ajax 종료
+		            	
+                      }) // .then(data => {
+                  	
+	                  .catch(error => {
+	                      console.error("구글 캘린더에서 데이터를 가져오는 중 오류 발생:", error);
+	                      failureCallback(error);
+	                  });
+			        }, // event 종료 
+              dateClick: function(info) {  
+            	  // 날짜 선택 관련 로직
+            	// 이전 선택된 날짜의 스타일을 초기화
+                  if (selectedDate) {
+                      var prevCell = document.querySelector('.fc-daygrid-day[data-date="' + selectedDate + '"]');
+                      if (prevCell) {
+                          prevCell.style.backgroundColor = ''; // 초기화
+                      }
+                  }
+				
               	  // 달력 선택 날짜 -> 예약정보 입력 - 예약날짜 에 넣기
-                  var selectedDate = info.dateStr;
+                  selectedDate = info.dateStr;
+              	  
+              	  
+               	  // 선택된 날짜 셀을 노란색으로 설정
+               	  var selectedCell = document.querySelector('.fc-daygrid-day[data-date="' + selectedDate + '"]');
+	                if (selectedCell) {
+	                    selectedCell.style.backgroundColor = '#FDD7D7';
+	                }
+	             // 선택된 날짜를 표시
+	              //document.getElementById('reservationScheduleselectedDateText').textContent = info.dateStr + ' 예약 일정';
+	                
                   var dayOfWeek = new Date(info.date).getDay(); // 요일 가져오기 (0: 일요일, 6: 토요일)
                   
+                  
+                  
+                  var reservationSchedulselectedDate = new Date(info.dateStr);
+                  var year = reservationSchedulselectedDate.getFullYear();
+              	  var month = reservationSchedulselectedDate.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+    			  var day = reservationSchedulselectedDate.getDate();
+    			  var dateText = year + "년 " + month + "월 " + day + "일"; // 'nn월 nn일' 형식으로 날짜 텍스트를 설정
+    			  
+    			  
                	 // 휴일이 아닌 경우에만 날짜를 설정
                  // 휴일 또는 주말(Sat=6, Sun=0) 선택 방지
                   if (holidayDates.includes(selectedDate) || dayOfWeek === 0 || dayOfWeek === 6) {
-                      alert('해당 날짜는 휴무일이므로 선택이 불가합니다.');
-                      document.getElementById('reservationDt').value = ''; // 휴일이므로 예약 날짜 input에 값을 넣지 않음 // 선택을 취소합니다.
+                      alert('해당 날짜는 휴무일이므로 예약이 불가합니다.');
+                      
+                      
+                   // 예약 현황 - 선택 날짜 표기 (휴무일 )
+	    			  document.getElementById('reservationScheduleselectedDateText').textContent = dateText + "(휴무일)";
+                      
+                      
+                      document.getElementById('reservationDt').value = ''; // 휴일이므로 예약 날짜 input에 값을 넣지 않음 // 선택을 취소함
+                      
+                   	  // 예약 시간대와 인원수 초기화
+                      $('#timeOptions').empty().append("<p>예약 날짜를 선택해주세요</p>");
+                      $('#reservationCountOptions').empty().append("<p>예약 시간대를 선택해주세요</p>");
+                      
+                      
                       return;
                   }else{
                 	  document.getElementById('reservationDt').value = selectedDate;
-                      alert( '예약 날짜가 ' + info.dateStr + '로 선택되었습니다.');// 선택한 날짜가 휴일이면 선택을 막고 알림을 띄웁니다.
-                      
-                      // 여기서 날짜 클릭 시 수행할 동작을 추가할 수 있습니다. 
-                     	
+                      // 여기서 날짜 클릭 시 수행할 동작을 추가 가능 
                       
                       // 예약 현황 - 선택 날짜 표기 (휴무일이 아닐 때에만 )
-	                  var reservationSchedulselectedDate = new Date(info.dateStr);
-	              	  var month = reservationSchedulselectedDate.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
-	    			  var day = reservationSchedulselectedDate.getDate();
-	    			  var dateText = month + "월 " + day + "일"; // 'nn월 nn일' 형식으로 날짜 텍스트를 설정
 	    			  document.getElementById('reservationScheduleselectedDateText').textContent = dateText;
                       
+                      // 일별 예약시간대 정보 가져오는 함수
                       loadReservationData(selectedDate, classId); // ajax 함수 호출
                       
                   } 
                   
               },
-              eventClick: function(info) {
-                  alert('이벤트: ' + info.event.title);
-                  // 여기서 예약 가능한 시간 등을 추가로 표시할 수 있음
-              },
               dayCellClassNames: function(arg) {
             	  var dayOfWeek = arg.date.getUTCDay();
-                  if (dayOfWeek === 6) { // 일요일
-                      return ['fc-sunday'];
+                  if (dayOfWeek === 6) { // 일요일 
+                      return ['fc-sunday']; // 글자색 css
                   } else if (dayOfWeek === 5) { // 토요일
-                      return ['fc-saturday'];
+                      return ['fc-saturday']; // 글자색 css
                   }
               }
               
           });
           
+          // 캘린더 크기 설정
+          calendar.setOption('contentHeight', 600);
           
-       	  // 휴일 날짜와 설명
-          // classDetails.holidayInfo 값을 가져와서 파싱합니다.
-          var holidayInfo = "${classDetails.holidayInfo}"; // 예: "2024-09-05(휴무일), 2024-09-18(휴무일)"
-          var holidayDates = []; // 나중 추가
+          /**************************************************************/
+       	 
           
-          if (holidayInfo) {
-              var holidays = holidayInfo.split(','); // 쉼표(,)로 분리하여 배열로 만듭니다.
-
-              // 각 휴일 정보를 파싱하여 이벤트로 변환
-              holidays.forEach(function(holiday) {
-            	// 공백 제거 후 괄호 기준으로 날짜와 설명을 분리
-                  var date = holiday.trim().split('(')[0]; // 날짜 부분 추출
-                  var description = holiday.trim().split('(')[1].replace(')', ''); // 설명 부분 추출
-				  
-               	  // 휴일 날짜를 배열에 저장
-                  holidayDates.push(date);
-                  
-                  // 이벤트 객체 생성
-                  var holidayEvent = {
-                      title: description,  // 휴일 설명을 제목으로 설정
-                      start: date,         // 이벤트 시작일은 휴일 날짜
-                      allDay: true,         // 하루종일 이벤트로 설정
-                      color: 'red'  // 휴일을 빨간색으로 표시
-                  };
-
-                  // 이벤트를 달력에 추가
-                  calendar.addEvent(holidayEvent);
-              });
-          }
-          
-          calendar.render(); // 달력 끝!
-      });
+          calendar.render(); // 달력을 화면에 렌더링
+      }); // fullCalendar API 함수 끝
+      
+      
+      
+      
+      
 	</script>
+
+
+
+
+
+
 
 	<script>
 	//페이지 로드가 완료되면
@@ -656,99 +795,96 @@
 	var userIdCk = false;
 	function userData() {
 		
-		/**************************************************/
-		// 예약정보 입력 - 예약시간대 추가
-		// 예시: "3: 14:00-16:00, 4: 16:00-18:00, 5: 18:00-20:00"
-	    var timeSets = "${classDetails.timeSets}"; 
-
-	    // 쉼표로 분리하여 배열로 만듭니다.
-	    var timeSlots = timeSets.split(',');
-
-	    // 각 시간대 쌍을 처리하여 라디오 버튼을 생성합니다.
-	    $.each(timeSlots, function(index, slot) {
-	        // 공백 제거 후 세미콜론(;)으로 class_detail_id와 시간대 분리
-	        var details = $.trim(slot).split(';');
-	        var classDetailId = $.trim(details[0]); // class_detail_id 부분
-	        var timeRange = $.trim(details[1]); // 시간대 부분
-
-	        // label과 input 태그를 생성
-	        var label = $('<label>', {
-	            'for': 'classDetailId' + classDetailId,
-	            'text': timeRange, // 시간대 텍스트 추가
-	            'class': '' // Custom CSS class (optional)
-	        });
-
-	        var input = $('<input>', {
-	            'type': 'radio',
-	            'name': 'classDetailId',// 'reservationTime',
-	            'id': 'classDetailId' + classDetailId,
-	            'value': classDetailId, // class_detail_id를 value로 설정
-	            'required': true // 필수 입력 속성 추가
-	        });
-
-	        // label에 input을 추가
-	        label.prepend(input);
-
-	        // 생성된 label을 div에 추가
-	        $('#timeOptions').append(label);
-	        
-	        
-	        // 얘약 일정 현황
-	        // 예약 시간대 넣기
-			
-	        /*
-	        <span class="reservationSchedule timeRange">10:00-14:00</span>
-			<span class="reservationSchedule sumAllreservation"> </span>명/
-			<span class="reservationSchedule classMaxCnt"> </span>	명
-	        
-	        */
-	        
-	        var span = $('<span>', {
-	            'type': 'span',
-	            'name': 'classDetailId',// 'reservationTime',
-	            'id': 'classDetailId' + classDetailId,
-	            'value': classDetailId, // class_detail_id를 value로 설정
-	            'text': timeRange,
-	            'class' : 'timeRange'
-	            
-	        });
-
-	        
-	        
-        });
-    	
-    	
-		// 예약정보 입력 - 예약시간대 선택 시
-		// 라디오 버튼이 선택되었을 때 class를 변경하는 함수
-		$('input[name="classDetailId"]').change(function() {
-		    // 모든 label에서 action 클래스를 제거
-		    $('label').removeClass('action');
-		    
-		    // 선택된 라디오 버튼에 해당하는 label에 action 클래스 추가
-		    $(this).closest('label').addClass('action');
-		});
+		// 예약버튼 클릭 전 유효성 검사
 		
-    	/***************************************************/
+		// 예약자명 입력 제한 및 길이 제한
+		  $('#reservationNm').on('input', function() {
+		      // 이름 정규식 (한글 or 영어 대소문자만 허용 // 공백x 특수문자x 숫자x)
+		      let validChars = /^[ㄱ-ㅎ|가-힣a-zA-Z]*$/;
+
+		      let reservationNm = $(this).val(); // 현재 입력된 이름
+
+		      // 입력불가 문자 입력 시 삭제
+		      if (!validChars.test(reservationNm)) {
+		          $(this).val(reservationNm.replace(/[^가-힣a-zA-Z]/g, ''));
+		          $('#reservationNmMsg').text("이름은 한글 또는 영어 대소문자만 허용됩니다. 공백,특수문자,숫자는 입력할 수 없습니다.").css("color", "red");
+		      } 
+		      // 글자수 10글자 제한
+		      else if (reservationNm.length > 10) { 
+		          $(this).val(reservationNm.substring(0, 10));
+		          $('#reservationNmMsg').text("이름은 최대 10자까지 입력 가능합니다.").css("color", "red");
+		      } else {
+		          $('#reservationNmMsg').text(""); // 정규표현식 o -> 메시지 삭제
+		      }
+		  });
+		
+		
+		// 예약자 연락처 
+		
+			//휴대전화 
+			 $('#reservationPhone').on('input', function() {
+		        let reservationPhone = $(this).val().replace(/[^0-9]/g, ''); // 숫자만 허용
+		        
+		        // 글자수 11 제한
+		        if (reservationPhone.length > 11) {
+		            reservationPhone = reservationPhone.substring(0, 11);
+		        }
+		        
+		        let formattedNumber;
+		
+		        if (reservationPhone.length <= 3) {
+		            formattedNumber = reservationPhone; // 3자리 이하일 경우 그대로 표시
+		        } else if (reservationPhone.length <= 7) {
+		            formattedNumber = reservationPhone.slice(0, 3) + '-' + reservationPhone.slice(3); // 4~7자리일 경우 3-4 형식
+		        } else if (reservationPhone.length <= 10) {
+		            formattedNumber = reservationPhone.slice(0, 3) + '-' + reservationPhone.slice(3, 6) + '-' + reservationPhone.slice(6); // 10자리 형식 3-3-4
+		        } else {
+		            formattedNumber = reservationPhone.slice(0, 3) + '-' + reservationPhone.slice(3, 7) + '-' + reservationPhone.slice(7); // 11자리 형식 3-4-4
+		        }
+		
+		        $(this).val(formattedNumber); // 포맷팅된 번호를 필드에 표시
+		    });
+			
+		
+		// 예약자 이메일 
+			// 이메일 입력 제한: 최대 30글자, 공백 허용하지 않음
+			 $('#reservationEmail').on('input', function() {
+			     let email = $(this).val().replace(/\s/g, ''); // 공백 제거
+			     if (email.length > 30) {
+			         email = email.substring(0, 30); // 최대 30글자로 제한
+			     }
+			     $(this).val(email); // 수정된 값 설정
+			 });
+		
+		
+			// 비회원 예약자 비밀번호
+				// 비밀번호 유효성 검증 정규식: 공백 없이 최대 15자까지 입력 가능. 영어, 숫자, 특수문자(!@#$%^*+=-)만 허용
+				  const passwordRegEx = /^[A-Za-z0-9!@#$%^*+=-]{1,15}$/;
+				  
+				  $('#reservationPw').on('input', function() {
+					    let password = $(this).val();
+					    
+					    // 공백 or 15글자 초과 시 삭제
+					    password = password.replace(/\s/g, '').substring(0, 15);
+					    $(this).val(password);
+					    
+					    // 정규표현식 확인
+					    if (!passwordRegEx.test(password)) {
+					        $('#userPasswdMsg').text("공백 없이 최대 15자까지, 영어, 숫자, 특수문자(!@#$%^*+=-)를 사용하여 입력하세요.").css("color", "red");
+					    } else {
+					        $('#userPasswdMsg').text(""); // 유효한 경우 메시지 지우기
+					    }
+					});
+					
+		
+		/**********************************************************/
 		
 		// 예약 버튼 클릭 시 
 		$('.registerBtn').click(function(e) {
 			e.preventDefault();
 			
-			
-			if ($.trim($('#reservationNm').val()) == ''){
-				alert('예약자명을 입력해주세요');
-				$('#reservationNm').focus();
-				return false;
-			}
-			
-			if(!$('input:radio[name=reservationCnt]').is(":checked")){
-				alert("예약인원수를 선택해주세요.");
-				$('#reservationCnt').focus();
-				return false;
-			}
-			
 			if ($.trim($('#reservationDt').val()) == ''){
-				alert('예약날짜를 입력해주세요');
+				alert('달력에서 예약날짜를 선택해주세요');
 				$('#reservationDt').focus();
 				return false;
 			}
@@ -759,11 +895,25 @@
 				return false;
 			}
 			
+			if(!$('input:radio[name=reservationCnt]').is(":checked")){
+				alert("예약인원수를 선택해주세요.");
+				$('#reservationCnt').focus();
+				return false;
+			}
+			
+			
+			if ($.trim($('#reservationNm').val()) == ''){
+				alert('예약자명을 입력해주세요');
+				$('#reservationNm').focus();
+				return false;
+			}
+			
 			if ($.trim($('#reservationPhone').val()) == ''){
-				alert('휴대전화 번호를 입력해주세요');
+				alert('예약자 연락처를 입력해주세요');
 				$('#reservationPhone').focus();
 				return false;
 			}
+			
 			
 			// 휴대폰 번호 및 지역번호 형식 체크 (01X-XXXX-XXXX 또는 지역번호-XXXX-XXXX 형식)
 			// let phoneReg = /^(01[0|1|6|7|8|9])-\d{3,4}-\d{4}$/;	// 휴대폰 번호 형식 체크 (010, 011, 016, 017, 018, 019-1234-5678 형식)
@@ -777,8 +927,9 @@
 			
 			
 			if ($.trim($('#reservationEmail').val()) == '' ){
-				alert('이메일을 입력해주세요.');
+				alert('예약자 이메일을 입력해주세요.');
 				$('#reservationEmail').focus();
+				return false;
 			}
 			// 이메일 형식 체크 (ex. exaple@naver.com)
 				/* 
@@ -788,12 +939,30 @@
 			*/
 			let emailReg = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 			
-
 			if (!emailReg.test($('#reservationEmail').val())) {
 			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
 			    $('#reservationEmail').focus();
 			    return false;
 			}
+			
+			
+			
+			if ($.trim($('#reservationPw').val()) == ''){
+				alert('비밀번호를 입력해주세요');
+				$('#reservationPw').focus();
+				return false;
+			}
+			
+			// 비밀번호 형식 체크 (영문, 숫자, 특수문자 포함 8~15자)
+			let reg = /^[A-Za-z0-9!@#$%^*+=-]{1,15}$/;
+			if (!reg.test($('#reservationPw').val())) {
+			    alert('비밀번호는 공백 없이 최대 15자까지, 영어, 숫자, 특수문자(!@#$%^*+=-)를 사용하여 입력하세요.');
+			    $('#reservationPw').focus();
+			    return false;
+			}
+			
+			
+			
 			
 			
 			// 유효성 검사 - 미입력
@@ -802,7 +971,7 @@
 			}
 			
 			
-			if (confirm("예약을 하시겠습니까?")) {
+			//if (confirm("예약을 하시겠습니까?")) {
 				var form = $('#registerForm')[0];
 				var formData = new FormData(form);
 				
@@ -812,37 +981,39 @@
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
-						console.log("예약 응답 result:", result);
+					success: function(response){
+						console.log("예약 응답 result:", response);
 		                
 						try{
 			                // JSON 파싱
-			                var response = JSON.parse(result);
-							console.log("예약 response:", response);
+			                //var response = JSON.parse(result);
+							//console.log("예약 response:", response);
 	
 			                if (response.error == 'N') {
-			                    alert("예약이 등록되었습니다. 관리자 승인 후 예약이 확정됩니다.");
-			                    location.href = '/myReservationList.do';
+			                    alert("예약이 신청되었습니다. 관리자 접수완료 후 예약이 확정됩니다.");
+			                    location.href = '/';
 			                } else if (response.error == 'Y') {
-			                    alert('예약 실패: ' + response.errorMsg);
-			                    location.href = '/reservationUsrForm.do';
+			                    alert('예약 신청 실패: ' + response.errorMsg);
+			                    location.href = '/reservationUsrForm.do?classId=' + response.classId; // classId 추가
 			                }
 							
 						} catch(e) {
 							console.error("Unexpected response format. It is not valid JSON.", result);
 					        alert("서버에서 잘못된 응답을 받았습니다.");
+					        //location.href = '/reservationUsrForm.do?classId=' + response.classId; // classId 추가
 						}
 					}
-					/*,
+					,
 					error: function() {
 		                alert("예약 중 오류가 발생했습니다.");
-		            }*/
+		                //location.href = '/reservationUsrForm.do?classId=' + response.classId; // classId 추가
+		            }
 				});
-			}
+			// } // if문
 			
 			
 			
-		})// 회원가입 버튼 클릭 끝
+		})// 예약신청 버튼 클릭 끝
 	};// 전체 불러오기 끝
 		
 	// 유효성 검사 함수
@@ -870,12 +1041,12 @@
 	}
 	
 	
-	// 선택된 날짜의 예약정보 가져오는 함수
+	// 일별 선택된 날짜의 예약정보 가져오는 함수
 	function loadReservationData(selectedDate, classId) {
        
           // AJAX 요청을 통해 선택된 날짜의 예약 가능한 시간대 정보를 가져옵니다.
           $.ajax({
-              url: 'getAvailableTimeSlots.do',
+              url: 'getDayAvailableTimeSlots.do',
               method: 'POST',
               data: { reservationDt: selectedDate,
               	    classId : $('#classId').val()
@@ -883,52 +1054,54 @@
               success: function(response) {
               	
             	  
-            	  /*console.log("response :", response )
+            	console.log("response :", response )
               	
-              	console.log("response[0] :", response[0] )
-              	console.log("response[0].timeRange :", response[0].timeRange )
-              	console.log("response[0].sumAllreservation 현재 예약 인원(모든 예약 고려):", response[0].sumAllreservation )
-              	console.log("response[0].availableSeatsWithAllReservations 현재 가능 (모든 예약 고려):", response[0].availableSeatsWithAllReservations )
-              	console.log("response[0].classMaxCnt (최대 수강인원) :", response[0].classMaxCnt )
-              	
-              	console.log("response[1] :", response[1] )
-              	console.log("response[1].timeRange :", response[1].timeRange )
-              	console.log("response[1].sumAllreservation 현재 예약 인원(모든 예약 고려):", response[1].sumAllreservation )
-              	console.log("response[1].availableSeatsWithAllReservations 현재 가능 (모든 예약 고려):", response[1].availableSeatsWithAllReservations )
-              	console.log("response[1].classMaxCnt (최대 수강인원) :", response[1].classMaxCnt )
-              	*/
-              	
-              	
+                  $('#timeOptions').empty();
+                  
+                  // 새로운 데이터로 리스트 채우기
+                  response.forEach(function(slot) { 
+                	  console.log("slot : ", slot)
+                	  console.log("slot.classMaxCnt : ", slot.classMaxCnt)
+                	  
+                      
+                      // 예약시간대에 선택한 날짜에 해당하는 예약시간대 라디오버튼으로 만들어서 넣기 
+                      var label = $('<label>', {
+                    'for': 'classDetailId' + slot.classDetailId,
+                    'text': slot.timeRange, // Display time range text
+                    'class': 'time-slot-label' // Optional: add a class for styling
+		                });
+		
+		                var input = $('<input>', {
+		                    'type': 'radio',
+		                    'name': 'classDetailId', // Ensure all options have the same name
+		                    'id': 'classDetailId' + slot.classDetailId,
+		                    'value': slot.classDetailId, // Value to be sent on form submission
+		                    'required': true // Make selection required
+		                });
+		
+		                label.prepend(input); //label 앞에  input에 추가
+		
+		                $('#timeOptions').append(label);//  #timeOptions div에 라벨 추가
+		                
+		             	// 선택 : 현재 예약정보, 최대인원수를 각 라벨에추가
+		                var infoText = ' (예약 : ' + slot.sumAllreservation +'명 / 최대 : ' + slot.classMaxCnt + '명 /  예약가능 : ' + slot.availableSeatsWithAllReservations + '명)';
+		                label.append(infoText);
+                      	
+		                
+		             
+		                /******************************************/
+		                
+		                // 선택 날짜, 선택한 예약시간대 별 예약가능한 인원수까지 라디오버튼 생성
+		             	input.on('change', function() {
+		                	
+		                	$('#timeOptions label').removeClass('active');
 
-            	  var timeSlotList = $('.product__details__option__size ul');
-                  timeSlotList.empty();
-
-                  // Populate the list with new data
-                  response.forEach(function(slot) {
-                      var li = $('<li>');
-                      var timeRangeSpan = $('<span>', {
-                          class: 'reservationSchedule timeRange',
-                          text: slot.timeRange // e.g., "10:00-14:00"
-                      });
-                      var sumAllreservationSpan = $('<span>', {
-                          class: 'reservationSchedule sumAllreservation',
-                          text: slot.sumAllreservation // Current reserved count
-                      });
-                      var classMaxCntSpan = $('<span>', {
-                          class: 'reservationSchedule classMaxCnt',
-                          text: slot.classMaxCnt // Max capacity
-                      });
-
-                      // Build the li structure: "10:00-14:00 3명 / 10명"
-                      li.append(timeRangeSpan)
-                        .append(' ')
-                        .append(sumAllreservationSpan)
-                        .append('명 / ')
-                        .append(classMaxCntSpan)
-                        .append('명');
-
-                      // Append the li to the ul
-                      timeSlotList.append(li);
+		    	            // active 클래스를 선택된 라벨에 추가
+		    	            $(this).closest('label').addClass('active');
+		    	            
+		                    generateReservationCountOptions(slot.availableSeatsWithAllReservations);
+		                });
+		
                   });
               },
               error: function(xhr, status, error) {
@@ -940,6 +1113,39 @@
           
        
     }
+	
+	
+	// 예약인원수 표출 : 선택 날짜, 선택 예약시간대별 가능한 예약인원수까지 예약인원수 표출
+	function generateReservationCountOptions(maxAvailableSeats) {
+	    $('#reservationCountOptions').empty(); // 이전 예약인원수 옵션 초기화
+	
+	    for (var i = 1; i <= maxAvailableSeats; i++) {
+	        var label = $('<label>', {
+	            'for': 'person' + i
+	        }).text(i + '명');
+	
+	        var input = $('<input>', {
+	            'type': 'radio',
+	            'name': 'reservationCnt',
+	            'id': 'person' + i,
+	            'value': i,
+	            'required': true
+	        });
+	
+	        label.prepend(input);
+	        $('#reservationCountOptions').append(label);
+	        
+	        
+			// 예약인원수 선택 시 css 적용되도록 수정
+	        input.on('change', function() {
+	            $('#reservationCountOptions label').removeClass('active'); // active 클래스 다 지우기
+
+	            $(this).closest('label').addClass('active'); // 선택된 라벨에 active 클래스 부여
+	        });
+	        
+	        
+	    }
+	}
 	</script>
 
 

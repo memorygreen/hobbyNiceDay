@@ -43,10 +43,13 @@ public class ClassVO implements Serializable {
     private int classPrice;      // 클래스 가격 // 할인된 가격도 추가해야하나?
     private String classPost;  // 클래스 게시 여부
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    // @DateTimeFormat(pattern = "yyyy-MM-dd")
+    
     private String startDt; // 클래스 수강 시작일
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private String endDt; // 클래스 수강 종료일
+    
+    // @DateTimeFormat(pattern = "yyyy-MM-dd")
+    
+    private String  endDt; // 클래스 수강 종료일
     private int classTimeTaken; // 클래스 소요시간 
     
     

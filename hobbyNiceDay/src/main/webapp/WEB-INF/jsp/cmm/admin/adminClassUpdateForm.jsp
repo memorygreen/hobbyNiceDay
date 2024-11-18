@@ -97,7 +97,12 @@
     margin-right: 0px;
 	}
 
-
+	/* 라벨 색상 변경 */
+	.input-group-append .input-group-text, .input-group-prepend .input-group-text {
+	    background-color: #32589d;
+	    border-color: rgba(0, 0, 0, 0.15);
+	    color: #fff;
+	}
     </style>
 </head>
 
@@ -131,23 +136,25 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <div class="page-header-title">
                                             <h5 class="m-b-10">클래스 수정 페이지</h5>
-                                            <p class="m-b-0">등록되어 있는 클래스를 수정하는 페이지입니다.</p>
+                                            <p class="m-b-0">등록된 클래스 정보를 수정하는 페이지입니다.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                            <li >
+                                                <a href="index.html"> </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">클래스 관리 > </a>
+                                            <li >
+                                            	<a href="/adminClassList.do">클래스 관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">클래스 등록</a>
+                                            <li >
+                                            	<a href="/adminClassInfo.do">클래스 수정</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -168,17 +175,9 @@
                                     		<div class="col-sm-12">
 	                                    	<div class="card">
 	                                            <div class="card-header">
-	                                                <h5>클래스 등록</h5>
-	                                                <span>클래스 등록 페이지입니다. <code>TB_CLASS</code></span>
-	                                       		    <div class="card-header-right">
-	                                                    <ul class="list-unstyled card-option">
-	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-	                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-	                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-	                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-	                                                        <li><i class="fa fa-trash close-card"></i></li>
-	                                                    </ul>
-	                                                </div>
+	                                                <h5>클래스 수정</h5>
+	                                                <span>클래스 수정 페이지입니다. <code>TB_CLASS</code></span>
+	                                       		   
 	                                            </div>
 	                                            
 	                                            <form id="insertForm" name="insertForm" method="post"  enctype="multipart/form-data"><!-- 파일 업로드 위해서 추가 -->
@@ -199,20 +198,22 @@
 	                                                                <th colspan="2" width="50%">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="classNm">
-				                                                            	<i class="icofont icofont-user-alt-3"> * 클래스명</i>
+				                                                            	* 클래스명
 				                                                            </label>
 			                                                            </span>
-			                                                            <input type="text" id=classNm name="classNm" class="form-control" placeholder="클래스명을 입력해주세요" title="클래스명을 입력해주세요"  data-toggle="tooltip"  required>
+			                                                            <input type="text" id=classNm name="classNm" class="form-control" placeholder="클래스명을 입력해주세요" title="클래스명을 입력해주세요"  data-toggle="tooltip"  required
+			                                                            	value="${classDetails.classNm}" >
 			                                                            
 	                                                                </th>
 	                                                                
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classDscrptn">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 설명</i>
+			                                                            	클래스 설명
 			                                                           	</label>
 			                                                           	</span>
-			                                                           	<input type="text" id=classDscrptn name="classDscrptn" class="form-control" placeholder="클래스 설명을 입력해주세요" title="클래스 설명을 입력해주세요"  data-toggle="tooltip" >
+			                                                           	<input type="text" id=classDscrptn name="classDscrptn" class="form-control" placeholder="클래스 설명을 입력해주세요" title="클래스 설명을 입력해주세요"  data-toggle="tooltip" 
+			                                                           		 value="${classDetails.classDscrptn}" >
 	                                                                </th>
 	                                                            </tr>
 	                                                            
@@ -220,20 +221,26 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                    <span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="location">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 장소</i>
+			                                                            	* 클래스 장소
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="location" name="location" class="form-control" placeholder="클래스 장소를 입력해주세요" title="클래스 장소를 입력해주세요"  data-toggle="tooltip" required>	                                                        			
+			                                                            <input type="text" id="location" name="location" class="form-control" 
+			                                                            	   placeholder="클래스 장소를 입력해주세요" title="클래스 장소를 입력해주세요"  data-toggle="tooltip"  required
+			                                                            	   value="${classDetails.location}" >
+			                                                            	   </br>	                                                        			
+			                                                            	   </br>
 	                                                                </th>
 	                                                                <th colspan="2" width="50%">
 		     															
 		     															<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="imgFile">
-			                                                            	<i class="icofont icofont-ui-email">  클래스 이미지 </i>
+			                                                            	*  클래스 이미지
 			                                                           	</label>
 			                                                           	</span>
-	                                                            		<input type="file" id="imgFile" name="imgFile" class="form-control" placeholder="클래스 이미지를 등록해주세요" title="클래스 이미지를 등록해주세요" data-toggle="tooltip">
-	                                                            		                                                     
+	                                                            		<input type="file" id="imgFile" name="imgFile" class="form-control" placeholder="클래스 이미지를 등록해주세요" title="클래스 이미지를 등록해주세요" data-toggle="tooltip" 
+	                                                            				value = "${classDetails.imgNm}" disabled >
+                                                           				<p>현재 등록된 클래스 대표사진 파일명: ${classDetails.imgNm}</p>
+                                                           				                                                     
 	                                                                </th>
 	                                                            </tr>
 	                                                        
@@ -243,18 +250,16 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classCateBig">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 대분류</i>
+			                                                            	* 클래스 대분류
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
-			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" placeholder="클래스 대분류를 선택해주세요" title="클래스 대분류를 선택해주세요"  data-toggle="tooltip" required>
-			                                                            	<option value="">선택</option> <!-- 클래스 대분류 코드를 가져와야 함 (tb_code) -->
-			                                                            	<option value="crafts">공예</option>
-			                                                            	<option value="art">미술</option>
-			                                                            	<option value="music">음악</option>
-			                                                            	<option value="exercise">운동</option>
-			                                                            	<option value="etc">기타</option>
-			                                                            </select>
+			                                                            <select id="classCateBig" name="classCateBig"  class="form-control" placeholder="클래스 대분류를 선택해주세요" title="클래스 대분류를 선택해주세요"  data-toggle="tooltip" required  > 
+			                                                            	    <option value="">선택</option>
+																			    <option value="crafts" ${classDetails.classCateBig == 'crafts' ? 'selected' : ''}>공예</option>
+																			    <option value="cooking_baking" ${classDetails.classCateBig == 'cooking_baking' ? 'selected' : ''}>요리&베이킹</option>
+																			    <option value="art" ${classDetails.classCateBig == 'art' ? 'selected' : ''}>미술</option>
+																			</select>
 			                                                            
 			                                                                                                             
 	                                                                </th>
@@ -262,10 +267,11 @@
 	                                                                <th colspan="2" width="50%" >
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classCateSmall">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 소분류</i>
+			                                                            	* 클래스 소분류
 			                                                           	</label>
-			                                                           	</span><select id="classCateSmall" name="classCateSmall"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required>
-			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
+			                                                           	</span>
+			                                                           	<select id="classCateSmall" name="classCateSmall"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required>
+			                                                            	<option value=" ${classDetails.classCateSmall}">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
 			                                                            	
 			                                                            </select>
 			                                                         </th>
@@ -276,18 +282,20 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classMaxCnt">
-			                                                            	<i class="icofont icofont-ui-email"> * 최대 참가자수</i>
+			                                                            	* 최대 참가자수
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="number" min="0" id="classMaxCnt" name="classMaxCnt" class="form-control" placeholder="최대 참가자수를 입력해주세요" title="최대 참가자수를 입력해주세요" data-toggle="tooltip" required>
+			                                                            <input type="number" min="0" id="classMaxCnt" name="classMaxCnt" class="form-control" placeholder="최대 참가자수를 입력해주세요" title="최대 참가자수를 입력해주세요" data-toggle="tooltip" required
+			                                                            		value="${classDetails.classMaxCnt}" readonly >
 			                                                        </th>
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classAgeMin">
-			                                                            	<i class="icofont icofont-ui-email">  최소수강가능연령</i>
+			                                                            	* 최소수강가능연령
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="number" min="0" id="classAgeMin" name="classAgeMin" class="form-control" placeholder="수강가능한 최소연령을 입력해주세요" title="수강가능한 최소연령을 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="number" min="0" id="classAgeMin" name="classAgeMin" class="form-control" placeholder="수강가능한 최소연령을 입력해주세요" title="수강가능한 최소연령을 입력해주세요" data-toggle="tooltip" required
+			                                                            		value="${classDetails.classAgeMin}" >
 			                                                        </th>
 	                                                            </tr>
 	                                                            
@@ -295,25 +303,27 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classPrice">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 가격</i>
+			                                                            	 * 클래스 가격
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="text" id="classPrice" name="classPrice" class="form-control" placeholder="클래스 가격을 입력해주세요" title="클래스 가격을 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="number" min="0" id="classPrice" name="classPrice" class="form-control" placeholder="클래스 가격을 입력해주세요" title="클래스 가격을 입력해주세요" data-toggle="tooltip"
+			                                                            		value="${classDetails.classPrice}" >
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classPost">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 게시 여부</i>
+			                                                            	 * 클래스 게시 여부
 			                                                           	</label>
 			                                                           	</span><select id="classPost" name="classPost"  class="form-control" placeholder="클래스 소분류를 선택해주세요" title="클래스 소분류를 선택해주세요" data-toggle="tooltip" required>
 			                                                            	<option value="">선택</option> <!-- 클래스 대분류에 따른 소분류 코드를 가져와야함 (tb_code) -->
-			                                                            	<option value="Y">게시</option>
-			                                                            	<option value="N">미게시</option>
+			                                                            	<option value="Y" ${classDetails.classPost == 'Y' ? 'selected' : ''}>게시</option>
+			                                                            	<option value="N" ${classDetails.classPost == 'N' ? 'selected' : ''}>미게시</option>
 			                                                            </select>
 			                                                            
 			                                                            <!-- 직접 입력용 소분류 입력란 (기타 선택 시 표시) -->
-    																	<input type="text" id="classCateSmallText" name="classCateSmallText" class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
+    																	<input type="text" id="classCateSmallText" name="classCateSmallText" 
+    																	class="form-control" placeholder="소분류를 입력하세요" title="소분류를 입력하세요" data-toggle="tooltip" style="display:none;" />
 			                                                         </th>
                                                                 	
 	                                                            </tr>
@@ -322,10 +332,11 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="classPrice">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 소요시간</i>
+			                                                            	* 클래스 소요시간
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="int" id="classTimeTaken" name="classTimeTaken" class="form-control" placeholder="클래스 소요시간을 입력해주세요" title="클래스 소요시간을 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="int" id="classTimeTaken" name="classTimeTaken" class="form-control" placeholder="클래스 소요시간을 입력해주세요" title="클래스 소요시간을 입력해주세요" data-toggle="tooltip"
+			                                                            		value="${classDetails.classTimeTaken}" readonly>
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
@@ -337,96 +348,167 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="startDt">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 시작일자</i>
+			                                                            	* 클래스 시작일자
 			                                                           	</label>
 			                                                           	</span>
-			                                                            <input type="date" id="startDt" name="startDt" class="form-control" placeholder="클래스 시작일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip">
+			                                                            <input type="date" id="startDt" name="startDt" class="form-control" placeholder="클래스 시작일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip"
+			                                                          		   value="${classDetails.startDt}" >
 		                                                        	</th>
 		                                                        	
 		                                                        	<th colspan="2" width="50%" >
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="endDt">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 종료일자</i>
+			                                                            	* 클래스 종료일자
 			                                                           	</label>
 			                                                           	</span>
-    																    <input type="date" id="endDt" name="endDt" class="form-control" placeholder="클래스 종료일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip">
+    																    <input type="date" id="endDt" name="endDt" class="form-control" placeholder="클래스 종료일자를 입력해주세요" title="클래스 종료일자를 입력해주세요" data-toggle="tooltip"
+    																     		value="${classDetails.endDt}" >
 		                                                        	</th>
                                                                 	
 	                                                            </tr>
-	                                                            
-	                                                            <tr id = "classTimeRow">
-	                                                                <th colspan="2"  width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="timeStart">
-			                                                            	<i class="icofont icofont-ui-email"> *  클래스 시작시간</i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="time" id="timeStart" name="timeStart[]" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip">
-	                                                                </th>   
-	                                                                    
-	                                                                <th colspan="2" width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="timeEnd">
-			                                                            	<i class="icofont icofont-ui-email"> * 클래스 종료시간 </i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="time" id="timeEnd" name="timeEnd[]" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip">
-	                                                                </th>  
-	                                                                <!-- 
-	                                                                <th  width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="maxParticipants">
-			                                                            	<i class="icofont icofont-ui-email"> 최대 수강가능 인원</i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="number" id="maxParticipants" name="maxParticipants[]" class="form-control" placeholder="수강가능 인원을 입력해주세요" title="수강가능 인원을 입력해주세요" data-toggle="tooltip">
-   																		
-	                                                                </th> 
-	                                                                 -->
-                                                                	<th width="5%">
-	                                                                	<button id="addTime"  class="btn btn-inverse waves-effect waves-light">+</button>
-	                                                                    </br>
-	                                                                </th>
-	                                                                
-	                                                            </tr>
-	                                                            
-	                                                            <tr id = "holidayRow">
-	                                                                
-	                                                                <th colspan="2" width="5%">
-	                                                                	<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="holidayDt">
-			                                                            	<i class="icofont icofont-ui-email">  휴무일</i>
-			                                                           	</label>
-			                                                           	</span>
-   																		<input type="date" id="holidayDt" name="holidayDt[]" class="form-control" placeholder="휴무일을 입력해주세요" title="휴무일을 입력해주세요" data-toggle="tooltip">
-	                                                                </th>   
-	                                                                    
-	                                                                <th colspan="2" width="25%">
-		                                                                <span class="input-group-prepend" id="name">
-				                                                            <label class="input-group-text" for="holidayDesc">
-				                                                            	<i class="icofont icofont-ui-email">  휴무일 설명</i>
+                                                            
+                                                            
+                                                            
+                                                            <div>
+                                                            	<tr>
+                                                            		<th>
+                                                            			<h5>클래스 수강 시간대</h5>
+                                                            		</th>
+                                                           		</tr>
+                                                            	<c:forEach var="timeSet" items="${timeSetsList}"> 
+                                                            		
+		                                                            <tr id = "classTimeRow">
+		                                                                <th colspan="2"  width="5%">
+		                                                                	<span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="timeStart">
+				                                                            	*  클래스 시작시간
 				                                                           	</label>
 				                                                           	</span>
-	                                                                	<input type="text" id="holidayDesc" name="holidayDesc[]" class="form-control" placeholder="휴무일 설명을 입력해주세요" title="휴무일 설명을 입력해주세요" data-toggle="tooltip">                                              
-	                                                                </th>
-                                                                	<th width="5%">
-	                                                                	<button id="addHoliday"  class="btn btn-inverse waves-effect waves-light">+</button>
-	                                                                    </br>
-	                                                                </th>
-	                                                                
-	                                                               
-	                                                                <th ></th>
-	                                                                <th></th>
-	                                                            </tr>
+	   																		<input type="time" id="timeStart" name="timeStart[]" class="form-control" placeholder="클래스 시작시간을 입력해주세요" 
+	   																			   title="클래스 시작시간을 입력해주세요"  readonly  value="${timeSet.timeStart}" data-toggle="tooltip">
+		                                                                </th>   
+		                                                                    
+		                                                                <th colspan="2" width="5%">
+		                                                                	<span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="timeEnd">
+				                                                            	* 클래스 종료시간
+				                                                           	</label>
+				                                                           	</span>
+	   																		<input type="time" id="timeEnd" name="timeEnd[]" class="form-control" placeholder="클래스 종료시간을 입력해주세요" 
+	   																		title="클래스 종료시간을 입력해주세요" data-toggle="tooltip" readonly value="${timeSet.timeEnd}">
+		                                                                </th>  
+		                                                                
+		                                                                
+		                                                            </tr>
+	                                                            </c:forEach>
+                                                            </div>
+                                                            	
+                                                            	<tr>
+                                                            		<th>
+                                                            			<h5>클래스 휴무일</h5>
+                                                            		</th>
+                                                           		</tr>
+                                                            	<c:forEach var="holiday" items="${holidayList}">
+		                                                            <tr id = "holidayRow">
+		                                                                <!-- 기존 휴무일 날짜 입력 -->
+		                                                                <th colspan="2" width="5%">
+		                                                                	<span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="holidayDt">
+				                                                            	휴무일
+				                                                           	</label>
+				                                                           	</span>
+	   																		<input type="date" id="holidayDt" name="holidayDt[]" class="form-control" placeholder="휴무일을 입력해주세요" title="휴무일을 입력해주세요" data-toggle="tooltip"
+	   																		value="${holiday.holidayDt}" readonly>
+		                                                                </th>   
+		                                                                    
+	                                                                    <!-- 기존 휴무일 설명 입력 -->
+		                                                                <th colspan="2" width="25%">
+			                                                                <span class="input-group-prepend" id="name">
+					                                                            <label class="input-group-text" for="holidayDesc">
+					                                                            	휴무일 설명
+					                                                           	</label>
+					                                                           	</span>
+		                                                                	<input type="text" id="holidayDesc" name="holidayDesc[]" class="form-control" placeholder="휴무일 설명을 입력해주세요" title="휴무일 설명을 입력해주세요" data-toggle="tooltip"
+		                                                                			value="${holiday.holidayDesc}" readonly>                                              
+		                                                                </th>
+		                                                                
+	                                                                	<!-- 휴무일 삭제 버튼 -->
+																        <th width="5%">
+																            <button type="button" class="btn btn-danger removeHoliday" data-holiday-id="${holiday.holidayId}" style="background-color: ;">X</button>
+																        </th>
+		                                                                
+		                                                               
+		                                                                <th ></th>
+		                                                                <th></th>
+		                                                            </tr>
+	                                                        	</c:forEach>
 	                                                        	
+	                                                        	
+	                                                        	
+	                                                        	<!-- 새로운 휴무일 추가 -->
+																<tr id="newHolidayRow">
+																    <th colspan="2" width="5%">
+																        <span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="newHolidayDt">
+				                                                            	휴무일
+				                                                           	</label>
+			                                                           	</span>
+																        
+																        <input type="date" id="newHolidayDt" name="newHolidayDt" class="form-control" placeholder="휴무일을 입력해주세요" title="휴무일을 입력해주세요" data-toggle="tooltip">
+																        <div  style="margin-top: 5px;"></div>
+																    </th>
+																    <th colspan="2" width="25%">
+																    
+																	    <span class="input-group-prepend" id="name">
+				                                                            <label class="input-group-text" for="holidayDesc">
+				                                                            	휴무일 설명
+				                                                           	</label>
+			                                                           	</span>
+																        <input type="text" id="newHolidayDesc" name="newHolidayDesc" class="form-control" placeholder="휴무일 설명을 입력해주세요" title="휴무일 설명을 입력해주세요" data-toggle="tooltip">
+																        
+																        <!-- 에러 메시지를 표시할 위치 -->
+																		<!-- 
+																		<div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+																		 -->
+																		 
+																		 <!-- 경고 메시지를 표시할 영역 -->
+																		 <div id="holidayDescMsg" style="margin-top: 5px;"></div>
+																    </th>
+																    <th width="5%">
+																        <button id="addHolidayBtn" class="btn btn-inverse">+</button>
+																    </th>
+																</tr>
+	                                                        	
+	                                                        	
+	                                                        	
+	                                                        	
+	                                                        	
+	                                                        	
+	                                                        	
+																
+																
 	                                                        	<tr>
-		                                                        	<td colspan="2">
-		                                                        		<button type="button" id="insertBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">등록</button>
-	                                                        
-				                                                        <!-- 취소 -->
-				                                                        <button class="btn btn-danger waves-effect waves-light">취소</button>
+		                                                        	<td colspan="5">
+		                                                        		
+		                                                        		<div style="text-align: center; margin-top: 10px;">
+			                                                        		<!-- 수정 -->
+		                                                        			<a href="/adminClassUpdateForm.do?classId=${classDetails.classId}" id="updateBtn" 
+		                                                        			class="btn waves-effect  waves-light m-r-20" style=background-color:#32589d;color:white;margin-right:20px;" 
+			                                                        				data-toggle="tooltip" data-placement="right">수정</a>
+		                                                        			
+					                                                        <!-- 목록 -->
+					                                                        <a href="/adminClassList.do" id="ListBtn" class="btn waves-effect waves-light"
+					                                                        style="background-color:#d8b95d;color:white;border-color:#d8b95d;margin-right:20px;" >클래스 목록</a>
+					                                                        
+					                                                        <!-- 삭제 -->
+					                                                        <a href="#" id="deleteBtn" class="btn waves-effect waves-light m-r-20" 
+					                                                        	style="background-color:#D85D5D;color:white;border-color:#D85D5D;margin-right:20px;" data-toggle="tooltip" data-placement="right">
+					                                                        	삭제
+					                                                        </a>
+		                                                        		</div>
+	                                                        			 
+	                                                        			 
 		                                                        	</td>
-		                                                        	<td colspan="2"></td>
 	                                                        	</tr>    	
 	                                                            	                                                           
 	                                                        </thead>
@@ -440,25 +522,6 @@
                                        	
                                        	<!-- 툴팁 끝 -->
 	                                        
-                                        <!-- Basic table card start -->
-                                        <!-- Basic table card end -->
-                                        
-                                        <!-- Inverse table card start -->
-                                        <!-- Inverse table card end -->
-                                        
-                                        
-                                        <!-- Hover table card start -->
-                                        
-                                        <!-- Hover table card end -->
-                                        
-                                       
-                                        
-                                       
-                                        <!-- Contextual classes table starts -->
-                                        <!-- Contextual classes table ends -->
-                                        
-                                        <!-- Background Utilities table start -->
-                                        <!-- Background Utilities table end -->
                                     </div>
                                     <!-- Page-body end -->
                                 </div>
@@ -478,38 +541,6 @@
 
 	<!--  회원가입 폼 붙이기 -->
 	
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Warning Section Starts -->
-    
-    <!-- Warning Section Ends -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     <!-- Required Jquery -->
     <script type="text/javascript" src="js/admin/js/jquery/jquery.min.js "></script>
@@ -537,105 +568,240 @@
 	else
 			window.onload = userData;
 	var userIdCk = false;
+	
+	var timeSets = "${classDetails.timeSets}";
+    console.log("timeSets", timeSets)
+
 	function userData() {
+    	
 		
-		    // 휴무일 추가 버튼 클릭 시 휴무일 필드를 추가
-		    $('#addHoliday').click(function(e) {
-		    	e.preventDefault(); // 기본 폼 제출 방지
-		    	
-		        var newHolidayRow = `
-		            <tr>
-		                <th colspan="2" width="50%">
-		                    <span class="input-group-prepend" id="name">
-		                        <label class="input-group-text" for="holidayDt">
-		                            <i class="icofont icofont-ui-email"> 휴무일</i>
-		                        </label>
-		                    </span>
-		                    <input type="date" name="holidayDt[]" class="form-control" placeholder="휴무일을 입력해주세요">
-		                </th>
-		                <th colspan="2" width="40%">
-		                    <span class="input-group-prepend" id="name">
-		                        <label class="input-group-text" for="holidayDesc">
-		                            <i class="icofont icofont-ui-email"> 휴무일 설명</i>
-		                        </label>
-		                    </span>
-		                    <input type="text" name="holidayDesc[]" class="form-control" placeholder="휴무일 설명을 입력해주세요">
-		                </th>
-		                <th width="5%">
-		                    <button type="button" class="removeHoliday btn btn-danger waves-effect waves-light">-</button>
-		                </th>
-		            </tr>
-		        `;
-		        
-		        // 새 휴무일 입력란 추가
-		        $('#holidayRow').after(newHolidayRow);
-		    });
+	 	 
+	 	 
+		/*******************************************************************/
+		
+		// 기존 휴무일 삭제
+		$('.removeHoliday').click(function () {
+		    const holidayId = $(this).data('holiday-id');
+		
+		    if (confirm('해당 휴무일을 삭제하시겠습니까?')) {
+		        $.ajax({
+		            type: 'POST',
+		            url: '/adminClassUpdateDeleteHoliday.do',
+		            data: { holidayId: holidayId },
+		            success: function (response) {
+			        	console.log("휴무일 삭제 response : " , response)
 
-		    // 동적으로 추가된 휴무일 삭제 버튼 클릭 시 해당 행을 삭제
-		    $(document).on('click', '.removeHoliday', function() {
-		        $(this).closest('tr').remove();
-		    });
+		            	
+		            	if(response.error === "N"){
+				            // alert('휴무일이 성공적으로 삭제되었습니다.');
+				            alert(response.message); // 성공 메시지 표시
+				            location.reload();  // 페이지 새로고침하여 변경된 내용을 반영
+				            // location.href = '/adminClassUpdateForm.do?classId=' + classId;
+			        	}else if(response.error === "Y"){
+			                alert('휴무일 삭제 중 오류가 발생했습니다: ' + response.errorMsg); // 실패 메시지 표시
+			                location.href = '/adminClassUpdateForm.do?classId=' + classId;
+			        	}
+		            	
+		            },
+		            error: function (xhr) {
+		                alert('휴무일 삭제 중 오류가 발생했습니다: ' + xhr.responseText);
+		            }
+		        });
+		    }
+		});
+		/***********************************************************/
 		
 		
-		 // 클래스 시간대 추가 버튼 클릭 시 클래스 시작시간 필드를 추가
-		    $('#addTime').click(function(e) {
-		    	e.preventDefault(); // 기본 폼 제출 방지
-		    	
-		        var newTimeRow = `
-		            <tr>
-				        	<td colspan="2"  widtd="5%">
-			                	<span class="input-group-prepend" id="name">
-			                    <label class="input-group-text" for="timeStart">
-			                    	<i class="icofont icofont-ui-email">  클래스 시작시간</i>
-			                   	</label>
-			                   	</span>
-									<input type="time" id="timeStart" name="timeStart[]" class="form-control" placeholder="클래스 시작시간을 입력해주세요" title="클래스 시작시간을 입력해주세요" data-toggle="tooltip">
-			                </td>   
-			                    
-			                <td colspan="2" widtd="5%">
-			                	<span class="input-group-prepend" id="name">
-			                    <label class="input-group-text" for="timeEnd">
-			                    	<i class="icofont icofont-ui-email">  클래스 종료시간 </i>
-			                   	</label>
-			                   	</span>
-									<input type="time" id="timeEnd" name="timeEnd[]" class="form-control" placeholder="클래스 종료시간을 입력해주세요" title="클래스 종료시간을 입력해주세요" data-toggle="tooltip">
-			                </td>  
-			               
-			            	<td widtd="5%">
-			            		</br><button type="button" class="removeClassTime btn btn-danger waves-effect waves-light">-</button>
-			                </td>
-		            </tr>
-		        `;
-		        
-		        // 새 휴무일 입력란 추가
-		        $('#classTimeRow').after(newTimeRow);
-		    });
+		
+		//새로운 휴무일 등록 시
+		// 휴무일 날짜 입력 시 유효성 검사
+	    const startDate = new Date('${classDetails.startDt}');
+	    const endDate = new Date('${classDetails.endDt}');
+	
+	    // 기존 휴무일을 배열로 수집
+	    const existingHolidays = [];
+	    $('input[name="holidayDt[]"]').each(function () {
+	        existingHolidays.push($(this).val());
+	    });
+	
+	    console.log("기존 휴무일 목록:", existingHolidays);
+	
+	    // 휴무일 날짜 선택 시 유효성 검사
+	    $('#newHolidayDt').on('change', function () {
+	        const holidayDt = $(this).val();
+	        
+	        const holidayDate = new Date(holidayDt);
+	
+	        
+	        
+	
+	        // 휴무일이 클래스 시작일과 종료일 사이에 있는지 확인
+	        if (holidayDate < startDate || holidayDate > endDate) {
+	            alert('휴무일은 클래스 시작일과 종료일 사이에 있어야 합니다.');
+	            resetHolidayInputs();
+	            return;
+	        }
+	
+	        // 기존 휴무일과 중복되는지 확인
+	        if (existingHolidays.includes(holidayDt)) {
+	            alert('이미 등록된 휴무일입니다.');
+	            resetHolidayInputs();
+	            return;
+	        }
+	    });
 
-		    // 동적으로 추가된 휴무일 삭제 버튼 클릭 시 해당 행을 삭제
-		    $(document).on('click', '.removeClassTime', function() {
-		        $(this).closest('tr').remove();
-		    });
+
+	 	// 입력 필드 초기화 함수
+	    function resetHolidayInputs() {
+	        $('#newHolidayDt').val('');
+	        $('#newHolidayDesc').val('');
+	        $('#holidayDescMsg').text('');
+	    }
 		
-		    /*
-            <td  widtd="5%">
-            	<span class="input-group-prepend" id="name">
-                <label class="input-group-text" for="maxParticipants">
-                	<i class="icofont icofont-ui-email"> 최대 수강가능 인원</i>
-               	</label>
-               	</span>
-					<input type="number" id="maxParticipants" name="maxParticipants[]" class="form-control" placeholder="수강가능 인원을 입력해주세요" title="수강가능 인원을 입력해주세요" data-toggle="tooltip">
-            </td> 
-            */
 		
+		// 3. 휴무일 설명이 30자를 초과한 경우, 공백만 입력할 경우 제한
+		 	$('#newHolidayDesc').on('input', function () {
+			    const maxLength = 30;
+			    const description = $(this).val();
+			
+			    // 공백만 입력된 경우 경고 메시지 표시
+			    if (description.trim().length === 0) {
+			        $('#holidayDescMsg').text("공백만 입력할 수 없습니다. 휴무일 설명을 입력해주세요.")
+			            .css("color", "#D85D5D");
+			    } 
+			    // 최대 글자 수를 초과한 경우 경고 메시지 표시 및 자동 자르기
+			    else if (description.length > maxLength) {
+			        $(this).val(description.substring(0, maxLength));
+			        $('#holidayDescMsg').text("휴무일 설명은 최대 30자까지 입력할 수 있습니다.")
+			            .css("color", "#D85D5D");
+			    } 
+			    // 유효한 입력일 경우 메시지 삭제
+			    else {
+			        $('#holidayDescMsg').text("");
+			    }
+			});
+	 	 
+		
+		
+		
+		
+		
+	 	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// 새로운 휴무일 추가 버튼 클릭
+		$('#addHolidayBtn').click(function (e) {
+			
+			 e.preventDefault(); // 기본 폼 제출 방지
+			 
+			 const classId = '${classDetails.classId}';
+			    const holidayDt = $('#newHolidayDt').val();
+			    // const holidayDesc = $('#newHolidayDesc').val();
+				const holidayDesc = $('#newHolidayDesc').val().trim(); // 공백 제거
+				
+				
+			    //클래스 시작일자, 종료 일자
+			    const startDate = new Date('${classDetails.startDt}');
+			    const endDate = new Date('${classDetails.endDt}');
+			    const holidayDate = new Date(holidayDt);
+
+			    
+		    // 1. 휴무일 날짜가 입력되지 않았을 경우
+		    
+		    if (!holidayDt) {
+		        alert('휴무일을 입력해주세요.');
+		        $('#newHolidayDt').focus();
+		        return false;
+		    }
+		    
+		    // 2. 휴무일 설명이 입력되지 않았거나 공백만 있는 경우
+		    if (!holidayDesc || holidayDesc.length === 0) {
+		        alert('휴무일 설명을 입력해주세요.');
+		        $('#newHolidayDesc').focus();
+		        return false;
+		    }
+		    
+		 	
+		 	
+		 	
+		 
+		 	
+		    
+		    
+			
+			// 유효성 검사 - 미입력
+			// if (requiredEmpty()) {
+			// 	return false;
+			// }
+		    
+		    
+		    
+		     // 유효성 검사를 모두 통과했을 경우, 휴무일 추가 요청 전송
+		    if (confirm("새로운 휴무일을 추가하시겠습니까?")) {
+				// 휴무일 추가 
+			    $.ajax({
+			        type: 'POST',
+			        url: '/adminClassUpdateInsertHoliday.do',
+			        data: { classId: classId
+			        		, holidayDt: holidayDt
+			        		, holidayDesc: holidayDesc },
+			        success: function (response) {
+			        	console.log("휴무일 추가 response : " , response)
+			        	
+			        	// 응답을 JSON 형식으로 파싱
+	        			// var jsonResponse = JSON.parse(response);
+			        	// console.log("휴무일 추가- 파싱데이터 jsonResponse : " , jsonResponse)
+					    
+			        	
+			        	if(response.error === "N"){
+				            // alert('휴무일이 성공적으로 추가되었습니다.');
+				            alert(response.message); // 성공 메시지 표시
+				            location.reload();  // 페이지 새로고침하여 변경된 내용을 반영
+				            // location.href = '/adminClassUpdateForm.do?classId=' + classId;
+			        	}else if(response.error === "Y"){
+			                alert('휴무일 추가 중 오류가 발생했습니다: ' + response.errorMsg); // 실패 메시지 표시
+			                // location.href = '/adminClassUpdateForm.do?classId=' + classId;
+			        	}
+			        },
+			        error: function (xhr) {
+			            alert('휴무일 추가 중 오류가 발생했습니다: ' + xhr.responseText);
+			         	// location.href = '/adminClassUpdateForm.do?classId=' + classId;
+			        }
+			    });
+			
+		    }
+		});
+		
+		/***************************************************************************/
+		// 소분류, 대분류 
+		// DB에서 가져온 값
+	    var selectedClassCateBig = "${classDetails.classCateBig}"; // 대분류 값
+	    var selectedClassCateSmall = "${classDetails.classCateSmall}"; // 소분류 값
+	    
+	    
+	    console.log("대분류: " + selectedClassCateBig);
+	    console.log("소분류: " + selectedClassCateSmall);
+	    
 		// 대분류와 소분류 데이터를 객체로 정의
+		// 대분류에 따른 소분류 목록 정의
+	    
+	    // 대분류와 소분류 데이터를 객체로 정의
 	    var categories = {
 	        crafts: [
-	            { value: 'soap_making', text: '비누 만들기' },
-	            { value: 'candle_making', text: '캔들 만들기' },
-	            { value: 'pottery', text: '도자기 공예' },
-	            { value: 'leather_crafting', text: '가죽 공예' },
+	            { value: 'soap_making', text: '비누' },
+	            { value: 'candle_making', text: '캔들' },
+	            { value: 'pottery', text: '도자기' },
+	            { value: 'leather_crafting', text: '가죽' },
 	            { value: 'knitting', text: '뜨개질' },
-	            { value: 'embroidery', text: '자수' }
+	            { value: 'embroidery', text: '자수' },
+	            { value: 'etc', text: '기타' }
 	        ],
 	        art: [
 	            { value: 'watercolor', text: '수채화' },
@@ -643,15 +809,17 @@
 	            { value: 'drawing', text: '드로잉' },
 	            { value: 'calligraphy', text: '캘리그래피' },
 	            { value: 'sculpture', text: '조각' },
-	            { value: 'craft_art', text: '공예 미술' }
+	            { value: 'craft_art', text: '공예 미술' },
+	            { value: 'etc', text: '기타' }
 	        ],
 	        music: [
-	            { value: 'guitar', text: '기타 연주' },
+	            { value: 'guitar', text: '기타' },
 	            { value: 'piano', text: '피아노' },
 	            { value: 'ukulele', text: '우쿨렐레' },
-	            { value: 'vocal', text: '보컬 트레이닝' },
-	            { value: 'drumming', text: '드럼 연주' },
-	            { value: 'violin', text: '바이올린 연주' }
+	            { value: 'vocal', text: '보컬' },
+	            { value: 'drumming', text: '드럼' },
+	            { value: 'violin', text: '바이올린' },
+	            { value: 'etc', text: '기타' }
 	        ],
 	        exercise: [
 	            { value: 'yoga', text: '요가' },
@@ -659,16 +827,30 @@
 	            { value: 'dance', text: '댄스' },
 	            { value: 'taekwondo', text: '태권도' },
 	            { value: 'fitness', text: '피트니스' },
-	            { value: 'climbing', text: '클라이밍' }
+	            { value: 'climbing', text: '클라이밍' },
+	            { value: 'etc', text: '기타' }
+	        ],
+	        cooking_baking: [ // 요리 & 베이킹 대분류 추가
+	            { value: 'korean_cuisine', text: '한식' }, // 한식 소분류
+	            { value: 'western_cuisine', text: '양식' }, // 양식 소분류
+	            { value: 'bakery', text: '제과제빵' }, // 제과제빵 소분류
+	            { value: 'dessert', text: '디저트' }, // 디저트 소분류
+	            { value: 'etc', text: '기타' } 
+	        ],
+	        etc: [ // 요리 & 베이킹 대분류 추가
+	        	{ value: 'etc', text: '기타' } 
 	        ]
 	    };
 
+            
 	    // 대분류 선택 시 소분류를 업데이트하는 jQuery 코드
+	    
 	    $('#classCateBig').on('change', function() {
 	        var selectedCategory = $(this).val(); // 선택된 대분류 값
 	        var $classCateSmall = $('#classCateSmall'); // 소분류 선택 요소
 	        var $classCateSmallText = $('#classCateSmallText'); // 소분류 입력 요소
 
+			/*
 	        // '기타'가 선택되면 select 숨기고 input 보이게 설정
 	        if (selectedCategory === 'etc') {
 	            $classCateSmall.hide();
@@ -676,7 +858,8 @@
 	        } else {
 	            $classCateSmallText.hide();
 	            $classCateSmall.show();
-
+	        }
+            */
 	            // 소분류 초기화
 	            $classCateSmall.empty();
 	            $classCateSmall.append('<option value="">선택</option>');
@@ -687,152 +870,143 @@
 	                    $classCateSmall.append('<option value="' + subcategory.value + '">' + subcategory.text + '</option>');
 	                });
 	            }
-	        }
+	        
+	        
+	        
+	        
 	    }); // 대분류 소분류 끝 
+	    
+		
+	    
+            
+         // 대분류에 맞는 소분류 채우기
+            function populateClassCateSmall() {
+                var $classCateSmall = $('#classCateSmall');
+                $classCateSmall.empty(); // 기존 옵션 삭제
+                $classCateSmall.append('<option value="">선택</option>');
+				
+                
+                // 선택된 대분류에 해당하는 소분류 목록이 있는지 확인
+                if (categories[selectedClassCateBig]) {
+                    $.each(categories[selectedClassCateBig], function (index, subcategory) {
+                        var option = $('<option>', {
+                            value: subcategory.value,
+                            text: subcategory.text
+                        });
+                        // 소분류 값이 일치하면 선택
+                        if (subcategory.value === selectedClassCateSmall) {
+                            option.prop('selected', true);
+                        }
+                        $classCateSmall.append(option);
+                    });
+                }
+                
+	    }; // 대분류 소분류 끝 
+		
+	 // 초기 실행 - 소분류 가져오기  (페이지 로드 시 호출)
+	    populateClassCateSmall();
 		
 		
+		/************************************************************************/
 		
-		
-		// 회원가입 버튼 클릭 시 
-		$('#insertBtn').click(function(e) {
-			console.log("등록버튼 클릭 들어왔는지 확인 ")
-			e.preventDefault();
+		// 수정버튼 클릭 시
+	    $('#updateBtn').click(function(e) {
+	        e.preventDefault(); // 폼의 기본 제출 기능 방지
+
+	        const classId = '${classDetails.classId}';
+	        
+	        if (requiredEmpty()) {
+	            return;
+	        }
 			
-			
-			if ($.trim($('#classNm').val()) == ''){
-				alert('클래스명을 입력해주세요');
-				$('#classNm').focus();
-				return false;
-			}
-			
-			if ($.trim($('#location').val()) == ''){
-				alert('클래스 장소를 입력해주세요');
-				$('#location').focus();
-				return false;
-			}
-			
-			
-			
-			
-			if ($.trim($('#classCateBig').val()) == ''){
-				alert('클래스 대분류를 선택해주세요');
-				$('#classCateBig').focus();
-				return false;
-			}
-			
-			if ($('#classCateBig').val() === 'etc' && $.trim($('#classCateSmallText').val()) == '') {
-			    alert('기타 항목을 선택하셨습니다. 소분류를 입력해주세요.');
-			    $('#classCateSmallText').focus();
-			    return false;
-			}
-			
-			if ($.trim($('#classCateSmall').val()) == ''){
-				alert('클래스 소분류를 선택해주세요');
-				$('#classCateSmall').focus();
-				return false;
-			}
-			
-			
-			if ($.trim($('#classMaxCnt').val()) == '' ){
-				alert('최대 참가자수를 입력해주세요.');
-				$('#classMaxCnt').focus();
-			}
-			
-			
-			
-			if ($.trim($('#classAgeMin').val()) == '' ){
-				alert('최소수강가능연령 입력해주세요.');
-				$('#classAgeMin').focus();
-				return false;
-			}
-			
-			
-			if ($.trim($('#classPrice').val()) == '' ){
-				alert('클래스 가격을 입력해주세요.');
-				$('#classPrice').focus();
-				return false;
-			}
-			
-			if($('select[name=classPost]').val()===''){
-				alert("클래스 게시여부를 선택해주세요.");
-				$('select[name="classPost"]').focus();
-				return false;
-			}
-			
-			if ($.trim($('#startDt').val()) == '' ){
-				alert('클래스 시작일자를 입력해주세요.');
-				$('#startDt').focus();
-				return false;
-			}
-			
-			if ($.trim($('#endDt').val()) == '' ){
-				alert('클래스 종료일자를 입력해주세요.');
-				$('#endDt').focus();
-				return false;
-			}
-			
-			if ($.trim($('#timeStart').val()) == '' ){
-				alert('클래스 시작 시간을 입력해주세요.');
-				$('#timeStart').focus();
-				return false;
-			}
-			
-			if ($.trim($('#timeEnd').val()) == '' ){
-				alert('클래스 종료시간을 입력해주세요.');
-				$('#timeEnd').focus();
-				return false;
-			}
-			
-			
-			
-			
-			
-			// 유효성 검사 - 미입력
-			if (requiredEmpty()) {
-				return;
-			}
-			
-			
-			// 클래스 최대 인원 -> tb_class_ detail 테이블의 컬럼에 넣기
-			//$('#maxParticipants').val($('#classMaxCnt').val());
-			
-			
-			if (confirm("클래스를 등록 하시겠습니까?")) {
+	        
+	     // form 데이터를 자동으로 수집
+	     if (confirm("클래스를 수정하시겠습니까?")) {
 				var form = $('#insertForm')[0];
 				var formData = new FormData(form);
-				
-				$.ajax({
-					url: 'insertClass.do',
-					processData: false,
+		        // const formData = $('#insertForm').serialize();
+					
+		        console.log("전송할 formData : " + formData)
+		        
+		        // 수정할 클래스 정보 수집
+		        
+		        // 클래스 수정 요청 (휴무일 제외)
+		        $.ajax({
+		            type: 'POST',
+		            url: '/adminClassUpdate.do?classId=' + classId,
+		            // contentType: 'application/json',
+		            // data: JSON.stringify(classData),
+		            processData: false,
 					contentType: false,
-					data: formData,
-					type: 'POST',
-					success: function(result){
-						console.log("클래스 등록 응답 result:", result);
-		                
-		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("클래스 등록 response:", response);
-
-		                if (response.error == 'N') {
-		                    alert("클래스가 등록되었습니다.");
-		                    location.href = '/adminClassList.do';
+		            data: formData,
+		            success: function(response) {
+		           
+		            	console.log("응답 데이터: ", response);
+		            	
+		            	if (response.error === "N") {
+		                    alert(response.message);
+		                    location.href = '/adminClassInfo.do?classId=' + classId;
 		                } else if (response.error == 'Y') {
-		                    alert('클래스 등록실패: ' + response.errorMsg);
-		                    location.href = '/adminClassInsertForm.do';
+		                	 alert('클래스 수정 실패 : ' + response.errorMsg);
+			                    location.href = '/adminClassUpdate.do?classId=' + classId;
+		                    // alert('오류: ' + response.message);
 		                }
-					},
-					error: function() {
-		                alert("클래스 등록  중 오류가 발생했습니다.");
+		            },
+		            error: function(xhr) {
+		            	 const errorResponse = JSON.parse(xhr.responseText);
+		                 alert('수정 중 오류 발생: ' + errorResponse.errorMsg);
+		                 //alert('클래스 정보 수정 중 오류가 발생했습니다: ' + xhr.responseText);
 		            }
-				});
-			}
-			
-			
-			
-		})// 회원가입 버튼 클릭 끝
-	};// 전체 불러오기 끝
+		        });
+	     	}
+	    });
 		
+		
+		/******************************************************************/
+		// 삭제 버튼 클릭
+	    $('#deleteBtn').click(function (e) {
+	    	console.log("삭제 버튼 클릭")
+	    	e.preventDefault(); // 기본 링크 동작 방지
+	    	
+	    	const classId = '${classDetails.classId}'; // 클래스 ID 가져오기
+	    	console.log("삭제 버튼 클릭 classId : ", classId)
+	    	
+	        if (confirm('해당 클래스를 삭제하시겠습니까?')) {
+	        	
+	            $.ajax({
+	                type: 'POST',
+	                url: '/adminDeleteClass.do',
+	                data: { classId: classId },
+	                success: function (response) {
+	                    console.log("삭제 응답 데이터: ", response); // 응답 데이터를 로그에 출력
+	                    
+	                    
+	                        // const jsonResponse = typeof response === "string" ? JSON.parse(response) : response;
+	                        // console.log("파싱된 응답 데이터: ", jsonResponse);
+							
+	                        if (response.error === "N") {
+	                            alert(response.message);
+	                            location.href = '/adminClassList.do'; // 목록 페이지로 이동
+	                        } else if (response.error === "Y") {
+	                            alert('클래스 삭제 실패: ' + response.errorMsg); // 실패 시 오류 메시지 표시
+	                        }
+                    },
+	                error: function (xhr) {
+	                    console.error("AJAX 요청 실패: ", xhr);
+	                    alert('클래스 삭제 중 오류가 발생했습니다: ' + xhr.responseText);
+	                }
+	            });
+	        }
+	    });
+		
+		
+		
+		
+		
+		
+	};// 전체 불러오기 끝
+
+
 // 유효성 검사 함수
 function requiredEmpty() {
 	var empty = false;

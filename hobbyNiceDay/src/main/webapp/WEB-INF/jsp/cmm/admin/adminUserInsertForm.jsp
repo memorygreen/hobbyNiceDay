@@ -97,6 +97,12 @@
     margin-right: 0px;
 	}
 
+	/* 라벨 색상 변경 */
+	.input-group-append .input-group-text, .input-group-prepend .input-group-text {
+	    background-color: #32589d;
+	    border-color: rgba(0, 0, 0, 0.15);
+	    color: #fff;
+	}
 
     </style>
 </head>
@@ -131,7 +137,7 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
@@ -143,11 +149,11 @@
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                                <a href="/adminUserList.do"> </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">회원 관리 > </a>
+                                            <li ><a href="/adminUserList.do">회원 관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">회원 등록</a>
+                                            <li ><a href="/adminUserInserForm.do">회원 등록</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -170,15 +176,7 @@
 	                                            <div class="card-header">
 	                                                <h5>회원 등록</h5>
 	                                                <span>회원 등록 페이지입니다. <code>TB_USER</code></span>
-	                                       		    <div class="card-header-right">
-	                                                    <ul class="list-unstyled card-option">
-	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-	                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-	                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-	                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-	                                                        <li><i class="fa fa-trash close-card"></i></li>
-	                                                    </ul>
-	                                                </div>
+	                                       		    
 	                                            </div>
 	                                            
 	                                            <form id="joinForm" name="joinForm" method="post">
@@ -192,24 +190,27 @@
 	                                                                <th>
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="userId">
-				                                                            	<i class="icofont icofont-user-alt-3">  아이디</i>
+				                                                            	아이디
 				                                                            </label>
 			                                                            </span>
 			                                                            <input type="text" id="userId" name="userId" class="form-control" placeholder="id를 입력해주세요" title="id를 입력해주세요"  data-toggle="tooltip" autocomplete="new-password" required>
 			                                                            <span id="userIdMsg">ID 중복확인이 되지 않았습니다.</span>
 	                                                                </th>
 	                                                                <th width="10%">
-	                                                                    <button id="userIdCk"  class="btn btn-inverse waves-effect waves-light">ID 중복확인</button>
+	                                                                    <button id="userIdCk"  class="btn btn-inverse waves-effect waves-light" style="background-color:#32589d;color:white;">ID 중복확인</button>
 	                                                                    </br>
 	                                                                </th>
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="userName">
-			                                                            	<i class="icofont icofont-ui-email">  이름</i>
+			                                                            	이름
 			                                                           	</label>
 			                                                           	</span>
 			                                                           	<input type="text" id="userName" name="userName" class="form-control" placeholder="이름을 입력해주세요" title="이름을 입력해주세요"  data-toggle="tooltip"  autocomplete="new-password" required>
-			                                                           	</br>
+			                                                           	
+			                                                            <p id="userNameMsg"> </p>
+			                                                           	
+			                                                           	
 	                                                                </th>
 	                                                            </tr>
 	                                                            
@@ -217,21 +218,21 @@
 	                                                                <th colspan="2" width="50%"> <!-- 비밀번호 -->
 	                                                                    <span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="passwd">
-			                                                            	<i class="icofont icofont-ui-email">  비밀번호</i>
+			                                                            	비밀번호
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="password" id="passwd" name="passwd" class="form-control" placeholder="비밀번호를 입력해주세요" title="비밀번호를 입력해주세요"  data-toggle="tooltip" autocomplete="new-password" required>
-	                                                        			<span>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<span>
+	                                                        			<span id="userPasswdMsg">비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<span>
 	                                                        			
 	                                                                </th>
 	                                                                <th colspan="2" width="50%">
 		     															<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="passwdCk">
-			                                                            	<i class="icofont icofont-ui-email">  비밀번호 확인</i>
+			                                                            	비밀번호 확인
 			                                                           	</label>
 			                                                           	</span>
 	                                                            		<input type="password" id="passwdCk" name="passwdCk" class="form-control" placeholder="비밀번호를 확인해주세요" title="비밀번호를 확인해주세요" data-toggle="tooltip" required>
-	                                                            		</br>                                                         
+	                                                            		<span id="userPasswdCkMsg"><span>                                                      
 	                                                                </th>
 	                                                            </tr>
 	                                                        
@@ -241,11 +242,12 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="userSe">
-			                                                            	<i class="icofont icofont-ui-email">  회원구분</i>
+			                                                            	회원구분
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
 			                                                            <select id="userSe" name="userSe"  class="form-control" placeholder="회원구분을 선택해주세요" title="회원구분을 선택해주세요"  data-toggle="tooltip" required>
+			                                                            
 			                                                            	<option value="user">사용자</option>
 			                                                            	<option value="admin">관리자</option>
 			                                                            </select>
@@ -256,7 +258,7 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="brthdy">
-			                                                            	<i class="icofont icofont-ui-email">  생년월일</i>
+			                                                            	생년월일
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="date" id="brthdy" name="brthdy" class="form-control" placeholder="생년월일을 입력해주세요" title="생년월일을 입력해주세요" data-toggle="tooltip" required>
@@ -268,7 +270,7 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="mbtlnum">
-			                                                            	<i class="icofont icofont-ui-email">  휴대전화</i>
+			                                                            	휴대전화
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="text" id="mbtlnum" name="mbtlnum" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
@@ -276,7 +278,7 @@
 	                                                                <th colspan="2">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="email">
-			                                                            	<i class="icofont icofont-ui-email">  이메일</i>
+			                                                            	이메일
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="text" id="email" name="email" class="form-control" placeholder="이메일을 입력해주세요" title="이메일을 입력해주세요" data-toggle="tooltip" required>
@@ -287,15 +289,16 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="sex">
-			                                                            	<i class="icofont icofont-ui-email">  성별</i>
+			                                                            	성별
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <div class="gender-buttons">
-																	    <!-- 성별 선택 -->
-																	    <div class="input-group btn-radio">
-																	        <input type="radio" id="male" name="sex" value="M" required>
-																	        <label for="male">남성</label>
-																	    </div>
+																		    <!-- 성별 선택 -->
+																		    <div class="input-group btn-radio">
+																		        <input type="radio" id="male" name="sex" value="M" required>
+																		        <label for="male">남성</label>
+																		    </div>
+																		    
 																		    <div class="input-group btn-radio">
 																		        <input type="radio" id="female" name="sex" value="F" required>
 																		        <label for="female">여성</label>
@@ -306,15 +309,25 @@
 	                                                                <th></th>
 	                                                            </tr>
 	                                                        	
+	                                                        	  
 	                                                        	<tr>
-	                                                        	<td colspan="3">
-	                                                        		<button type="button" id="joinBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">등록</button>
-                                                        
-			                                                        <!-- 취소 -->
-			                                                        <button class="btn btn-danger waves-effect waves-light">취소</button>
-	                                                        	</td>
-	                                                        	</tr>    	
-	                                                            	                                                           
+		                                                        	<td colspan="5">
+			                                                        		
+			                                                        		<div style="text-align: center; margin-top: 10px;">
+				                                                        		<!-- 수정 -->
+			                                                        			<button type="button" id="insertBtn" class="btn waves-effect  waves-light m-r-20" style=background-color:#32589d;color:white;margin-right:20px;" 
+				                                                        				data-toggle="tooltip" data-placement="right">등록</button>
+			                                                        			
+						                                                        <!-- 목록 -->
+						                                                        <a href="/adminUserList.do" id="ListBtn" class="btn waves-effect waves-light"
+						                                                        style="background-color:#d8b95d;color:white;border-color:#d8b95d;margin-right:20px;" >회원 목록</a>
+						                                                        
+						                                                       
+			                                                        		</div>
+		                                                        			 
+		                                                        			 
+		                                                        	</td>  	
+	                                                            </tr>	                                                           
 	                                                        </thead>
 	                                                        
 	                                                    </table>
@@ -425,6 +438,130 @@
 	var userIdCk = false;
 	function userData() {
 		
+		
+		
+		
+		//id 입력제한
+		$('#userId').on('input', function() {
+        // id 정규표현식 : 영어 대소문자, 숫자만 허용
+        let validChars = /^[A-Za-z0-9]*$/;
+        
+        // 현재입력된 id
+        let userId = $(this).val();
+        
+        // 제한된 문자 입력 or 15글자 초과 -> 수정
+        if (!validChars.test(userId) || userId.length > 15) {
+            // 불필요한 문자 제거, 15글자 초과시 15글자로 제한
+            $(this).val(userId.replace(/[^A-Za-z0-9]/g, '').substring(0, 15));
+            
+            // 15글자 이상 -> 메시지 
+            $('#userIdMsg').text("ID는 영어 대소문자와 숫자만 허용하며 최대 15글자까지 입력 가능합니다.").css("color", "#D85D5D");
+        } else {
+            $('#userIdMsg').text(""); // 조건만족 시 메시지 제거
+        }
+    });
+		
+		// 이름 입력 제한 및 길이 제한
+		  $('#userName').on('input', function() {
+		      // 이름 정규식 (한글 or 영어 대소문자만 허용 // 공백x 특수문자x 숫자x)
+		      let validChars = /^[ㄱ-ㅎ|가-힣a-zA-Z]*$/;
+
+		      let userName = $(this).val(); // 현재 입력된 이름
+
+		      // 입력불가 문자 입력 시 삭제
+		      if (!validChars.test(userName)) {
+		          $(this).val(userName.replace(/[^가-힣a-zA-Z]/g, ''));
+		          $('#userNameMsg').text("이름은 한글 또는 영어 대소문자만 허용됩니다. 공백,특수문자,숫자는 입력할 수 없습니다.").css("color", "#D85D5D");
+		      } 
+		      // 글자수 10글자 제한
+		      else if (userName.length > 10) { 
+		          $(this).val(userName.substring(0, 10));
+		          $('#userNameMsg').text("이름은 최대 10자까지 입력 가능합니다.").css("color", "#D85D5D");
+		      } else {
+		          $('#userNameMsg').text(""); // 정규표현식 o -> 메시지 삭제
+		      }
+		  });
+		
+		
+		
+		// 비밀번호 유효성 검증 정규식: 공백 제외, 영문자, 숫자, 특수문자 포함 8~15자
+		  // const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-])\S{8,15}$/;
+		  const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9])[A-Za-z0-9!@#$%^*+=-]{8,15}$/;
+
+		  $('#passwd').on('input', function() {
+			    let password = $(this).val();
+			    
+			    // 공백 or 15글자 초과 시 삭제
+			    password = password.replace(/\s/g, '').substring(0, 15);
+			    $(this).val(password);
+			    
+			    // 정규표현식 확인
+			    if (!passwordRegEx.test(password)) {
+			        $('#userPasswdMsg').text("비밀번호는 공백 없이 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.").css("color", "#D85D5D");
+			    } else {
+			        $('#userPasswdMsg').text(""); // 메시지 삭제
+			    }
+			});
+
+			$('#passwdCk').on('input', function() {
+			    let confirmPassword = $(this).val();
+			    
+			    // 공백 or 15글자 초과 시 제거
+			    confirmPassword = confirmPassword.replace(/\s/g, '').substring(0, 15);
+			    $(this).val(confirmPassword);
+			    
+			    // 비밀번호 일치 확인
+			    if (confirmPassword !== $('#passwd').val()) {
+			        $('#userPasswdCkMsg').text("비밀번호가 일치하지 않습니다. 다시 확인해주세요.").css("color", "#D85D5D");
+			    } else {
+			        $('#userPasswdCkMsg').text(""); // 메시지 삭제
+			    }
+			});
+			
+			
+			//휴대전화 
+			 $('#mbtlnum').on('input', function() {
+		        let phoneNumber = $(this).val().replace(/[^0-9]/g, ''); // 숫자만 허용
+		        
+		        // 글자수 11 제한
+		        if (phoneNumber.length > 11) {
+		            phoneNumber = phoneNumber.substring(0, 11);
+		        }
+		        
+		        let formattedNumber;
+		
+		        if (phoneNumber.length <= 3) {
+		            formattedNumber = phoneNumber; // 3자리 이하일 경우 그대로 표시
+		        } else if (phoneNumber.length <= 7) {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3); // 4~7자리일 경우 3-4 형식
+		        } else if (phoneNumber.length <= 10) {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 6) + '-' + phoneNumber.slice(6); // 10자리 형식 3-3-4
+		        } else {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7); // 11자리 형식 3-4-4
+		        }
+		
+		        $(this).val(formattedNumber); // 포맷팅된 번호를 필드에 표시
+		    });
+			
+			
+			// 이메일 입력 제한: 최대 30글자, 공백 허용하지 않음
+			 $('#email').on('input', function() {
+			     let email = $(this).val().replace(/\s/g, ''); // 공백 제거
+			     if (email.length > 30) {
+			         email = email.substring(0, 30); // 최대 30글자로 제한
+			     }
+			     $(this).val(email); // 수정된 값 설정
+			 });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// 사용자ID 중복체크
 		$('#userIdCk').click(
 				function(e) {
@@ -459,16 +596,18 @@
 			        });
 				});
 		
-		// 회원가입 버튼 클릭 시 
-		$('#joinBtn').click(function(e) {
-			console.log("회원가입 클릭 버튼 들어왔는지 확인 ")
+		// 회원등록 버튼 클릭 시 
+		$('#insertBtn').click(function(e) {
+			console.log("회원등록 버튼 들어왔는지 확인 ")
 			e.preventDefault();
+
 			
 			if (!userIdCk) {
 				alert('아이디 중복확인을 해주세요.');
 				$('#userId').focus();
 				return false;
 			}
+			
 			
 			if ($.trim($('#userName').val()) == ''){
 				alert('이름을 입력해주세요');
@@ -481,7 +620,7 @@
 				$('#passwd').focus();
 				return false;
 			}else if($('#passwd').val() != $('#passwdCk').val()){
-				alert('비밀번호를 다시 확인해주세요!');
+				alert('비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요');
 				$('#passwdCk').focus();
 				return false;
 			}
@@ -494,11 +633,23 @@
 			    return false;
 			}
 			
-			if(!$('input:radio[name=sex]').is(":checked")){
+			
+			// userSe 필수 체크
+		    if ($.trim($('#userSe').val()) === '') {
+		        alert('회원 구분을 선택해주세요.');
+		        $('#userSe').focus();
+		        return false;
+		    }
+			
+			if(!$('input:radio[name="sex"]').is(":checked")){
 				alert("성별을 선택해주세요.");
-				$('#sex').focus();
+				$('#male').focus();
+			    $('#male').css("outline", "2px solid #e53637");  // 포커스가 된 라디오 버튼을 시각적으로 표시
+
 				return false;
 			}
+			
+			
 			
 			if ($.trim($('#brthdy').val()) == ''){
 				alert('생년월일을 입력해주세요');
@@ -526,6 +677,7 @@
 			if ($.trim($('#email').val()) == '' ){
 				alert('이메일을 입력해주세요.');
 				$('#email').focus();
+				return false;
 			}
 			// 이메일 형식 체크 (ex. exaple@naver.com)
 				/* 
@@ -533,7 +685,8 @@
 				@[A-Z0-9.-]+: @ 뒤에는 도메인 부분이 오며, 영문자, 숫자, 점(.), 하이픈(-)이 허용됩니다.
 				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
 			*/
-			if (!reg.test($('#email').val())) {
+			let emailReg = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+			if ( $.trim($('#email').val()) != '' && !emailReg.test($('#email').val())) {
 			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
 			    $('#email').focus();
 			    return false;
@@ -544,9 +697,7 @@
 			if (requiredEmpty()) {
 				return;
 			}
-			
-			
-			if (confirm("회원가입을 하시겠습니까?")) {
+			if (confirm("회원 등록을 하시겠습니까?")) {
 				var form = $('#joinForm')[0];
 				var formData = new FormData(form);
 				
@@ -556,18 +707,18 @@
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
-						console.log("회원가입 응답 result:", result);
+					success: function(response){
+						//console.log("회원등록 응답 result:", result);
 		                
 		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("회원가입 response:", response);
+		                //var response = JSON.parse(result);
+						//console.log("회원등록 response:", response);
 
 		                if (response.error == 'N') {
-		                    alert("회원가입되었습니다.");
+		                    alert("회원 등록이 완료되었습니다.");
 		                    location.href = '/loginForm.do';
 		                } else if (response.error == 'Y') {
-		                    alert('회원가입 실패: ' + response.errorMsg);
+		                    alert('회원등록 실패: ' + response.errorMsg);
 		                    location.href = '/joinForm.do';
 		                }
 					},
@@ -579,7 +730,7 @@
 			
 			
 			
-		})// 회원가입 버튼 클릭 끝
+		})// 회원등록 버튼 클릭 끝
 	};// 전체 불러오기 끝
 		
 	// 유효성 검사 함수

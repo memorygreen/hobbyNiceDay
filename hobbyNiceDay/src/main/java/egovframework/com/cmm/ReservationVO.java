@@ -56,7 +56,7 @@ public class ReservationVO implements Serializable {
     private Date confmDt;           // 승인 일시
     
     private String reservationNum; // 예약 번호
-    
+    private String reservationPw; // 비회원 예약시 비밀번호
     
     // tb_class 관련 필드 추가
     // 클래스 정보 관련 필드
@@ -79,13 +79,16 @@ public class ReservationVO implements Serializable {
     
  // TB_CLASS_DETAIL 관련 필드들
     //private int classDetailId; // 클래스 디테일 ID
-    private int maxParticipants;// 최대 예약 가능 인원수(시간대별)
-    private int availableCurrentCnt; // 현재 예약된 인원수
-    private int availableSeats; // 남은 좌석 수
-    private String availableStatus; // 예약 가능 상태
+    //private int maxParticipants;// 최대 예약 가능 인원수(시간대별)
+    //private int availableCurrentCnt; // 현재 예약된 인원수
+    //private int availableSeats; // 남은 좌석 수
+    //private String availableStatus; // 예약 가능 상태
     private String timeStart; // 시작 시간
     private String timeEnd; // 종료 시간
     
     private String reservationTime; // 예약시간대
     
+    // private String timeSets; // 시간대 정보 (ex. 14:00-16:00)
+
+    private int availableSeatsWithAllReservations; // 정원 체크 각 시간대별 남은 자리
 }

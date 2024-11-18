@@ -21,12 +21,6 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>HobbyNiceDay</title>
 
-<!-- 전자정부 프레임워크 기본 -->
-<!-- <link href="<c:url value='/'/>css/common.css" rel="stylesheet"
-	type="text/css">
-	<link href="<c:url value='/'/>css/login.css" rel="stylesheet"
-	type="text/css"> -->
-
 
 <!-- Google Font -->
 <link
@@ -52,14 +46,11 @@
 <link rel="stylesheet" href="<c:url value='/css/style.css' />"
 	type="text/css">
 
-<!-- 달력 -->
+<!-- full calendaer api  -->
 <!-- https://www.jsdelivr.com/package/npm/fullcalendar?version=6.1.15  -->
 <script
 	src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 <!-- google calendar api 추가  -->
-<!-- <script
-	src="https://cdn.jsdelivr.net/npm/fullcalendar-google-calendar@latest/index.global.min.js"></script> -->
-	
 <script
 	src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.15/index.global.min.js"></script>
 	
@@ -119,22 +110,7 @@
 	outline: none; /* 기본 파란색 외곽선 제거 */
 }
 
-/*241025 추가 예약 시간대 활성화 시 css*/
-/*
-.product__details__option__size label.active {
-	background: #111111;
-	color: #ffffff;
-	border-color: #111111;
-}*/
 
-
-
-/*241030 추가 달력 주말 배경 연한 빨간색*/
-/*
-.fc-weekend { 
-        background-color: rgba(255, 0, 0, 0.1); /* 주말을 연한 빨간색으로 
-    }
-  */  
 .fc-sunday .fc-daygrid-day-top { 
     color: #D85D5D; /* 일요일 글자 빨간색 */
 }
@@ -174,8 +150,6 @@
 	</div>
 	<!-- Header Section End -->
 
-	<!-- Hero Section Begin -->
-	<!-- Hero Section End -->
 
 
 
@@ -198,35 +172,24 @@
 					<div class="product__details__text">
 						<h4>${classDetails.classNm}</h4>
 						<!-- 클래스명 -->
-						<!-- <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                <span> - 5 Reviews</span>
-                            </div> -->
+						
 						<h3>
 							<fmt:formatNumber value="${classDetails.classPrice}" type="currency" currencySymbol="₩" /><!-- 클래스 가격 -->
 							<!-- <span>\89,000</span> -->
-						</h3> 
-						<!-- 클래스 가격 -->
+						</h3> <!-- 클래스 가격 -->
 						<p>${classDetails.classDscrptn}</p>
 						<!-- 클래스 설명 -->
-						<!-- <div class="product__details__btns__option">
-                                <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-                                <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-                            </div> -->
+						
 						<div class="product__details__last__option">
 							<h5>
 								<span>클래스 정보</span>
 							</h5>
-							<!-- <img src="/images/img/shop-details/details-payment.png" alt=""> -->
 							<ul>
 								<li><span>수강기간 : </span>${classDetails.startDt} - ${classDetails.endDt}</li>
 								
 								<li><span>장소 : </span>${classDetails.location}</li>
 								<!-- <li><span>소요시간 : </span>약 2시간</li> -->
+								<li><span>소요시간 :</span>약 ${classDetails.classTimeTaken}시간</li>
 								<li><span>최대 예약가능 인원 수 : </span>${classDetails.classMaxCnt}명</li>
 								<li><span>최소 수강가능 연령 : </span>만
 									${classDetails.classAgeMin}세</li>
@@ -235,43 +198,8 @@
 						</div>
 
 						<div class="product__details__option">
-							<!-- 
-                                <div class="product__details__option__size">
-                                    <span>예약인원</span>
-                                    <label for="xxl">1
-                                        <input type="radio" id="xxl">
-                                    </label>
-                                    <label class="active" for="xl">2
-                                        <input type="radio" id="xl">
-                                    </label>
-                                    <label for="l">3
-                                        <input type="radio" id="l">
-                                    </label>
-                                    <label for="sm">4
-                                        <input type="radio" id="sm">
-                                    </label>
-                                </div> -->
-
-							<!-- 
-                                <div class="product__details__option__color">
-                                    <span>Color:</span>
-                                    <label class="c-1" for="sp-1">
-                                        <input type="radio" id="sp-1">
-                                    </label>
-                                    <label class="c-2" for="sp-2">
-                                        <input type="radio" id="sp-2">
-                                    </label>
-                                    <label class="c-3" for="sp-3">
-                                        <input type="radio" id="sp-3">
-                                    </label>
-                                    <label class="c-4" for="sp-4">
-                                        <input type="radio" id="sp-4">
-                                    </label>
-                                    <label class="c-9" for="sp-9">
-                                        <input type="radio" id="sp-9">
-                                    </label>
-                                </div>
-                                 -->
+							
+							
 						</div>
 
 
@@ -292,7 +220,7 @@
 
 
 	<!-- Checkout Section Begin -->
-	<section class="checkout spad">
+	<section class="checkout spad" style="padding-top:0px;">
 	<div class="container">
 
 		<div class="row">
@@ -301,7 +229,7 @@
 					<div class="jy_page_title">
 						<!--section-title  -->
 						<span>RESERVATION</span>
-						<h2>예약 등록</h2>
+						<h2>예약 신청</h2>
 						<p>달력에서 예약하고자하는 날짜를 선택한 후, 예약정보를 입력해주세요</p>
 					</div>
 				</div>
@@ -324,33 +252,29 @@
 			
 			
 			<div class="col-lg-5 ">
-				<!--  <div class="product__details__pic">-->
+				
 					<h6 class="checkout__title">
 					선택날짜 : <span  id="reservationScheduleselectedDateText">달력에서 예약날짜를 선택해주세요</span></h6>
 						<!-- 예약 일정 리스트 -->
 						<div class="checkout__form">
-								<!-- 시간대 리스트가 여기 들어갑니다 -->
+								<!-- 시간대 리스트 -->
 
 								<div class="row">
 									
 									<div class="col-lg-12">
 										<div class="checkout__input">
 											
-											<!-- <input type="time" id="reservationTime" name="reservationTime" required /> -->
-											<!--<div id="timeOptions">  -->
 											
-	
 										</div>
 										
 										</br>
 										</br>
-										<!-- <h6 class="checkout__title">예약정보 입력</h6> -->
+										
 											
 										
 										<div class="checkout__input">
-											<!-- <p>예약 시간대<span>*</span></p> -->
 											<h6 class="checkout__title">예약시간대 *</h6>
-											<!-- <p>(현재예약인원수 / 예약가능인원수)</p> -->
+											
 											
 											<div class="product__details__option__size" id="timeOptions">
 												<p>예약 날짜를 선택해주세요</p>
@@ -373,7 +297,7 @@
 										<div class="checkout__input">
 											<h6 class="checkout__title">예약 비고</h6>
 											<!-- <p>예약 비고</p> -->
-											<input type="text" id="reservationEtc" name="reservationEtc" width="80%">
+											<input type="text" id="reservationEtc" name="reservationEtc" width="80%" placeholder="예약 신청 시 비고사항을 입력해주세요">
 										</div>
 										
 										
@@ -388,10 +312,13 @@
 				<!-- 사용자 구분(일반사용자) -->
 				<!-- <input type="hidden" id="classDetailId" name="classDetailId" ><!-- 클래스 시간 고유 id -->
 				<input type="hidden" id="classId" name="classId" value="<c:out value='${classDetails.classId}'/>">
+				<input type="hidden" id="classMaxCnt" name="classMaxCnt" value="<c:out value='${classDetails.classMaxCnt}'/>">
 				<input type="hidden" id="reservationNm" name="reservationNm" value="<c:out value='${userVO.userName}'/>" required /><!-- 예약자명 -->
 				<input type="hidden" id="reservationDt" name="reservationDt" readonly required /> 
 				<input type="hidden" id="reservationPhone" name="reservationPhone" value="<c:out value='${userVO.mbtlnum}'/>" required> <!-- 연락처 -->
 				<input type="hidden" id="reservationEmail" name="reservationEmail" value="<c:out value='${userVO.email}'/>" required> <!-- 이메일 -->
+				<input type="hidden" id="reservationType" name="reservationType" value="user" required> <!-- 회원구분 -->
+				
 		</form>
 			<div class="col-lg-12 " >
 				</br>
@@ -417,13 +344,6 @@
 	</div>
 	</section>
 	<!-- Checkout Section End -->
-
-
-
-	<!-- Contact Section Begin -->
-
-	<!-- Contact Section End -->
-
 
 	<!-- Banner Section Begin -->
 	<section class="banner spad">
@@ -455,13 +375,10 @@
 		</div>
 	</div>
 	<!-- Search End -->
-	<!-- 구글 캘린더 대한민국의 공휴일 -->
-	<!-- <iframe src="https://calendar.google.com/calendar/embed?src=ko.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul" 
-				style="border: 0" width="800" height="600" frameborder="0" scrolling="no">
-		</iframe>
-	 -->
-	<!-- 자영 달력 추가 -->
-	<!-- 참고용 : 공식문서 https://fullcalendar.io/docs/initialize-globals -->
+	
+	
+	<!-- 달력 추가 - 참고 : 공식문서 https://fullcalendar.io/docs/initialize-globals -->
+	
 	<script>
 	// frullCalendaer 달력 api
 	  document.addEventListener('DOMContentLoaded', function() {
@@ -471,7 +388,8 @@
           var selectedDate = null; // 선택된 날짜를 저장할 변수
 
           var holidayDates = []; // 공휴일 날짜를 저장할 배열
-          
+          var holidayLabels = {}; // 구글 캘린더에서 불러온 공휴일 날짜와 이름을 저장할 객체 (여기서 선언)
+
           
           // 클래스 수강 시작일자, 종료일자
           var startDt = "${classDetails.startDt}"; // Format: YYYY-MM-DD
@@ -482,56 +400,8 @@
           
           var calendar = new FullCalendar.Calendar(calendarEl, {
         	  
-        	  // google 캘린더 api 관련
         	  googleCalendarApiKey : "AIzaSyBIIqXESeaREeCJB3QABFClVC8FGok3yhs", // google api key
-        	  eventSources :[ 
-			        	        {
-			        	            googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com' // 대한민국 공휴일 달력 id
-			        	            , color: 'white'   
-			        	            , textColor: '#D85D5D'  // 공휴일을 빨간색으로 표시 
-		        	     
-			        	                // 이벤트가 로드된 후 실행되는 콜백 함수
-			        	                /*
-			        	                ,events: function(fetchInfo, successCallback, failureCallback) {
-			        	                    $.ajax({
-			        	                        url: `https://www.googleapis.com/calendar/v3/calendars/ko.south_korea#holiday@group.v.calendar.google.com/events?key=AIzaSyBIIqXESeaREeCJB3QABFClVC8FGok3yhs` 
-			        	                        		,
-			        	                        type: 'GET',
-			        	                        success: function(response) {
-			        	                        	
-			        	                        	console.log("구글 api 성공 호출 확인")
-			        	                        	
-			        	                            var events = []; // 이벤트 데이터를 저장할 배열
-
-			        	                            // API로부터 가져온 이벤트 데이터에서 필요한 정보를 추출
-			        	                            response.items.forEach(function(event) {
-			        	                                if (event.start && event.start.date) {
-			        	                                    var holidayDate = event.start.date; // 공휴일 날짜
-			        	                                    holidayDates.push(holidayDate); // 공휴일 날짜를 배열에 저장
-			        	                                    events.push({
-			        	                                        title: event.summary, // 공휴일 이름
-			        	                                        start: holidayDate, // 공휴일 시작 날짜
-			        	                                        color: '#D85D5D', // 공휴일 표시 색상 (빨간색)
-			        	                                        textColor: 'white' // 공휴일 텍스트 색상
-			        	                                    });
-			        	                                    
-			        	                                    console.log("공휴일 날짜 배열 확인 : ", holidayDates)
-			        	                                }
-			        	                            });
-
-			        	                            successCallback(events); // 캘린더에 이벤트 데이터 전달
-			        	                        },
-			        	                        error: function() {
-			        	                            failureCallback(); // 오류 발생 시 처리
-			        	                            console.error("공휴일 데이터를 가져오는 중 오류가 발생했습니다.");
-			        	                        }
-			        	                    });
-			        	            
-			        	                }  */
-			        	        } 
-        	    			], // eventSources 끝 (구글 캘린더 )
               initialView: 'dayGridMonth', // 월별 보기
-              //events: '/getEvents.do',  // 스프링 컨트롤러에서 이벤트를 불러오는 URL 매핑
               locale: 'ko', // 한국어 설정
               headerToolbar: {
 			                  left: 'prev,next today',
@@ -544,22 +414,76 @@
 		              			   }
              				},
       		  firstDay: 0, // 일요일(0)을 월요일(1)을 일주일의 첫째날로 설정
-              // weekends: false, // 주말 비활성화
-              // events: [], // 이곳에 추후 이벤트(휴일)를 추가
               
-              events: function(fetchInfo, successCallback, failureCallback) { // 이벤트 
-		            	  		
+              events: function(fetchInfo, successCallback, failureCallback) { // 월 변경 시 이벤트
+		            	  	
+            	  var events = []; // full calendar 공휴일 + db 휴무일 데이터 이벤트 객체를 담을 배열
+            		
+	            	  /**************************************************************/
+	            	  
+	               	  // 휴일 날짜와 설명
+	                  // db에서 가져온 휴무일 데이터 classDetails.holidayInfo 값을 가져와서 파싱
+	                  var holidayInfo = "${classDetails.holidayInfo}"; // 예: "2024-09-05(휴무일), 2024-09-18(휴무일)"
+	                  
+	                 
+	                  if (holidayInfo) {
+	                      var holidays = holidayInfo.split(','); // 쉼표(,)로 분리하여 배열로 만듭니다.
+	
+	                      // 각 휴일 정보를 파싱하여 이벤트로 변환
+	                      holidays.forEach(function(holiday) {
+	                    	// 공백 제거 후 괄호 기준으로 날짜와 설명을 분리
+	                          var date = holiday.trim().split('(')[0]; // 날짜 부분 추출
+	                          var description = holiday.trim().split('(')[1].replace(')', ''); // 설명 부분 추출
+	        				  
+	                       	  // 휴일 날짜를 배열에 저장
+	                          holidayDates.push(date);
+	                          
+	                           events.push({
+	                          // var holidayEvent = {
+	                              title: description,  // 휴일 설명을 제목으로 설정
+	                              start: date,         // 이벤트 시작일은 휴일 날짜
+	                              allDay: true,         // 하루종일 이벤트로 설정
+	                              color: '#D85D5D'  // 휴무일을 빨간색으로 표시
+	                          //};
+	                           });
+	                          
+	                          // 이벤트를 달력에 추가
+	                          //calendar.addEvent(holidayEvent);
+	                      });
+	                  }
+                  	
+	                  
+	                  
+	                  /**************************************************/
+	            	  // 구글 캘린더 api 에서 공휴일 데이터 가져오기
+	                  fetch(`https://www.googleapis.com/calendar/v3/calendars/l9ijikc83v1ne5s61er6tava4iplm8id@import.calendar.google.com/events?key=AIzaSyBIIqXESeaREeCJB3QABFClVC8FGok3yhs`)
+	                      .then(response => response.json())
+	                      .then(data => {
+	                          // var events = []; // full calendar 공휴일 + db 휴무일 데이터 이벤트 객체를 담을 배열
+	
+	                          // 구글 캘린더에서 가져온 공휴일 추가
+	                          data.items.forEach(event => {
+	                              var eventDate = new Date(event.start.date || event.start.dateTime).toISOString().split('T')[0];
+	                              var eventTitle = event.summary || "공휴일"; // 공휴일 이벤트 제목
+	                              
+	                              holidayDates.push(eventDate); // 공휴일 날짜
+	                              holidayLabels[eventDate] = eventTitle; // 공휴일 이름 넣는 곳
+	                              
+	                              // 공휴일 이벤트 넣기
+                          		  events.push({
+	                                  title: eventTitle,
+	                                  start: eventDate,
+	                                  color: '#D85D5D',
+	                                  allDay: true
+	                              });
+                          	  });
+                      	
+                  
+            	  		/*******************************************************************************/
 		            	// 특정 월의 예약 가능 시간대 데이터 가져오기
 		            
-            	  		console.log("event 월별 이벤트 함수 들어왔는지 확인")
-            	  		console.log("월별 이벤트 함수 정보 : fetchInfo", fetchInfo)
-            	  		
-            	  		console.log("startDate", fetchInfo.startStr.slice(0, 7) + '-01')
-            	  		console.log("endDate", fetchInfo.startStr.slice(0, 7) + '-30')
-            	  		
-            	  		
-            	  		console.log("event successCallback", successCallback)
-            	  		console.log("event failureCallback", failureCallback)
+            	  		console.log("시작일 startDate : ", fetchInfo.startStr.slice(0, 7) + '-01')
+            	  		console.log("종료일 endDate : ", fetchInfo.startStr.slice(0, 7) + '-30')
             	  		
             	  		// 월별로 예약 가능일자 가져오는 함수
             	  		$.ajax({
@@ -570,28 +494,29 @@
 			                    startDate: fetchInfo.startStr.slice(0, 7) + '-01',  // 달의 첫째날
 			                    endDate: fetchInfo.startStr.slice(0, 7) + '-30'     // 달의 마지막날 (adjust for actual month length)
 			                },
-			                success: function(response) { // response : 월별 예약가능 일자 정보
+			                success: function(response) { // response : 월별 예약가능 일자 정보 (해당 월 1~말)
 			                	
-			                	console.log("event - ajax getMonthlyAvailableTimeSlots.do 가져왔는지 확인 :  ", response);
+			                	//console.log("event - ajax getMonthlyAvailableTimeSlots.do 가져왔는지 확인 :  ", response);
 			                
 			                	
-			                    var events = []; // 이벤트 목록
+			                    //var events = []; // 이벤트 목록
 			                    var reservationDates = new Set(); // 예약 완료된 날짜 
 			                    var holidayDatesSet = new Set(holidayDates); // 휴무일과 공휴일 날짜를 Set에 저장
 			                    var dateAvailability = {}; // 각 날짜의 예약 가능 여부를 추적하는 객체
 			                    var reservationDoneDates = new Set();
+			                    
+			                    
 			                    // 서버에서 받은 예약 가능 정보를 바탕으로 이벤트 생성
 			                    // 반복문 시작 
 			                    response.forEach(function(slot) {
 			                    	
-			                    	console.log("slot : ", slot)
+			                    	//console.log("slot : ", slot) // 시작일자~종료일자 각각 정보(예약가능인원, 전체인원, 날짜,...)
 			                        
-			                        console.log()
+			                        
 			                        // 예약 가능한 인원이 0인 경우 예약 불가로 표시
-			                        if (slot.availableSeatsWithAllReservations === 0) {
+			                        if (slot.availableSeatsWithAllReservations <= 0) {
 			                        	reservationDates.add(slot.reservationDt); // 예약된 날짜 추가
 				                        
-			                        	
 			                            events.push({
 			                                title: '예약마감',
 			                                start: slot.reservationDt,
@@ -605,10 +530,10 @@
 			                    // 선택된 월의 모든 날짜를 처리
 			                    // 예약없는 날(모든 날짜 가능한날) 보여줌
 			                    var currentDate = new Date(fetchInfo.start); // fetchInfo == 이벤트 전체 start == 오늘날짜인듯
-			                    console.log("fetchInfo.start : ", fetchInfo.start)
+			                    console.log("오늘날짜 fetchInfo.start : ", fetchInfo.start)
 			                    while (currentDate <= fetchInfo.end) {
 			                        var formattedDate = currentDate.toISOString().split('T')[0]; // 오늘부터 월말까지 날짜 하루하루
-									console.log("formattedDate : " , formattedDate)
+									// console.log("월별 하루하루 formattedDate : " , formattedDate)
 									
 									
 					                // 주말(토, 일) 여부와 공휴일 여부 확인
@@ -616,22 +541,24 @@
 					                var isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 					                var isHoliday = holidayDatesSet.has(formattedDate);
 					                
-					                // 공휴일 또는 주말인 경우 예약 불가로 설정 (고민좀 해봐야함)
-					                /*
-					                if (isHoliday || isWeekend) {
-					                    events.push({
-					                        title: '예약불가', // 공휴일 또는 주말인 경우 예약 불가 표시
-					                        start: formattedDate,
-					                        color: 'gray' // 예약 불가 날짜의 색상
-					                    });
-					                }
-					                */
+					               
 					                // 예약 가능한 날짜가 아니고(예약마감), 휴무일, 공휴일 또는 주말이 아닌 경우에만 "예약 가능" 표시
 					                if (!reservationDates.has(formattedDate) && !holidayDatesSet.has(formattedDate) && !isWeekend) {
 					                    events.push({
 					                        title: '예약가능',
 					                        start: formattedDate,
 					                        color: '#267CC7'// '#97C84F' 
+					                    });
+					                }
+					                
+					                
+					                //(추가) 휴무일, 공휴일 
+					                
+					                if (holidayDatesSet.has(formattedDate)) {
+					                    events.push({
+					                        title: '예약불가',
+					                        start: formattedDate,
+					                        color: 'grey'// '#97C84F' 
 					                    });
 					                }
 					                
@@ -645,15 +572,20 @@
 			                }, // success 종료
 			                error: function() {
 			                    alert('예약 가능 정보를 불러오는 중 문제가 발생했습니다.');
+			                    
 			                }
-			            });
-			        }, // event 종료
-              
-              
-           	  // 날짜 클릭 이벤트 추가
-              dateClick: function(info) { // 날짜 선택 관련 로직
-                  
-            	// 이전 선택된 날짜의 스타일을 초기화
+			            }); // ajax 종료
+		            	
+                      }) // .then(data => {
+                  	
+	                  .catch(error => {
+	                      console.error("구글 캘린더에서 데이터를 가져오는 중 오류 발생:", error);
+	                      failureCallback(error);
+	                  });
+			        }, // event 종료 
+              dateClick: function(info) {  
+            	  // 날짜 선택 관련 로직
+            	  // 이전 선택된 날짜의 스타일을 초기화
                   if (selectedDate) {
                       var prevCell = document.querySelector('.fc-daygrid-day[data-date="' + selectedDate + '"]');
                       if (prevCell) {
@@ -687,14 +619,14 @@
                	 // 휴일이 아닌 경우에만 날짜를 설정
                  // 휴일 또는 주말(Sat=6, Sun=0) 선택 방지
                   if (holidayDates.includes(selectedDate) || dayOfWeek === 0 || dayOfWeek === 6) {
-                      alert('해당 날짜는 휴무일이므로 선택이 불가합니다.');
+                      alert('해당 날짜는 휴무일이므로 예약이 불가합니다.');
                       
                       
                    // 예약 현황 - 선택 날짜 표기 (휴무일 )
 	    			  document.getElementById('reservationScheduleselectedDateText').textContent = dateText + "(휴무일)";
                       
                       
-                      document.getElementById('reservationDt').value = ''; // 휴일이므로 예약 날짜 input에 값을 넣지 않음 // 선택을 취소합니다.
+                      document.getElementById('reservationDt').value = ''; // 휴일이므로 예약 날짜 input에 값을 넣지 않음 // 선택을 취소함
                       
                    	  // 예약 시간대와 인원수 초기화
                       $('#timeOptions').empty().append("<p>예약 날짜를 선택해주세요</p>");
@@ -704,10 +636,7 @@
                       return;
                   }else{
                 	  document.getElementById('reservationDt').value = selectedDate;
-                      alert( '예약 날짜가 ' + info.dateStr + '로 선택되었습니다.');// 선택한 날짜가 휴일이면 선택을 막고 알림을 띄웁니다.
-                      
-                      // 여기서 날짜 클릭 시 수행할 동작을 추가할 수 있습니다. 
-                     	
+                      // 여기서 날짜 클릭 시 수행할 동작을 추가 가능 
                       
                       // 예약 현황 - 선택 날짜 표기 (휴무일이 아닐 때에만 )
 	    			  document.getElementById('reservationScheduleselectedDateText').textContent = dateText;
@@ -718,10 +647,6 @@
                   } 
                   
               },
-              /*eventClick: function(info) {
-                  alert('이벤트: ' + info.event.title);
-                  // 여기서 예약 가능한 시간 등을 추가로 표시할 수 있음
-              },*/
               dayCellClassNames: function(arg) {
             	  var dayOfWeek = arg.date.getUTCDay();
                   if (dayOfWeek === 6) { // 일요일 
@@ -736,43 +661,17 @@
           // 캘린더 크기 설정
           calendar.setOption('contentHeight', 600);
           
-       	  // 휴일 날짜와 설명
-          // classDetails.holidayInfo 값을 가져와서 파싱합니다.
-          var holidayInfo = "${classDetails.holidayInfo}"; // 예: "2024-09-05(휴무일), 2024-09-18(휴무일)"
-          
-          if (holidayInfo) {
-              var holidays = holidayInfo.split(','); // 쉼표(,)로 분리하여 배열로 만듭니다.
-
-              // 각 휴일 정보를 파싱하여 이벤트로 변환
-              holidays.forEach(function(holiday) {
-            	// 공백 제거 후 괄호 기준으로 날짜와 설명을 분리
-                  var date = holiday.trim().split('(')[0]; // 날짜 부분 추출
-                  var description = holiday.trim().split('(')[1].replace(')', ''); // 설명 부분 추출
-				  
-               	  // 휴일 날짜를 배열에 저장
-                  holidayDates.push(date);
-                  
-                  // 이벤트 객체 생성
-                  var holidayEvent = {
-                      title: description,  // 휴일 설명을 제목으로 설정
-                      start: date,         // 이벤트 시작일은 휴일 날짜
-                      allDay: true,         // 하루종일 이벤트로 설정
-                      color: '#D85D5D'  // 휴무일을 빨간색으로 표시
-                  };
-
-                  // 이벤트를 달력에 추가
-                  calendar.addEvent(holidayEvent);
-              });
-          }
+          /**************************************************************/
+       	 
           
           calendar.render(); // 달력을 화면에 렌더링
       }); // fullCalendar API 함수 끝
+      
+      
+      
+      
+      
 	</script>
-
-
-
-
-
 
 
 	<script>
@@ -789,6 +688,8 @@
 		// 예약 버튼 클릭 시 
 		$('.registerBtn').click(function(e) {
 			e.preventDefault();
+			
+			// 필수입력값 확인
 			
 			if ($.trim($('#reservationDt').val()) == ''){
 				alert('달력에서 예약날짜를 선택해주세요');
@@ -858,7 +759,7 @@
 				return;
 			}
 			
-			
+			// 예약 등록
 			//if (confirm("예약을 하시겠습니까?")) {
 				var form = $('#registerForm')[0];
 				var formData = new FormData(form);
@@ -869,31 +770,30 @@
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
-						console.log("예약 응답 result:", result);
+					success: function(response){
+						console.log("예약 응답 result:", response);
 		                
 						try{
-			                // JSON 파싱
-			                var response = JSON.parse(result);
-							console.log("예약 response:", response);
-	
+			               
 			                if (response.error == 'N') {
 			                    alert("예약이 신청되었습니다. 관리자 접수완료 후 예약이 확정됩니다.");
 			                    location.href = '/myReservationList.do';
 			                } else if (response.error == 'Y') {
-			                    alert('예약 실패: ' + response.errorMsg);
-			                    location.href = '/reservationUsrForm.do';
+			                    alert('예약 신청 실패: ' + response.errorMsg);
+			                    location.href = '/reservationUsrForm.do?classId=' + response.classId; // classId 추가
 			                }
 							
 						} catch(e) {
 							console.error("Unexpected response format. It is not valid JSON.", result);
 					        alert("서버에서 잘못된 응답을 받았습니다.");
+					        //location.href = '/reservationUsrForm.do?classId=' + response.classId; // classId 추가
 						}
 					}
-					/*,
+					,
 					error: function() {
 		                alert("예약 중 오류가 발생했습니다.");
-		            }*/
+		                //location.href = '/reservationUsrForm.do?classId=' + response.classId; // classId 추가
+		            }
 				});
 			// } // if문
 			
@@ -941,64 +841,47 @@
               	
             	  
             	console.log("response :", response )
-              	/*
-              	console.log("response[0] :", response[0] )
-              	console.log("response[0].timeRange :", response[0].timeRange )
-              	console.log("response[0].sumAllreservation 현재 예약 인원(모든 예약 고려):", response[0].sumAllreservation )
-              	console.log("response[0].availableSeatsWithAllReservations 현재 가능 (모든 예약 고려):", response[0].availableSeatsWithAllReservations )
-              	console.log("response[0].classMaxCnt (최대 수강인원) :", response[0].classMaxCnt )
-              	
-              	console.log("response[1] :", response[1] )
-              	console.log("response[1].timeRange :", response[1].timeRange )
-              	console.log("response[1].sumAllreservation 현재 예약 인원(모든 예약 고려):", response[1].sumAllreservation )
-              	console.log("response[1].availableSeatsWithAllReservations 현재 가능 (모든 예약 고려):", response[1].availableSeatsWithAllReservations )
-              	console.log("response[1].classMaxCnt (최대 수강인원) :", response[1].classMaxCnt )
-              	*/
               	
                   $('#timeOptions').empty();
                   
-                  // Populate the list with new data
-                  response.forEach(function(slot) {
+                  // 새로운 데이터로 리스트 채우기
+                  response.forEach(function(slot) { 
                 	  console.log("slot : ", slot)
                 	  console.log("slot.classMaxCnt : ", slot.classMaxCnt)
                 	  
                       
                       // 예약시간대에 선택한 날짜에 해당하는 예약시간대 라디오버튼으로 만들어서 넣기 
                       var label = $('<label>', {
-                    'for': 'classDetailId' + slot.classDetailId,
-                    'text': slot.timeRange, // Display time range text
-                    'class': 'time-slot-label' // Optional: add a class for styling
-		                });
-		
+							                    'for': 'classDetailId' + slot.classDetailId,
+							                    'text': slot.timeRange, // 시간대 텍스트 표출
+							                    'class': 'time-slot-label' // 클래스명 
+									                });
+									
 		                var input = $('<input>', {
 		                    'type': 'radio',
-		                    'name': 'classDetailId', // Ensure all options have the same name
+		                    'name': 'classDetailId', // name 통일
 		                    'id': 'classDetailId' + slot.classDetailId,
-		                    'value': slot.classDetailId, // Value to be sent on form submission
-		                    'required': true // Make selection required
+		                    'value': slot.classDetailId, //제출 시 value 값
+		                    'required': true 
 		                });
 		
-		                // Append input to label
-		                label.prepend(input);
+		                label.prepend(input); //label 앞에  input에 추가
 		
-		                // Append label to #timeOptions div
-		                $('#timeOptions').append(label);
+		                $('#timeOptions').append(label);//  #timeOptions div에 라벨 추가
 		                
-		             	// Optional: Add current reservation info and max count to each label
+		             	// 선택 : 현재 예약정보, 최대인원수를 각 라벨에추가
 		                var infoText = ' (예약 : ' + slot.sumAllreservation +'명 / 최대 : ' + slot.classMaxCnt + '명 /  예약가능 : ' + slot.availableSeatsWithAllReservations + '명)';
 		                label.append(infoText);
                       	
 		                
-		             
 		                /******************************************/
 		                
 		                // 선택 날짜, 선택한 예약시간대 별 예약가능한 인원수까지 라디오버튼 생성
-		             	// Add event listener to dynamically generate reservation count options
-		                input.on('change', function() {
+		             	input.on('change', function() {
 		                	
 		                	$('#timeOptions label').removeClass('active');
 
-		    	            // Add 'active' class to the selected label
+		    	            // active 클래스를 선택된 라벨에 추가
 		    	            $(this).closest('label').addClass('active');
 		    	            
 		                    generateReservationCountOptions(slot.availableSeatsWithAllReservations);
@@ -1018,11 +901,9 @@
 	
 	
 	// 예약인원수 표출 : 선택 날짜, 선택 예약시간대별 가능한 예약인원수까지 예약인원수 표출
-	// Function to generate reservation count options based on available seats
 	function generateReservationCountOptions(maxAvailableSeats) {
-	    $('#reservationCountOptions').empty(); // Clear previous options
+	    $('#reservationCountOptions').empty(); // 이전 예약인원수 옵션 초기화
 	
-	    // Generate radio buttons from 1 to maxAvailableSeats
 	    for (var i = 1; i <= maxAvailableSeats; i++) {
 	        var label = $('<label>', {
 	            'for': 'person' + i
@@ -1041,13 +922,10 @@
 	        
 	        
 			// 예약인원수 선택 시 css 적용되도록 수정
-	        // Add click event to change background color when selected
 	        input.on('change', function() {
-	            // Remove 'active' class from all labels
-	            $('#reservationCountOptions label').removeClass('active');
+	            $('#reservationCountOptions label').removeClass('active'); // active 클래스 다 지우기
 
-	            // Add 'active' class to the selected label
-	            $(this).closest('label').addClass('active');
+	            $(this).closest('label').addClass('active'); // 선택된 라벨에 active 클래스 부여
 	        });
 	        
 	        

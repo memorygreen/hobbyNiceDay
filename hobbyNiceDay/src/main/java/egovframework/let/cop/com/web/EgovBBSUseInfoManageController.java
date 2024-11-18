@@ -317,12 +317,12 @@ public class EgovBBSUseInfoManageController {
 
     	if (!checkAuthority(model)) return "cmm/uat/uia/EgovLoginUsr";	// server-side 권한 확인
 
-		String param_trgetId = (String)commandMap.get("param_trgetId");
+		String paramTrgetId = (String)commandMap.get("mm");
 
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 
 		if (isAuthenticated) {
-		    boardUseInf.setTrgetId(param_trgetId);
+		    boardUseInf.setTrgetId(paramTrgetId);
 		    bbsUseService.updateBBSUseInfByTrget(boardUseInf);
 		}
 

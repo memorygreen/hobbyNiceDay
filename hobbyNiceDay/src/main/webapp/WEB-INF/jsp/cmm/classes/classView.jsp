@@ -6,6 +6,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.text.SimpleDateFormat, java.util.Date" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -68,9 +71,31 @@
 	<!-- JSTL을 사용하여 세션에서 userId 확인 -->
     <c:set var="userVO" value="${sessionScope.userVO}" />
     <c:set var="isLoggedIn" value="${not empty userVO.userId}" />
+	<!--
+	<c:set var="classDetails" value="${classDetails}" />
+	-->
 	
+	<!-- 현재 날짜를 가져와 'yyyy-MM-dd' 형식으로 저장 -->
+	<fmt:formatDate value="<%= new java.util.Date() %>" pattern="yyyy-MM-dd" var="todayStr" />
+	
+	<!-- 오늘 날짜를 Date 형식으로 파싱 -->
+	<fmt:parseDate value="${todayStr}" pattern="yyyy-MM-dd" var="currentDate" />
+	
+	<!-- 클래스 종료일을 Date 형식으로 파싱 -->
+	<fmt:parseDate value="${classDetails.endDt}" pattern="yyyy-MM-dd" var="classEndDate" />
 
-
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		                             
+		                             
 	<!-- Page Preloder -->
 	<div id="preloder">
 		<div class="loader"></div>
@@ -98,23 +123,23 @@
            		 
         <div class="product__details__pic">
             
-            <!-- 
             <div class="container">
-             
+				
+				<!-- 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__details__breadcrumb">
-                            <a href="./index.html">Home</a>
-                            <a href="./shop.html">Shop</a>
-                            <span>Product Details</span>
+                            <a href="./index.html">메인</a>
+                            <a href="./shop.html">클래스 목록</a>
+                            <span>클래스 상세보기 </span>
                         </div>
                     </div>
                 </div>
-                --------------------
+				 -->             
+				 
                 <div class="row">
-                
-                <!--  
                     <div class="col-lg-3 col-md-3">
+                    <!-- 원래 사진 목록 있던 곳  
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
@@ -142,41 +167,26 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>---------------------
+                        -->
+                    </div>
+                    
+                    <!-- 클래스 상세보기 이미지  -->
                     <div class="col-lg-6 col-md-9">
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <!-- <img src='/images/classes/img_class_cookie2.jpg' alt="대표 이미지"> -------------
-                                    <img src="<c:url value="${pageContext.request.contextPath}/resources/uploadImg/${classDetails.imgNm}" />" alt="Class Leader Image"> 
-                                    <!-- style="width: 100%; height: 100%; object-fit: cover;"> --------------
-                                    
+                                    <!-- <img src='/images/classes/img_class_cookie2.jpg' alt="대표 이미지">
+                                     -->
+                                    <img src="<c:url value="${pageContext.request.contextPath}/resources/uploadImg/${classDetails.imgNm}" />" alt="Class Leader Image" style="width: 100%; height: 100%; object-fit: cover;"> 
+                                   
                                 </div>
                             </div>
                             
-                            <!---------------
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src='/images/classes/img_class_cookie3.jpg' alt="대표이미지 2">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="/images/img/shop-details/product-big3333.png" alt="">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-4" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="/images/img/shop-details/product-big-444444.png" alt="">
-                                    <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1" class="video-popup"><i class="fa fa-play"></i></a>
-                                </div>
-                            </div> 
-                            ---------------
                         </div>
                     </div>
                 </div>
             </div>
-        -->
+        
         </div>
         
         <div class="product__details__content">
@@ -186,21 +196,13 @@
                     <div class="col-lg-8">
                         <div class="product__details__text">
                             <h4>${classDetails.classNm}</h4> <!-- 클래스명 -->
-                            <!-- 
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                <span> - 5 Reviews</span>
-                            </div>
-                             -->
+                            
                             <h3>
 								<fmt:formatNumber value="${classDetails.classPrice}" type="currency" currencySymbol="₩" /><!-- 클래스 가격 -->
 								<!-- <span>\89,000</span> -->
 							</h3> 
                             <p>${classDetails.classDscrptn}</p><!-- 클래스 설명 -->
+                            
                             <!-- <p>장소 : ${classDetails.location}</p> -->
                             <!-- 
                             <div class="product__details__option">
@@ -241,29 +243,30 @@
                             
                              -->
                             <div class="product__details__cart__option">
-                                <!-- <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                </div>
-                                 -->
-                                <c:choose>
-	                        		<c:when test="${isLoggedIn}"> <!-- 로그인 한 경우 -->
-		                                <a href="/reservationUsrForm.do?classId=${classDetails.classId}" class="primary-btn">예약하기</a> <!-- 예약화면으로 이동 -->
-		                        	</c:when>
-		                         	<c:otherwise> <!-- 로그인 안 한 경우 -->
-									<a href="/setUrlLoginForm.do?returnUrl=${pageContext.request.requestURL}" class="primary-btn"   onclick="return confirmReservation()">예약하기</a>
-									<a href="/reservationNonUsrForm.do?classId=${classDetails.classId}" class="primary-btn">비회원 예약하기</a>
-		                         	</c:otherwise>
-	                        	</c:choose>     
-		                                
+                              
+	                        	
+	                        	<!-- 클래스 종료일과 현재 날짜 비교 -->
+								<c:choose>
+								<%-- 클래스 종료일이 오늘 이후이고, 로그인 상태인 경우 --%>
+    								<c:when test="${classEndDate.compareTo(currentDate) >= 0 && isLoggedIn}">
+								        <a href="/reservationUsrForm.do?classId=${classDetails.classId}" class="primary-btn">회원 예약하기</a>
+								    </c:when>
+								    <%-- 클래스 종료일이 오늘 이후이고, 비로그인 상태인 경우 --%>
+    								<c:when test="${classEndDate.compareTo(currentDate) >= 0 && !isLoggedIn}">
+								        <a href="/setUrlLoginForm.do?classId=${classDetails.classId}&returnUrl=${pageContext.request.requestURL}" class="primary-btn" onclick="return confirmReservation()">회원 예약하기</a>
+								        <a href="/reservationNonUsrForm.do?classId=${classDetails.classId}" class="primary-btn">비회원 예약하기</a>
+								    </c:when>
+								    
+								    <%-- 클래스 종료일이 오늘 이전인 경우 안됨(클래스 등록시에 오늘날짜 이후로만 등록하게 막아야할듯)--%>
+								    <c:otherwise>
+								        <span>클래스 수강 기간이 종료되었습니다.</span>
+								    </c:otherwise>
+								</c:choose>
+								
+							   
                             </div>
-                            <!-- 
-                            <div class="product__details__btns__option">
-                                <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-                                <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-                            </div>
-                             -->
+                            
+                            
                             <div class="product__details__last__option">
                                 
                                 <!-- 
@@ -272,7 +275,7 @@
                                  -->
                                 <ul>
                                 	<li><span>장소 : </span>${classDetails.location}</li>
-                                    <li><span>소요시간 : </span>약 2시간</li>
+                                    <li><span>소요시간 : </span>약 ${classDetails.classTimeTaken}시간</li>
                                     <li><span>최대 예약가능 인원 수 : </span>${classDetails.classMaxCnt}명</li>
                                     <li><span>최소 수강가능 연령 : </span>만 ${classDetails.classAgeMin}세</li> <!-- 최소 수강가능 연령 -->
                                 </ul>
@@ -283,73 +286,22 @@
 							<!-- <div id='calendar'></div> -->
                             
                         </div>
+                        
+                        
+                        
+                        <!-- 클래스 목록  -->
+                        
+                        <div class="checkout__input" style="text-align: center;">
+                        
+                        <div class="jy_margin_1" style="height:80px"></div>
+		
+							<a href="/classAllList/all" id="classListBtn"  style="background:#7c7c7c;" class="primary-btn listBtn">목록</a>
+							
+						</div>
                     </div>
                 </div>
                 
-                <!-- 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__details__tab">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                    role="tab">Description</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-                                    Previews(5)</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
-                                    information</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tabs-5" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note">123</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>123</p>
-                                            <p>123</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>123</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-6" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>123</p>
-                                            <p>123</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>123</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-7" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note">123</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>123</p>
-                                            <p>123</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>123</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+                
                 
                 
                 <div class="row">

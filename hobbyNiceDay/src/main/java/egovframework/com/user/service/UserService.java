@@ -42,5 +42,8 @@ public interface UserService {
 	// 관리자 - 회원 삭제 기능
 	public int deleteUser(String userId) throws Exception;
 	
+	// 관리자 - 회원 정보 수정 기능 
+	public int adminUserUpdate(UserVO userVO) throws Exception;
+	
 	
 }

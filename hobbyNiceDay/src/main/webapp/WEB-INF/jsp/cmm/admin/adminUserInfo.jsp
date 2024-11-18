@@ -84,7 +84,7 @@
 	}
 	
 	.btn-radio input[type="radio"]:checked + label {
-	    //background-color: #007bff;
+	    /*background-color: #007bff;*/
 	    color: black; /*폰트 색상 */
 	    border: 1px solid black; /* 선택 시 검정 테두리 추가 */
 	    
@@ -97,7 +97,20 @@
     margin-right: 0px;
 	}
 
-
+	/* 라벨 색상 변경 */
+	.input-group-append .input-group-text, .input-group-prepend .input-group-text {
+	    background-color: #32589d;
+	    border-color: rgba(0, 0, 0, 0.15);
+	    color: #fff;
+	}
+	
+	/*회원구분 왜 안되지*/
+	.form-control:disabled {
+		/*color:#495057;*/	
+		opacity :1;
+	}
+	
+	
     </style>
 </head>
 
@@ -131,7 +144,7 @@
 
                     <div class="pcoded-content">
                         <!-- Page-header start -->
-                        <div class="page-header">
+                        <div class="page-header" style="background-color:#20263b;"> <!-- 페이지 헤더 배경색상 -->
                             <div class="page-block">
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
@@ -143,11 +156,11 @@
                                     <div class="col-md-4">
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                                <a href="/adminUserList.do"> </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">회원 관리 > </a>
+                                            <li ><a href="/adminUserList.do">회원 관리 > </a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="#!">회원 등록</a>
+                                            <li ><a href="/adminUserInfo.do?userId=${userInfo.userId}">회원 조회</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -170,15 +183,7 @@
 	                                            <div class="card-header">
 	                                                <h5>회원 정보조회</h5>
 	                                                <span>회원 정보조회 페이지입니다. <code>TB_USER</code></span>
-	                                       		    <div class="card-header-right">
-	                                                    <ul class="list-unstyled card-option">
-	                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-	                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-	                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-	                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-	                                                        <li><i class="fa fa-trash close-card"></i></li>
-	                                                    </ul>
-	                                                </div>
+	                                       		    
 	                                            </div>
 	                                            
 	                                            <form id="joinForm" name="joinForm" method="post">
@@ -192,7 +197,7 @@
 	                                                                <th colspan="2">
 		                                                                <span class="input-group-prepend" id="name">
 				                                                            <label class="input-group-text" for="userId">
-				                                                            	<i class="icofont icofont-user-alt-3">  아이디</i>
+				                                                            	아이디
 				                                                            </label>
 			                                                            </span>
 			                                                            <input type="text" id="userId" name="userId" class="form-control"  data-toggle="tooltip" readonly value="${userInfo.userId}">
@@ -201,7 +206,7 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="userName">
-			                                                            	<i class="icofont icofont-ui-email">  이름</i>
+			                                                            	이름
 			                                                           	</label>
 			                                                           	</span>
 			                                                           	<input type="text" id="userName" name="userName" class="form-control" data-toggle="tooltip"  readonly value="${userInfo.userName}">
@@ -212,7 +217,7 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="userSe">
-			                                                            	<i class="icofont icofont-ui-email">  회원구분</i>
+			                                                            	회원구분
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
@@ -227,7 +232,7 @@
 	                                                                <th colspan="2" width="50%">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="brthdy">
-			                                                            	<i class="icofont icofont-ui-email">  생년월일</i>
+			                                                            	생년월일
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="date" id="brthdy" name="brthdy" class="form-control" data-toggle="tooltip" readonly  value="${fn:substring(userInfo.brthdy, 0, 10)}">
@@ -239,7 +244,7 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="mbtlnum">
-			                                                            	<i class="icofont icofont-ui-email">  휴대전화</i>
+			                                                            	휴대전화
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="text" id="mbtlnum" name="mbtlnum" class="form-control" data-toggle="tooltip" readonly value="${userInfo.mbtlnum}">
@@ -247,7 +252,7 @@
 	                                                                <th colspan="2">
 	                                                                	<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="email">
-			                                                            	<i class="icofont icofont-ui-email">  이메일</i>
+			                                                            	이메일
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <input type="text" id="email" name="email" class="form-control" data-toggle="tooltip" readonly value="${userInfo.email}">
@@ -258,7 +263,7 @@
 	                                                                <th colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
 			                                                            <label class="input-group-text" for="sex">
-			                                                            	<i class="icofont icofont-ui-email">  성별</i>
+			                                                            	성별
 			                                                           	</label>
 			                                                           	</span>
 			                                                            <div class="gender-buttons">
@@ -277,8 +282,8 @@
 		                                                        	</th>
 	                                                                <th  colspan="2" width="50%">
 																		<span class="input-group-prepend" id="name">
-			                                                            <label class="input-group-text" for="userSe">
-			                                                            	<i class="icofont icofont-ui-email">SNS 로그인 회원 구분</i>
+			                                                            <label class="input-group-text" for="snsProvider">
+			                                                            	SNS 로그인 회원 구분
 			                                                           	</label>
 			                                                           	</span>
 			                                                            
@@ -293,13 +298,33 @@
 	                                                                </th>
 	                                                            </tr>
 	                                                        	
+	                                                        	
+	                                                        	
 	                                                        	<tr>
-		                                                        	<td colspan="3">
-		                                                        		<button type="button" id="updateBtn" class="btn btn-primary waves-effect waves-light m-r-20" data-toggle="tooltip" data-placement="right">수정</button>
-				                                                        <a href="/adminUserList.do" id="ListBtn" class="btn btn-warning waves-effect waves-light">목록</a>
-				                                                        <button type="button" id="deleteBtn" class="btn btn-danger waves-effect waves-light"  onclick="deleteUser('${userInfo.userId}')">삭제</button>
+		                                                        	<td colspan="5">
+		                                                        		
+		                                                        		<div style="text-align: center; margin-top: 10px;">
+			                                                        		<!-- 수정 -->
+		                                                        			<a href="/adminUserUpdateForm.do?userId=${userInfo.userId}" id="updateBtn" 
+		                                                        			class="btn waves-effect  waves-light m-r-20" style=background-color:#32589d;color:white;margin-right:20px;" 
+			                                                        				data-toggle="tooltip" data-placement="right">수정</a>
+		                                                        			
+					                                                        <!-- 목록 -->
+					                                                        <a href="/adminUserList.do" id="ListBtn" class="btn waves-effect waves-light"
+					                                                        style="background-color:#d8b95d;color:white;border-color:#d8b95d;margin-right:20px;" >회원 목록</a>
+					                                                        
+					                                                        <!-- 삭제 
+					                                                        <a href="/adminClassDelete.do" id="deleteBtn" class="btn waves-effect waves-light m-r-20" 
+					                                                        style="background-color:#D85D5D;color:white;border-color:#D85D5D;margin-right:20px;" data-toggle="tooltip" data-placement="right">삭제</a>
+					                                                        -->
+		                                                        		</div>
+	                                                        			 
+	                                                        			 
 		                                                        	</td>
 	                                                        	</tr>    	
+	                                                        	
+	                                                        	
+	                                                        	
 	                                                            	                                                           
 	                                                        </thead>
 	                                                        

@@ -188,6 +188,12 @@ public class UserDAO extends EgovAbstractMapper {
 
 	}
 
+	// 관리자 회원 정보 수정 기능 
+	public int adminUserUpdate(UserVO userVO) {
+		int result = update("UserDAO.adminUserUpdate", userVO);
+		return result;
+	}
+
 	
 	
 	

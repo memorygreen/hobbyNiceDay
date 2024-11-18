@@ -135,7 +135,7 @@
     width: 100%;
     border: 1px solid #e1e1e1;
     font-size: 14px;
-    color: #b7b7b7;
+    color: #606060;
     padding-left: 20px;
     margin-bottom: 20px;
 }
@@ -144,6 +144,11 @@
 .checkout__input input:focus {
     border-color: #000; /* 테두리를 검정색으로 변경 */
     outline: none; /* 기본 파란색 외곽선 제거 */
+
+/*241030 약관 동의 포커스*/
+input[type="checkbox"]:focus {
+    outline: 2px solid #e53637; /* 체크박스에 포커스가 있을 때 테두리 색상 */
+}
 
 }
 </style>
@@ -195,7 +200,10 @@
 		<div class="checkout__form">
 
 			<form id="joinForm" name="joinForm" method="post" >
-				<input type="hidden" id="userSe" name="userSe" value="user"><!-- 사용자 구분(일반사용자) -->
+				<!-- 사용자 구분(일반사용자) --> 
+				<input type="hidden" id="userSe" name="userSe" value="user">
+				<input type="hidden" id="snsProvider" name="snsProvider" value="k">
+				
 				<!-- 이용약관 시작 -->
 				<h4>사이트 이용약관</h4>
 				<div class="terms_wrap">
@@ -346,13 +354,12 @@
 					</ul>
 				</div>
 				<!-- 이용약관 동의 체크박스 -->
-				<div class="checkout__input__checkbox">
-					<label for="agree1"> 사이트 이용약관에 동의합니다. 
-						<input type="checkbox" id="agree1" name="agree1" value="Y">
-						<span class="checkmark"></span>
-					</label>
-				</div>
+				<input type="checkbox" id="agree1" name="agree1" value="Y">
+				<label for="agree1"> 사이트 이용약관에 동의합니다. </label>
+				<!-- <span class="checkmark"></span> -->
+				
 				<div class="jy_margin_1" style="height:50px"></div>
+				
 				<!-- 이용약관2(개인정보 수집동의) 시작 -->
 				<h4>개인정보 수집/이용 동의</h4>
 				<div class="terms_wrap">
@@ -387,62 +394,76 @@
 				</div>
 
 				<!-- 개인정보 취급방침 동의 체크박스 -->
-				<div class="checkout__input__checkbox">
-					<label for="agree2">개인정보 취급방침에 동의합니다. <input
-						type="checkbox" id="agree2" name="agree2" value="Y" required>
-						<span class="checkmark"></span>
-					</label>
-				</div>
+				<!-- <div class="checkout__input__checkbox">
+				</div> -->
+					<input type="checkbox" id="agree2" name="agree2" value="Y" required>
+					<label for="agree2">개인정보 취급방침에 동의합니다.</label>
+					<!-- <span class="checkmark"></span> -->
+					
 				<!-- 이용약관2 끝 -->
 				
 				<div class="jy_margin_1" style="height:50px"></div>
 				
 				<!-- 회원가입 폼 시작 -->
 				<h6 class="checkout__title">회원정보 입력</h6>
+				
+				
+				
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="checkout__input">
-							<p>ID<span>*</span></p>
-							<input type="text" id="userId" name="userId" autocomplete="new-password" readonly required 
-									value="${kakaoUserId}"/> 
-							<!-- <a href="#" id="userIdCk" class="primary-btn" />ID중복확인</a> 
-							<span id="userIdMsg"></span><!-- 중복 체크 결과를 표시할 영역 -->
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>이름<span>*</span></p>
-							<input type="text" id="userName" name="userName" autocomplete="new-password" required />
+							<!-- <p>ID<span>*</span></p> -->
+							<input type="hidden" id="userId" name="userId" autocomplete="new-password" required 
+							value="${kakaoUserId}" readonly /> 
+							
 						</div>
 					</div>
 					
-					<!-- 
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>비밀번호<span>*</span></p>
-							<input type="password" id="passwd" name="passwd" autocomplete="new-password" required />
-							<p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.<p>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
-							<p>비밀번호 확인<span>*</span></p>
-							<input type="password" id="passwdCk" name="passwdCk" required />
-						</div>
-					</div>
-					 -->
 				</div>
-
-
 				<div class="row">
-					<div class="col-lg-6">
-						<div class="input_radio">
-							<p>성별<span style="color: #e53637;">*</span></p>
-							<input type="radio" id="male" name="sex" value="M" / required>남성 
-							<input type="radio" id="female" name="sex" value="F" /> 여성
+					<div class="col-lg-7">
+						<div class="checkout__input">
+							<p>이름<span>*</span></p>
+							<input type="text" id="userName" name="userName" autocomplete="new-password" required />
+							
 						</div>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-lg-5">
+						<div class="checkout__input">
+							<br/>
+							<br/>
+							<span id="userNameMsg"></span>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-lg-7">
+						
+							<p>성별<span style="color: #e53637;">*</span></p>
+							
+							<label for="male">
+								<input type="radio" id="male" name="sex" value="M" / required> 
+							남성</label>
+							
+							<label for="female">
+								<input type="radio" id="female" name="sex" value="F" />
+							여성</label>
+							
+						<div class="input_radio">
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
+						</br>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>생년월일<span>*</span></p>
 							<input type="date" id="brthdy" name="brthdy" required>
@@ -452,17 +473,42 @@
 
 
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-7">
 						<div class="checkout__input">
 							<p>휴대전화<span>*</span></p>
-							<input type="text" id="mbtlnum" name="mbtlnum" required>
-							<p>휴대전화 번호를 '-'까지 입력해주세요. </p>
+							<input type="text" id="mbtlnum" name="mbtlnum" placeholder="ex. 010-0000-0000" required>
 						</div>
 					</div>
-					<div class="col-lg-6">
-						<div class="checkout__input">
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-7">
+						<div class="checkout__input" >
 							<p>이메일<span>*</span></p>
-							<input type="text" id="email" name="email" required>
+							<input type="text" id="email" name="email"  placeholder="ex. example@example.com"  sytle="width:70%" required>
+							<!-- 
+							<span>@</span>
+				            <select id="emailDomainSelect" required>
+				                <option value="">도메인 선택</option>
+				                <option value="gmail.com">gmail.com</option>
+				                <option value="naver.com">naver.com</option>
+				                <option value="daum.net">daum.net</option>
+				                <option value="custom">직접 입력</option>
+				            </select>
+				            <input type="text" id="emailCustomDomain" name="emailCustomDomain" placeholder="직접 입력" style="display: none;">
+							 -->
+							
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="checkout__input" style="text-align: center;">
+							<a href="#" class="primary-btn joinBtn">회원가입</a>
+							<a href="/" id="listBtn" class="primary-btn listBtn" style="background:#7c7c7c;">메인화면</a>
+							
 						</div>
 					</div>
 				</div>
@@ -473,10 +519,8 @@
 		</form>
 
 		<!-- <input type="submit" value="회원가입" class="primary-btn" /> -->
-		<button type="reset" class="primary-btn">취소</button>
 		
-		<a href="#" class="primary-btn joinBtn">회원가입</a>
-		<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
+		
 	
 
 		<!-- 회원가입 폼 끝-->
@@ -485,12 +529,6 @@
 	</div>
 	</section>
 	<!-- Checkout Section End -->
-
-
-
-	<!-- Contact Section Begin -->
-
-	<!-- Contact Section End -->
 
 
 	<!-- Banner Section Begin -->
@@ -506,20 +544,13 @@
 	</section>
 	<!-- Banner Section End -->
 
-	<!-- Categories Section Begin -->
-	<!-- Categories Section End -->
-
-	<!-- Instagram Section Begin -->
-	<!-- Instagram Section End -->
-
-	<!-- Latest Blog Section Begin -->
-	<!-- Latest Blog Section End -->
-
+	
 	<!-- Footer Section Begin -->
 	<div id="footer">
 		<jsp:include page="/WEB-INF/jsp/main/inc/commonFooter.jsp" />
 	</div>
 	<!-- Footer Section End -->
+
 
 	<!-- Search Begin -->
 	<div class="search-model">
@@ -532,6 +563,7 @@
 	</div>
 	<!-- Search End -->
 
+
 	<script>
 	//페이지 로드가 완료되면
 	if (window.addEventListener)
@@ -543,14 +575,94 @@
 	var userIdCk = false;
 	function userData() {
 		
+		// 회원구분 선택 이벤트 리스너
+		$('.nice-select .list').on('click', '.option', function() {
+		    // 선택된 옵션의 data-value 값을 가져옴
+		    const selectedValue = $(this).attr('data-value');
+		    // 가져온 값을 숨겨진 select 요소에 반영
+		    $('#userSe').val(selectedValue);
+		    // 화면에 선택된 옵션 텍스트 표시
+		    $('.nice-select .current').text($(this).text());
+		    // 선택된 옵션 스타일 변경
+		    $('.nice-select .option').removeClass('selected');
+		    $(this).addClass('selected');
+		    // 콘솔에 선택된 회원 구분 값 출력
+		    console.log("회원구분: ", $('#userSe').val());
+		});
+		
+		
+		
+		
+		// 이름 입력 제한 및 길이 제한
+		  $('#userName').on('input', function() {
+		      // 이름 정규식 (한글 or 영어 대소문자만 허용 // 공백x 특수문자x 숫자x)
+		      let validChars = /^[ㄱ-ㅎ|가-힣a-zA-Z]*$/;
+
+		      let userName = $(this).val(); // 현재 입력된 이름
+
+		      // 입력불가 문자 입력 시 삭제
+		      if (!validChars.test(userName)) {
+		          $(this).val(userName.replace(/[^가-힣a-zA-Z]/g, ''));
+		          $('#userNameMsg').text("이름은 한글 또는 영어 대소문자만 허용됩니다. 공백,특수문자,숫자는 입력할 수 없습니다.").css("color", "#D85D5D");
+		      } 
+		      // 글자수 10글자 제한
+		      else if (userName.length > 10) { 
+		          $(this).val(userName.substring(0, 10));
+		          $('#userNameMsg').text("이름은 최대 10자까지 입력 가능합니다.").css("color", "#D85D5D");
+		      } else {
+		          $('#userNameMsg').text(""); // 정규표현식 o -> 메시지 삭제
+		      }
+		  });
+		
+		
+		
+			
+			//휴대전화 
+			 $('#mbtlnum').on('input', function() {
+		        let phoneNumber = $(this).val().replace(/[^0-9]/g, ''); // 숫자만 허용
+		        
+		        // 글자수 11 제한
+		        if (phoneNumber.length > 11) {
+		            phoneNumber = phoneNumber.substring(0, 11);
+		        }
+		        
+		        let formattedNumber;
+		
+		        if (phoneNumber.length <= 3) {
+		            formattedNumber = phoneNumber; // 3자리 이하일 경우 그대로 표시
+		        } else if (phoneNumber.length <= 7) {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3); // 4~7자리일 경우 3-4 형식
+		        } else if (phoneNumber.length <= 10) {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 6) + '-' + phoneNumber.slice(6); // 10자리 형식 3-3-4
+		        } else {
+		            formattedNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7); // 11자리 형식 3-4-4
+		        }
+		
+		        $(this).val(formattedNumber); // 포맷팅된 번호를 필드에 표시
+		    });
+			
+			
+			// 이메일 입력 제한: 최대 30글자, 공백 허용하지 않음
+			 $('#email').on('input', function() {
+			     let email = $(this).val().replace(/\s/g, ''); // 공백 제거
+			     if (email.length > 30) {
+			         email = email.substring(0, 30); // 최대 30글자로 제한
+			     }
+			     $(this).val(email); // 수정된 값 설정
+			 });
+			
+			
+		
 		
 		// 회원가입 버튼 클릭 시 
 		$('.joinBtn').click(function(e) {
 			e.preventDefault();
 			
 			if (!$(':checkbox[name="agree1"]').is(':checked')) {
-				alert('회원이용약관에 동의하지 않으셨습니다.');
+				alert('사이트 이용약관에 동의하지 않으셨습니다.');
 				$('#agree1').focus();
+				$('.checkmark').focus();
+				
 				return false;
 			}
 			if (!$(':checkbox[name="agree2"]').is(':checked')) {
@@ -565,31 +677,19 @@
 				$('#userName').focus();
 				return false;
 			}
-			/*
-			if ($.trim($('#passwd').val()) == ''){
-				alert('비밀번호를 입력해주세요');
-				$('#passwd').focus();
-				return false;
-			}else if($('#passwd').val() != $('#passwdCk').val()){
-				alert('비밀번호를 다시 확인해주세요!');
-				$('#passwdCk').focus();
-				return false;
-			}
 			
-			// 비밀번호 형식 체크 (영문, 숫자, 특수문자 포함 8~15자)
-			let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-			if (!reg.test($('#passwd').val())) {
-			    alert('비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.');
-			    $('#passwd').focus();
-			    return false;
-			}
-			*/
 			
-			if(!$('input:radio[name=sex]').is(":checked")){
+			
+			
+			if(!$('input:radio[name="sex"]').is(":checked")){
 				alert("성별을 선택해주세요.");
-				$('#sex').focus();
+				$('#male').focus();
+			    $('#male').css("outline", "2px solid #e53637");  // 포커스가 된 라디오 버튼을 시각적으로 표시
+
 				return false;
 			}
+			
+			
 			
 			if ($.trim($('#brthdy').val()) == ''){
 				alert('생년월일을 입력해주세요');
@@ -617,6 +717,7 @@
 			if ($.trim($('#email').val()) == '' ){
 				alert('이메일을 입력해주세요.');
 				$('#email').focus();
+				return false;
 			}
 			// 이메일 형식 체크 (ex. exaple@naver.com)
 				/* 
@@ -625,7 +726,7 @@
 				\.[A-Z]{2,}$: 도메인 끝부분이 최소 2자 이상의 문자로 끝나야 함을 의미합니다. (예: .com, .org, .co.kr)
 			*/
 			let emailReg = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-			if (!emailReg.test($('#email').val())) {
+			if ( $.trim($('#email').val()) != '' && !emailReg.test($('#email').val())) {
 			    alert('이메일 형식을 확인해 주세요.(ex. exaple@naver.com)');
 			    $('#email').focus();
 			    return false;
@@ -648,11 +749,11 @@
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
-						console.log("회원가입 응답 result:", result);
+					success: function(response){
+						//console.log("회원가입 응답 result:", result);
 		                
 		                // JSON 파싱
-		                var response = JSON.parse(result);
+		                // var response = JSON.parse(result);
 						console.log("회원가입 response:", response);
 
 		                if (response.error == 'N') {

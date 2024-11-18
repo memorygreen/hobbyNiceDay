@@ -135,7 +135,7 @@
     width: 100%;
     border: 1px solid #e1e1e1;
     font-size: 14px;
-    color: #b7b7b7;
+    color: #606060;
     padding-left: 20px;
     margin-bottom: 20px;
 }
@@ -485,31 +485,7 @@ input[type="checkbox"]:focus {
 					</div>
 				</div>
 				
-				<!-- 
-				<div class="row">
-					<div class="col-lg-7">
-						<div class="checkout__input">
-							<p>회원구분<span>*</span></p>
-							
-							<select id="userSe" name="userSe" style="display: none">
-								<option value="" style="width:100%">(선택)</option>
-								<option value="admin" style="width:100%">일반회원</option>
-								<option value="user" style="width:100%">관리자</option>
-							</select>
-							
-							<div class="nice-select " tabindex="0" style="width:100%">
-							<span class="current">선택</span>
-							<ul class="list" style="width:100%">
-								<li data-value="user" class="option selected focus">일반회원</li>
-								<li data-value="admin" class="option">관리자</li>
-							</ul>
-							</div>
-							
-						</div>
-					</div>
-				</div> 
-				</br>
-				-->
+				
 				<div class="row">
 					<div class="col-lg-7">
 						
@@ -579,7 +555,8 @@ input[type="checkbox"]:focus {
 					<div class="col-lg-12">
 						<div class="checkout__input" style="text-align: center;">
 							<a href="#" class="primary-btn joinBtn">회원가입</a>
-							<a href="/" id="listBtn" class="primary-btn listBtn">목록</a>
+							<a href="/" id="listBtn" class="primary-btn listBtn" style="background:#7c7c7c;">메인화면</a>
+							
 						</div>
 					</div>
 				</div>
@@ -694,26 +671,6 @@ input[type="checkbox"]:focus {
         }
     });
 		
-		// 이름 입력 제한 및 길이 제한
-		  $('#userName').on('input', function() {
-		      // 이름 정규식 (한글 or 영어 대소문자만 허용 // 공백x 특수문자x 숫자x)
-		      let validChars = /^[ㄱ-ㅎ|가-힣a-zA-Z]*$/;
-
-		      let userName = $(this).val(); // 현재 입력된 이름
-
-		      // 입력불가 문자 입력 시 삭제
-		      if (!validChars.test(userName)) {
-		          $(this).val(userName.replace(/[^가-힣a-zA-Z]/g, ''));
-		          $('#userNameMsg').text("이름은 한글 또는 영어 대소문자만 허용됩니다. 공백,특수문자,숫자는 입력할 수 없습니다.").css("color", "red");
-		      } 
-		      // 글자수 10글자 제한
-		      else if (userName.length > 10) { 
-		          $(this).val(userName.substring(0, 10));
-		          $('#userNameMsg').text("이름은 최대 10자까지 입력 가능합니다.").css("color", "red");
-		      } else {
-		          $('#userNameMsg').text(""); // 정규표현식 o -> 메시지 삭제
-		      }
-		  });
 		
 		
 		
@@ -730,7 +687,7 @@ input[type="checkbox"]:focus {
 			    
 			    // 정규표현식 확인
 			    if (!passwordRegEx.test(password)) {
-			        $('#userPasswdMsg').text("비밀번호는 공백 없이 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.").css("color", "red");
+			        $('#userPasswdMsg').text("비밀번호는 공백 없이 영문, 숫자, 특수문자(!@#$%^*+=-)를 포함한 8~15자로 입력해주세요.").css("color", "#D85D5D");
 			    } else {
 			        $('#userPasswdMsg').text(""); // 메시지 삭제
 			    }
@@ -745,7 +702,7 @@ input[type="checkbox"]:focus {
 			    
 			    // 비밀번호 일치 확인
 			    if (confirmPassword !== $('#passwd').val()) {
-			        $('#userPasswdCkMsg').text("비밀번호가 일치하지 않습니다. 다시 확인해주세요.").css("color", "red");
+			        $('#userPasswdCkMsg').text("비밀번호가 일치하지 않습니다. 다시 확인해주세요.").css("color", "#D85D5D");
 			    } else {
 			        $('#userPasswdCkMsg').text(""); // 메시지 삭제
 			    }
@@ -840,7 +797,7 @@ input[type="checkbox"]:focus {
 			            	console.log("성공 시 response",response)
 			            	console.log("성공 시 response",response.exist)
 			                if (response.exist == true) {
-			                    $('#userIdMsg').text("이미 사용 중인 ID입니다.").css("color", "red");
+			                    $('#userIdMsg').text("이미 사용 중인 ID입니다.").css("color", "#D85D5D");
 			                } else {
 			                	userIdCk = true;
 			                    $('#userIdMsg').text("사용 가능한 ID입니다.").css("color", "green");
@@ -976,12 +933,12 @@ input[type="checkbox"]:focus {
 					contentType: false,
 					data: formData,
 					type: 'POST',
-					success: function(result){
-						console.log("회원가입 응답 result:", result);
+					success: function(response){
+						//console.log("회원가입 응답 result:", result);
 		                
 		                // JSON 파싱
-		                var response = JSON.parse(result);
-						console.log("회원가입 response:", response);
+		                //var response = JSON.parse(result);
+						//console.log("회원가입 response:", response);
 
 		                if (response.error == 'N') {
 		                    alert("회원가입되었습니다.");
