@@ -51,6 +51,10 @@
 > # 서버구성
 
 ### 서버 구성 환경
+
+![슬라이드16](https://github.com/user-attachments/assets/84662678-f252-4319-b0b8-6a93138f085a)
+
+
 ![슬라이드22](https://github.com/user-attachments/assets/d9aa319d-4770-4f1e-877a-bc3d194ab02f)
 
 ![슬라이드21](https://github.com/user-attachments/assets/413e320c-2cc8-4692-84ff-308962b77ec8)
@@ -58,5 +62,5 @@
 ![슬라이드19](https://github.com/user-attachments/assets/cd4f5cd2-f29d-4f9f-8487-f5dda24a666a)
 ![슬라이드18](https://github.com/user-attachments/assets/bbb2da17-80f1-4a5a-8f85-db9bf6f1ea00)
 ![슬라이드17](https://github.com/user-attachments/assets/77003af1-322c-4839-bf9d-b2718c2cd3b9)
-![슬라이드16](https://github.com/user-attachments/assets/84662678-f252-4319-b0b8-6a93138f085a)
+
 
