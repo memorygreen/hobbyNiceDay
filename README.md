@@ -6,9 +6,9 @@
 # 개발 기간 : 2024.11.18
 
 > # 기획 배경
+![슬라이드26](https://github.com/user-attachments/assets/b0cd1423-1fda-451b-9060-cbdc437892fe)
 ![슬라이드27](https://github.com/user-attachments/assets/6032ce9c-ef48-4092-9e5e-d04082ef66ef)
 
-![슬라이드26](https://github.com/user-attachments/assets/b0cd1423-1fda-451b-9060-cbdc437892fe)
 
 > # 개발환경
 ![슬라이드25](https://github.com/user-attachments/assets/1af64cbd-77aa-4255-a998-3f857f646d96)
